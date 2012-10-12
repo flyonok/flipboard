@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flipboard>
+    <hosts>
+		<description>新浪</description>
+		<url>http://www.sina.com.cn</url>
+		<charset>gbk</charset>
+		<getsMethod>html</getsMethod>
+		<timeout>10000</timeout>
+		<dbFile>/sina.db</dbFile>
+		<newsArea>
+		     <contentArea>
+		         <item>
+				     <contentSelector>span#news_con_1</contentSelector>
+				     <mustHaveChild></mustHaveChild> 
+					 <title>新浪|财经</title>
+					 <type>1</type>
+				 </item>
+			 </contentArea>
+			<newsList>
+			    <listTagPattern>a</listTagPattern>
+				<newsUrlPattern>href</newsUrlPattern>
+				<excludePattern></excludePattern>
+				<urlLinkReg><![CDATA[[a-zA-z]+://[^\s]*.shtm.?]]></urlLinkReg>
+				<newsTitlePattern></newsTitlePattern>
+			</newsList>
+			<newsPageProcess>
+				<item>
+					<newsContentTag>div#artibody</newsContentTag>
+					<abstractPattern>p+p+p</abstractPattern>
+					<elementReplace>
+						<item>
+							<orgPattern>div#sinashareto</orgPattern>
+							<newContent></newContent>
+						</item>
+						<!-- <item>
+							<orgPattern>a#guessulike2Change</orgPattern>
+							<newContent></newContent>
+						</item> -->
+						<item>
+							<orgPattern>div.guessulike2</orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern>div.blkComment.otherContent_01</orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern>style</orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern>script</orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern>iframe</orgPattern>
+							<newContent></newContent>
+						</item>
+					</elementReplace>
+					<contentReplace>
+						<item>
+							<orgPattern><![CDATA[ <script(?:[^<]++|<(?!/script>))*+</script> ]]></orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern><![CDATA[ <style(?:[^<]++|<(?!/style>))*+</style> ]]></orgPattern>
+							<newContent></newContent>
+						</item>
+					</contentReplace>
+					<relatedItems>
+						 <item>
+						    <relatedPattern>div#blk_n001_050</relatedPattern>
+						    <relatedItemsType>0</relatedItemsType>
+						    <ignoreTags></ignoreTags>
+						</item>
+						<item>
+						    <relatedPattern>div#blk_n001_051</relatedPattern>
+						    <relatedItemsType>0</relatedItemsType>
+						    <ignoreTags></ignoreTags>
+						</item>
+						<item>
+							<relatedPattern>div.otherContent_01</relatedPattern>
+						    <relatedItemsType>1</relatedItemsType>
+						    <ignoreTags></ignoreTags>
+						</item>
+						<item>
+							<relatedPattern>div#blk_otherContent_2</relatedPattern>
+						    <relatedItemsType>1</relatedItemsType>
+						    <ignoreTags></ignoreTags>
+						</item>
+						<!-- <item>
+							<relatedPattern>div.guessulike2</relatedPattern>
+						    <relatedItemsType>1</relatedItemsType>
+						    <ignoreTags></ignoreTags>
+						</item> -->
+												
+					</relatedItems>
+					<pages>
+						<selectPattern></selectPattern>
+						<urlValue></urlValue>
+					</pages>
+				</item>
+			</newsPageProcess>
+			
+			<picturePageProcess> <!-- 纯图片网页处理方式 -->
+				<picContentTag>div#bigPicArea</picContentTag><!-- 图片内容开始 -->
+				<picAbstractPattern>div.slide_subtitle</picAbstractPattern><!-- 获取图片网页摘要 -->
+				<picSlide>div#slide_pic</picSlide><!-- 获取具体的图片html内容 -->
+				<picCountMax>font.pic_count_max</picCountMax><!-- 获取当前图片数目 -->
+				<picCount>font.pic_count</picCount> <!-- 获取图片总数目 -->
+				<picCountIndex>1</picCountIndex><!-- 获取图片总数目的索引 -->
+				<firstPicCountLetter>/</firstPicCountLetter><!-- 图片总数目数字分隔的第一个字母 -->
+				<secondPicCountLetter>)</secondPicCountLetter><!-- 图片总数目数字分隔的第二个字母 -->
+				<nextPicturePattern>a.pic_next</nextPicturePattern> <!-- 获取下一张图片 -->
+				<nextPictureAttr>href</nextPictureAttr> <!-- 获取下一张图片链接地址 -->
+			</picturePageProcess>
+		</newsArea>
+	</hosts>
+</flipboard>

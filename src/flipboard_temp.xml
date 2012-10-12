@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<flipboard>
+	<hosts>
+		<description>和讯</description><!-- 栏目描述： -->
+		<url>http://www.hexun.com</url><!-- 栏目网址： -->
+		<charset>gbk</charset><!-- 网站字符编码,中文网站一般用gbk,外文用utf-8 -->
+		<getsMethod>html</getsMethod>
+		<timeout>10000</timeout><!-- 获取网页超时时间(单位毫秒) -->
+		<dbFile>/xxtebook.db</dbFile><!-- 数据库文件 以/开头 -->
+		<newsArea><!-- 新闻区域块 -->
+		     <contentArea>
+		         <item>
+				     <contentSelector>div#tab01_con1</contentSelector><!-- 内容列表选择 -->
+				     <mustHaveChild></mustHaveChild> <!-- 为了防止同样的class选择多个区域,通过该项强制只有一个选择区 -->
+					 <title>财经要闻</title><!-- 内容标题 -->
+					 <type>1</type><!-- 栏目分类 -->
+				 </item>
+				 <item>
+				     <contentSelector>div#tab01_con2</contentSelector>
+				      <mustHaveChild></mustHaveChild>
+					 <title>时事要闻</title>
+					 <type>2</type>
+				 </item>
+			 </contentArea>
+			<newsList><!-- 栏目新闻列表 -->
+			    <listTagPattern>a</listTagPattern><!-- 新闻列表tag -->
+				<newsUrlPattern>href</newsUrlPattern><!-- 新闻链接地址 -->
+				<excludePattern><![CDATA[ ^\\[(.+?)\\] ]]></excludePattern><!-- 不需处理的项 -->
+				<urlLinkReg><![CDATA[[a-zA-z]+://[^\s]*.htm.?]]></urlLinkReg><!-- 判断新闻链接地址的正则，只处理具体的html页面，暂不处理专题 -->
+				<newsTitlePattern></newsTitlePattern><!-- 新闻标题 -->
+			</newsList>
+			<newsPageProcess><!-- 新闻网页处理方式 -->
+				<item>
+					<newsContentTag>div#artibody</newsContentTag><!-- 新闻内容开始 -->
+					<abstractPattern>p+p+p</abstractPattern> <!-- 获取新闻网页摘要 -->
+					<elementReplace> <!-- DOM元素替换 -->
+						<item>
+							<orgPattern>table:has(form#theForm14322)</orgPattern><!-- 要替换的DOM元素表达式 -->
+							<newContent></newContent> <!-- 新内容文本 -->
+						</item>				
+					</elementReplace>
+					<contentReplace><!-- 内容替换 --> 
+						<item>
+							<orgPattern><![CDATA[ <script(?:[^<]++|<(?!/script>))*+</script> ]]></orgPattern> <!-- 要被替代的内容表达式 -->
+							<newContent></newContent> <!-- 新内容 -->
+						</item>
+						<item>
+							<orgPattern><![CDATA[ <select(?:[^<]++|<(?!/select>))*+</select> ]]></orgPattern>
+							<newContent></newContent>
+						</item>
+					</contentReplace>
+					<relatedItems> <!-- 新闻相关 -->
+					    <item>
+						    <relatedPattern>p:contains(分析评论)</relatedPattern> <!-- select pattern -->
+						    <relatedItemsType>0</relatedItemsType><!-- 新闻相关的处理是在newsContentTag内还是外：0表示外，1表示内，建议程序先处理内，然后再处理外 -->
+						    <ignoreTags></ignoreTags><!-- 在处理兄弟节点时应该忽略的tag,比如在判断节点是否具有 <a/>子节点时,如果有多个用|分隔 -->
+						</item>
+						 <item>
+						    <relatedPattern>p:contains(行业动态)</relatedPattern>
+						    <relatedItemsType>0</relatedItemsType>
+						    <ignoreTags></ignoreTags>
+						</item>
+						 <item>
+						    <relatedPattern>p:contains(相关专题)</relatedPattern>
+						    <relatedItemsType>0</relatedItemsType>
+						    <ignoreTags></ignoreTags>
+						</item>
+						 <item>
+						    <relatedPattern>p:contains(延伸阅读)</relatedPattern>
+						    <relatedItemsType>0</relatedItemsType>
+						    <ignoreTags></ignoreTags>
+						</item>
+						 <item>
+						    <relatedPattern>p:contains(各国排水系统)</relatedPattern>
+						    <relatedItemsType>0</relatedItemsType>
+						    <ignoreTags></ignoreTags>
+						</item>
+						 <item>
+						    <relatedPattern>p:contains(反思和教训)</relatedPattern>
+						    <relatedItemsType>0</relatedItemsType>
+						    <ignoreTags></ignoreTags>
+						</item>
+						 <item>
+						    <relatedPattern>p:contains(相关新闻)</relatedPattern>
+						    <relatedItemsType>0</relatedItemsType>
+						    <ignoreTags></ignoreTags>
+						</item>
+						 <item>
+						    <relatedPattern>h4:contains(相关新闻)</relatedPattern>
+						    <relatedItemsType>0</relatedItemsType>
+						    <ignoreTags></ignoreTags>
+						</item>
+						 <item>
+						    <relatedPattern>p:contains(相关评论)</relatedPattern>
+						    <relatedItemsType>0</relatedItemsType>
+						    <ignoreTags></ignoreTags>
+						</item>
+						 <item>
+						    <relatedPattern>p:contains(推荐阅读)</relatedPattern>
+						    <relatedItemsType>1</relatedItemsType>
+						    <ignoreTags>h1</ignoreTags>
+						</item>
+					</relatedItems>
+					<pages> <!-- 分页处理 -->
+						<selectPattern><![CDATA[ select > option ]]></selectPattern> <!-- 分页元素reg -->
+						<urlValue>value</urlValue><!-- 页面的url -->
+					</pages>
+				</item>
+			</newsPageProcess>
+			
+			<picturePageProcess> <!-- 纯图片网页处理方式 -->
+				<picContentTag>div#bigPicArea</picContentTag><!-- 图片内容开始 -->
+				<picAbstractPattern>div.slide_subtitle</picAbstractPattern><!-- 获取图片网页摘要 -->
+				<picSlide>div#slide_pic</picSlide><!-- 获取具体的图片html内容 -->
+				<picCountMax>font.pic_count_max</picCountMax><!-- 获取当前图片数目 -->
+				<picCount>font.pic_count</picCount> <!-- 获取图片总数目 -->
+				<picCountIndex>1</picCountIndex><!-- 获取图片总数目的索引 -->
+				<firstPicCountLetter>/</firstPicCountLetter><!-- 图片总数目数字分隔的第一个字母 -->
+				<secondPicCountLetter>)</secondPicCountLetter><!-- 图片总数目数字分隔的第二个字母 -->
+				<nextPicturePattern>a.pic_next</nextPicturePattern> <!-- 获取下一张图片 -->
+				<nextPictureAttr>href</nextPictureAttr> <!-- 获取下一张图片链接地址 -->
+			</picturePageProcess>
+		</newsArea>
+	</hosts>
+</flipboard>
