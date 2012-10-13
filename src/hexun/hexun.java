@@ -981,6 +981,7 @@ public class hexun implements Job{
 		try {
 			SAXReader saxReader = new SAXReader();
 			// test git
+			// is ok
 			Document document = saxReader.read(file);
 			List<?> list = document.selectNodes("//flipboard/hosts" );
         	Iterator<?> iter = list.iterator();
