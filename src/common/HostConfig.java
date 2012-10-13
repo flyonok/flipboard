@@ -16,6 +16,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import dbTool.Article;
+
 public class HostConfig {
 	static Logger logger = Logger.getLogger(HostConfig.class.getName());
 	// hosts attribute
@@ -704,7 +706,16 @@ public class HostConfig {
 		
 		
 	}
-	
+	public class HexunPicProcess implements PicProcess {
+		public boolean processPicNode(Element picConfigNode) throws HostConfigException
+		{
+			return true;
+		}
+		
+		public boolean processHtml(String url, Article article ) {
+			return true;
+		}
+	}
 	private List<NewsArea> newsAreaList = null ;
 	public List<NewsArea> getNewsAreaList() { return newsAreaList; }
 	

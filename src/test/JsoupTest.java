@@ -25,7 +25,8 @@ public class JsoupTest {
 		JsoupTest test = new JsoupTest();
 		// test.testJsoup();
 		// test.testSinaNews();
-		test.testSinaPageContent();
+		// test.testSinaPageContent();
+		test.testSinaPicContent();
 		
 	}
 	
@@ -121,6 +122,28 @@ public class JsoupTest {
 					System.out.println(linkText);
 				}
 			}*/
+		}finally {
+			
+		}
+	}
+	
+	private void testSinaPicContent()
+	{
+		try {
+			String content = getCotentFromUrl("http://slide.news.sina.com.cn/c/slide_1_2841_27053.html");
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			// Elements contentEls = doc.select(/*"div#tab01_con1"*/"div#sinashareto");
+			Elements contentEls = doc.select("div#eData");
+			// contentEls.select("div#sinashareto").remove();
+			// System.out.println(contentEls.outerHtml());
+			Elements dls = contentEls.select("dl");
+			for (Element dl : dls) {
+				Elements dt = dl.select("dt");
+				System.out.println(dt.first().html());
+				Elements dds = dl.select("dd");
+				System.out.println(dds.first().html());
+			}
+			
 		}finally {
 			
 		}
