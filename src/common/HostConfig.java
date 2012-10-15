@@ -2,21 +2,36 @@ package common;
 
 import hexun.hexun;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.jsoup.Jsoup;
+import org.jsoup.select.Elements;
 
 import dbTool.Article;
+import dbTool.Resource;
 
 public class HostConfig {
 	static Logger logger = Logger.getLogger(HostConfig.class.getName());
@@ -767,6 +782,9 @@ public class HostConfig {
 		public String getNextPictureAttr() {
 			return strNextPictureAttr;
 		}
+		
+		Article curArticle = null;
+		private String baseUrl;
 
 		// pictureProcess end
 		public boolean processPicNode(Element newsAreaNode) throws HostConfigException
@@ -846,8 +864,210 @@ public class HostConfig {
 			return true;
 		}
 		
-		public boolean processHtml(String url, Article article ) {
-			return true;
+		public boolean processHtml(org.jsoup.nodes.Document doc, Article article) {
+			if (article == null) {
+				return false;
+			}
+			curArticle = article;
+			Elements els = doc.select(strPicContentTag);
+			try {
+				if (els.first() != null) {
+					Elements subTitles = els.select(strPicAbstractPattern);
+					Elements pics = els.select(strPicSlide);
+					if (subTitles.first() != null) {
+						// curArticle.setAbstract( subTitles.first().html() );
+						curArticle.setHtml(subTitles.first().html());
+						if (pics.first() != null) {
+							curArticle.setHtml(subTitles.first().html()
+									+ pics.first().html());
+							curArticle.setArcType(Article.ALLRESOURCE);
+							processPageImage(els);
+							Elements count_max = els.select(strPicCountMax);
+							String strMax = count_max.first().text();
+							Elements pic_count = els.select(strPicCount);
+							String strCount = pic_count.get(picCountIndex)
+									.text();
+							// System.out.println( strMax + "\t" + strCount );
+							if (Integer.parseInt(strMax) != Integer
+									.parseInt(strCount.substring(
+											strCount.indexOf(strFirstPicCountLetter) + 1,
+											strCount.indexOf(strSecondPicCountLetter)))) {
+
+								Elements nexts = els
+										.select(strNextPicturePattern);
+								String href = nexts.first().attr(
+										strNextPictureAttr);
+								processMorePictureHtml(href);
+							}
+
+						}
+					}
+					return true;
+				}
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+			}
+
+			return false;
+		}
+		
+		private boolean processMorePictureHtml(String url) {
+			boolean isRight = true;
+
+			/*
+			 * org.jsoup.nodes.Document doc =
+			 * Jsoup.connect(url).timeout(curHostConfig.getTimeOut()).get();
+			 */
+			String strWebContent = null;
+			try {
+				strWebContent = getContentFromUrl(url);
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				isRight = false;
+
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				isRight = false;
+			}
+			/*
+			 * org.jsoup.nodes.Document doc =
+			 * Jsoup.connect(url).timeout(curHostConfig.getTimeOut()).get();
+			 */
+			org.jsoup.nodes.Document doc = Jsoup.parse(strWebContent, baseUrl);
+			Elements els = doc.select(strPicContentTag);
+			if (els.first() != null) {
+				processPageImage(els);
+				Elements count_max = els.select(strPicCountMax);
+				String strMax = count_max.first().text();
+				Elements pic_count = els.select(strPicCount);
+				String strCount = pic_count.get(picCountIndex).text();
+				try {
+					if (Integer.parseInt(strMax) != Integer
+							.parseInt(strCount.substring(
+									strCount.indexOf(strFirstPicCountLetter) + 1,
+									strCount.indexOf(strSecondPicCountLetter)))) {
+						Elements nexts = els.select(strNextPicturePattern);
+						String href = nexts.first().attr(strNextPictureAttr);
+						processMorePictureHtml(href);
+					}
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+					logger.error(e.getMessage());
+					isRight = false;
+				}
+
+			}
+			return isRight;
+		}
+		
+		private String getContentFromUrl(String url)
+				throws ClientProtocolException, IOException {
+			String content = null;
+			try {
+				HttpClient client = new DefaultHttpClient();
+				client.getParams();
+				HttpGet request = new HttpGet(url);
+				baseUrl = request.getURI().getHost();
+				// request.getParams()
+				HttpResponse response = client.execute(request);
+				byte[] bytes = EntityUtils.toByteArray(response.getEntity());
+				content = new String(bytes, "gbk");
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+				logger.error("process URL:" + url + "failed! " + e.getMessage());
+				throw e;
+
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.error("process URL:" + url + "failed! " + e.getMessage());
+				throw e;
+			}
+			return content;
+		}
+		
+		
+		private void processPageImage(Elements els) {
+			Elements images = els.select("img");
+			for (org.jsoup.nodes.Element image : images) {
+				String url = image.absUrl("src");
+
+				logger.info(url);
+				logger.info(curArticle.getOrgUrl());
+				// testImage(url);
+				try {
+					URL imgUrl = new URL(url);
+					URLConnection connection = imgUrl.openConnection();
+					connection.setConnectTimeout(timeOut);
+					connection.setReadTimeout(timeOut);
+
+					BufferedImage bufImage = ImageIO.read(connection
+							.getInputStream());
+					Resource media = new Resource();
+					media.setDbFile(strDbFile);
+					media.setHeitht(bufImage.getHeight());
+					media.setWidth(bufImage.getWidth());
+					// media.setUrl(url);
+					media.setResContent(url);
+					media.setResType(Resource.IMGURL);
+					// switch (curArticle.getType()) {
+					// case Article.HTML:
+					if (curArticle.containsText()) {
+						String strAlt = image.attr("alt");
+						if (strAlt.length() > 0) {
+							// media.setTitle(strAlt);
+							media.setResText(strAlt);
+						} else {
+							// media.setTitle(curArticle.getTitle());
+							media.setResText(curArticle.getTitle());
+						}
+					}
+
+					// case Article.PICTURE:
+					if (curArticle.getArcType() == Article.ALLRESOURCE) {
+						Elements subTitles = els.select(strPicSlide);
+						if (subTitles.first() != null
+								&& (subTitles.first().text().length() > 0)) {
+							/* media.setTitle(subTitles.first().html()); */
+							media.setResText(subTitles.first().html());
+						} else {
+							/* media.setTitle(curArticle.getTitle()); */
+							String strAlt = image.attr("alt");
+							if (strAlt.length() > 0) {
+								// media.setTitle(strAlt);
+								media.setResText(strAlt);
+							} else {
+								// media.setTitle(curArticle.getTitle());
+								media.setResText(curArticle.getTitle());
+							}
+							// media.setResText(curArticle.getTitle());
+						}
+					}
+					// default:
+					// break;
+					// }
+
+					curArticle.addMedia(media);
+					// System.out.println("height: " + bufImage.getHeight());
+					// System.out.println("width: " + bufImage.getWidth());
+
+				} catch (MalformedURLException e) {
+
+					e.printStackTrace();
+					logger.error(e.getMessage());
+					continue;
+				} catch (IOException e) {
+					e.printStackTrace();
+					logger.error(e.getMessage());
+					logger.error(url);
+					continue;
+				}
+			}
 		}
 	}
 	private List<NewsArea> newsAreaList = null ;

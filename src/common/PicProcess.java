@@ -6,5 +6,5 @@ import dbTool.Article;
 
 public interface PicProcess {
 	public boolean processPicNode(Element picConfigNode) throws HostConfigException;
-	public boolean processHtml(String url, Article article );
+	public boolean processHtml(org.jsoup.nodes.Document doc, Article article );
 }

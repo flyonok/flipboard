@@ -1,9 +1,14 @@
 package test;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+
+import javax.imageio.ImageIO;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -14,6 +19,8 @@ import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import dbTool.Resource;
 
 public class JsoupTest {
 
@@ -142,9 +149,35 @@ public class JsoupTest {
 				System.out.println(dt.first().html());
 				Elements dds = dl.select("dd");
 				System.out.println(dds.first().html());
+				processPageImage(dds.first().html());
 			}
 			
 		}finally {
+			
+		}
+	}
+	
+	private void processPageImage(String url)
+	{
+		try {
+			URL imgUrl = new URL(url);
+			URLConnection connection = imgUrl.openConnection();
+			connection.setConnectTimeout(100000);
+			connection.setReadTimeout(100000);
+
+			BufferedImage bufImage = ImageIO.read(connection
+					.getInputStream());
+			System.out.println("height:" + bufImage.getHeight());
+			System.out.println("width:" + bufImage.getWidth());
+			// media.setUrl(url);
+		} catch (MalformedURLException e) {
+
+			e.printStackTrace();
+			System.err.println(e.getMessage());
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println(e.getMessage());
+			System.out.println(url);
 			
 		}
 	}

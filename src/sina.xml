@@ -102,17 +102,16 @@
 				</item>
 			</newsPageProcess>
 			
-			<picturePageProcess> <!-- 纯图片网页处理方式 -->
-				<picContentTag>div#bigPicArea</picContentTag><!-- 图片内容开始 -->
-				<picAbstractPattern>div.slide_subtitle</picAbstractPattern><!-- 获取图片网页摘要 -->
-				<picSlide>div#slide_pic</picSlide><!-- 获取具体的图片html内容 -->
-				<picCountMax>font.pic_count_max</picCountMax><!-- 获取当前图片数目 -->
-				<picCount>font.pic_count</picCount> <!-- 获取图片总数目 -->
-				<picCountIndex>1</picCountIndex><!-- 获取图片总数目的索引 -->
-				<firstPicCountLetter>/</firstPicCountLetter><!-- 图片总数目数字分隔的第一个字母 -->
-				<secondPicCountLetter>)</secondPicCountLetter><!-- 图片总数目数字分隔的第二个字母 -->
-				<nextPicturePattern>a.pic_next</nextPicturePattern> <!-- 获取下一张图片 -->
-				<nextPictureAttr>href</nextPictureAttr> <!-- 获取下一张图片链接地址 -->
+			<picturePageProcess>
+				<sina>
+					<htmlContent>div#d_picIntro</htmlContent><!-- 获取图片网页摘要 -->
+					<picContentTag>div#eData</picContentTag><!-- 图片内容开始 -->
+					<picElements>dl</picElements><!-- 图片元素集合 -->
+					<picDesc>dt</picDesc><!-- 图片文本描述 -->
+					<picSpec>dd</picSpec><!-- 具体图片元素 -->
+					<picIndex>0</picIndex><!-- 图片元素索引 -->
+				</sina>
+				
 			</picturePageProcess>
 		</newsArea>
 	</hosts>
