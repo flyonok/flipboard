@@ -1,5 +1,6 @@
 package common;
 
+// import org.dom4j.Document;
 import org.dom4j.Element;
 
 import dbTool.Article;

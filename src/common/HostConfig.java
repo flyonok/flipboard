@@ -34,7 +34,7 @@ import dbTool.Article;
 import dbTool.Resource;
 
 public class HostConfig {
-	static Logger logger = Logger.getLogger(HostConfig.class.getName());
+	static Logger logger = Logger.getLogger("newedu.webcrawl.hexun"/*HostConfig.class.getName()*/);
 	// hosts attribute
 	private String strDescription = null;
 	public String getHostDescription() { return strDescription;}
@@ -348,6 +348,7 @@ public class HostConfig {
 		// newsContent end
 		
 		// pictureProcess
+		private PicProcess picProcess = null;
 		private String strPicContentTag = null;
 		public String getPicContentTag() { return strPicContentTag; }
 		
@@ -378,6 +379,10 @@ public class HostConfig {
 		private String strNextPictureAttr = null;
 		public String getNextPictureAttr() { return strNextPictureAttr; }
 		// pictureProcess end
+		
+		public boolean processPicHtml(org.jsoup.nodes.Document doc, Article article) {
+			return picProcess.processHtml(doc, article);
+		}
 		
 		public void processNewsArea(Element newsAreaNode) throws HostConfigException {
 			Element contentAreaNode = newsAreaNode.element("contentArea");
@@ -647,9 +652,24 @@ public class HostConfig {
 		private void processPicturePage(Element newsAreaNode) throws HostConfigException  {
 			Element pictureNode = newsAreaNode.element("picturePageProcess");
 			if (pictureNode == null)
-				throw new HostConfigException("newsPageProcess node must have picturePageProcess child node!");
+				throw new HostConfigException("newsArea node must have picturePageProcess child node!");
 			
-			logger.info("picturePageProcess----begin");
+			Element hexunNode = pictureNode.element("hexun");
+			if (hexunNode != null)
+			{
+				picProcess = new HexunPicProcess();
+				picProcess.processPicNode(hexunNode);
+				return;
+			}
+			
+			Element sinaNode = pictureNode.element("sina");
+			if (sinaNode != null) {
+				picProcess = new SinaPicProcess();
+				picProcess.processPicNode(sinaNode);
+				return;
+			}
+			throw new HostConfigException("picturePageProcess node must have hexun or sina node");
+			/*logger.info("picturePageProcess----begin");
 			Element picContentTagNode = pictureNode.element("picContentTag");
 			if (picContentTagNode == null)
 				throw new HostConfigException("picturePageProcess node must have picContentTag child node!");
@@ -716,7 +736,7 @@ public class HostConfig {
 				logger.error(e.getMessage());
 				throw new HostConfigException("picCountIndex node must be number!");
 			}
-			logger.info("picturePageProcess----end");
+			logger.info("picturePageProcess----end");*/
 		}
 		
 		
@@ -787,71 +807,72 @@ public class HostConfig {
 		private String baseUrl;
 
 		// pictureProcess end
-		public boolean processPicNode(Element newsAreaNode) throws HostConfigException
+		public boolean processPicNode(Element hexunNode) throws HostConfigException
 		{
-			Element pictureNode = newsAreaNode.element("picturePageProcess");
-			if (pictureNode == null)
+			/*
+			Element hexunNode = hexunNode.element("picturePageProcess");
+			if (hexunNode == null)
 				throw new HostConfigException("newsPageProcess node must have picturePageProcess child node!");
-			
-			logger.info("picturePageProcess----begin");
-			Element picContentTagNode = pictureNode.element("picContentTag");
+			*/
+			logger.info("picturePageProcess-->hexun  ----begin");
+			Element picContentTagNode = hexunNode.element("picContentTag");
 			if (picContentTagNode == null)
-				throw new HostConfigException("picturePageProcess node must have picContentTag child node!");
+				throw new HostConfigException("hexun node must have picContentTag child node!");
 			strPicContentTag = picContentTagNode.getTextTrim();
 			logger.info("picContentTag:" + strPicContentTag);
 			
-			Element picAbstractPatternNode = pictureNode.element("picAbstractPattern");
+			Element picAbstractPatternNode = hexunNode.element("picAbstractPattern");
 			if (picAbstractPatternNode == null)
-				throw new HostConfigException("picturePageProcess node must have picAbstractPattern child node!");
+				throw new HostConfigException("hexun node must have picAbstractPattern child node!");
 			strPicAbstractPattern = picAbstractPatternNode.getTextTrim();
 			logger.info("picAbstractPattern:" + strPicAbstractPattern);
 			
-			Element picSlideNode = pictureNode.element("picSlide");
+			Element picSlideNode = hexunNode.element("picSlide");
 			if (picSlideNode == null)
-				throw new HostConfigException("picturePageProcess node must have picSlide child node!");
+				throw new HostConfigException("hexun node must have picSlide child node!");
 			strPicSlide = picSlideNode.getTextTrim();
 			logger.info("picSlide:" + strPicSlide );
 			
-			Element picCountMaxNode = pictureNode.element("picCountMax");
+			Element picCountMaxNode = hexunNode.element("picCountMax");
 			if (picCountMaxNode == null)
-				throw new HostConfigException("picturePageProcess node must have picCountMax child node!");
+				throw new HostConfigException("hexun node must have picCountMax child node!");
 			strPicCountMax = picCountMaxNode.getTextTrim();
 			logger.info("picCountMax:" + strPicCountMax);
 			
-			Element picCountNode = pictureNode.element("picCount");
+			Element picCountNode = hexunNode.element("picCount");
 			if (picCountNode == null)
-				throw new HostConfigException("picturePageProcess node must have picCount child node!");
+				throw new HostConfigException("hexun node must have picCount child node!");
 			strPicCount = picCountNode.getTextTrim();
 			logger.info("picCount:" + strPicCount);
 			
-			Element firstPicCountLetterNode = pictureNode.element("firstPicCountLetter");
+			Element firstPicCountLetterNode = hexunNode.element("firstPicCountLetter");
 			if (firstPicCountLetterNode == null)
-				throw new HostConfigException("picturePageProcess node must have firstPicCountLetter child node!");
+				throw new HostConfigException("hexun node must have firstPicCountLetter child node!");
 			strFirstPicCountLetter = firstPicCountLetterNode.getTextTrim();
 			logger.info("firstPicCountLetter:" + strFirstPicCountLetter );
 			
-			Element secondPicCountLetterNode = pictureNode.element("secondPicCountLetter");
+			Element secondPicCountLetterNode = hexunNode.element("secondPicCountLetter");
 			if (secondPicCountLetterNode == null)
-				throw new HostConfigException("picturePageProcess node must have secondPicCountLetter child node!");
+				throw new HostConfigException("hexun node must have secondPicCountLetter child node!");
 			strSecondPicCountLetter = secondPicCountLetterNode.getTextTrim();
 			logger.info("secondPicCountLetter:" + strSecondPicCountLetter );
 			
-			Element nextPicturePatternNode = pictureNode.element("nextPicturePattern");
+			Element nextPicturePatternNode = hexunNode.element("nextPicturePattern");
 			if (nextPicturePatternNode == null)
-				throw new HostConfigException("picturePageProcess node must have nextPicturePattern child node!");
+				throw new HostConfigException("hexun node must have nextPicturePattern child node!");
 			strNextPicturePattern = nextPicturePatternNode.getTextTrim();
 			logger.info("nextPicturePattern:" + strNextPicturePattern);
 			
-			Element nextPictureAttrNode = pictureNode.element("nextPictureAttr");
+			Element nextPictureAttrNode = hexunNode.element("nextPictureAttr");
 			if (nextPictureAttrNode == null)
-				throw new HostConfigException("picturePageProcess node must have nextPictureAttr child node!");
+				throw new HostConfigException("hexun node must have nextPictureAttr child node!");
 			strNextPictureAttr = nextPictureAttrNode.getTextTrim();
 			logger.info("nextPictureAttr:" + strNextPictureAttr);
 			
 			try {
-				Element picCountIndexNode = pictureNode.element("picCountIndex");
+				Element picCountIndexNode = hexunNode.element("picCountIndex");
 				if (picCountIndexNode == null)
-					throw new HostConfigException("picturePageProcess node must have picCountIndex child node!");
+					throw new HostConfigException("hexun node must have picCountIndex child node!");
 				picCountIndex = Integer.parseInt( picCountIndexNode.getTextTrim());
 				logger.info("picCountIndex:" + picCountIndex );
 				
@@ -860,7 +881,7 @@ public class HostConfig {
 				logger.error(e.getMessage());
 				throw new HostConfigException("picCountIndex node must be number!");
 			}
-			logger.info("picturePageProcess----end");
+			logger.info("picturePageProcess-->hexun  ----end");
 			return true;
 		}
 		
@@ -1070,6 +1091,145 @@ public class HostConfig {
 			}
 		}
 	}
+	
+	public class SinaPicProcess implements PicProcess {
+		
+		private String strHtmlContent = null;
+		public String getHtmlContent() { return strHtmlContent ; }
+		
+		private int htmlContentIndex = 0;
+		public int getHtmlContentIndex() { return htmlContentIndex; }
+		
+		private String strPicContentTag = null;
+		public String getPicContentTag() { return strPicContentTag; }
+		
+		private String strPicElements = null;
+		public String getPicElements() { return strPicElements; }
+		
+		private String strPicDesc = null;
+		public String getPicDesc() { return strPicDesc; }
+		
+		private String strPicSpec = null;
+		public String getPicSpec() { return strPicSpec; }
+		
+		private int picIndex = 0;
+		public int getPicIndex() { return picIndex; }
+		
+		Article curArticle = null;
+		
+		public boolean processPicNode(Element sinaNode) throws HostConfigException
+		{
+			logger.info("picturePageProcess-->sina  ----begin");
+			Element picContentTagNode = sinaNode.element("picContentTag");
+			if (picContentTagNode == null) {
+				throw new HostConfigException("sina node must have picContentTag child node!");
+			}
+			strPicContentTag = picContentTagNode.getTextTrim();
+			logger.info("picContentTag:"+strPicContentTag);
+			
+			Element picElementsNode = sinaNode.element("picElements");
+			if (picElementsNode == null) {
+				throw new HostConfigException("sina node must have picElements child node!");
+			}
+			strPicElements = picElementsNode.getTextTrim();
+			logger.info("picElements:" + strPicElements);
+			
+			Element picDescNode = sinaNode.element("picDesc");
+			if (picDescNode == null) {
+				throw new HostConfigException("sina node must have picDesc child node!");
+			}
+			strPicDesc = picDescNode.getTextTrim();
+			logger.info("picDesc:" + strPicDesc);
+			
+			Element picSpecNode = sinaNode.element("picSpec");
+			if (picSpecNode == null) {
+				throw new HostConfigException("sina node must have picSpec child node!");
+			}
+			strPicSpec = picSpecNode.getTextTrim();
+			logger.info("picSpec:" + strPicSpec);
+			
+			Element picIndexNode = sinaNode.element("picIndex");
+			if (picIndexNode == null) {
+				throw new HostConfigException("sina node must have picIndex child node!");
+			}
+			
+			try {
+				picIndex = Integer.parseInt(picIndexNode.getTextTrim());
+			} catch(NumberFormatException e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				throw new HostConfigException("sina-->picIndex must be number!");
+			}
+			logger.info("picIndex:" + picIndex);
+			
+			Element htmlContentNode = sinaNode.element("htmlContentIndex");
+			if (htmlContentNode == null) {
+				throw new HostConfigException("sina node must have htmlContentNodeIndex child node!");
+			}
+			try {
+				htmlContentIndex = Integer.parseInt(htmlContentNode.getTextTrim());
+			} catch(NumberFormatException e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				throw new HostConfigException("sina-->htmlContentIndex must be number!");
+			}
+			logger.info("htmlContentIndex:" + htmlContentIndex);
+			
+			logger.info("picturePageProcess-->sina  ----end");
+			return true;
+		}
+		public boolean processHtml(org.jsoup.nodes.Document doc, Article article ) {
+			if (article == null) {
+				return false;
+			}
+			curArticle = article;
+			
+			Elements picContentEls = doc.select(strPicContentTag/*"div#eData"*/);
+			Elements imgCollections = picContentEls.select(strPicElements/*"dl"*/);
+			if (imgCollections.first() != null)
+			{
+				curArticle.setHtml(imgCollections.first().select(strPicSpec).get(htmlContentIndex).html());
+				curArticle.setArcType(Article.ALLRESOURCE);
+			}
+			for (org.jsoup.nodes.Element dl : imgCollections) {
+				Resource media = new Resource();
+				Elements imgDesc = dl.select(strPicDesc/*"dt"*/);
+				// System.out.println(imgDesc.first().html());
+				media.setResText(imgDesc.first().html());
+				Elements imgUrls = dl.select(strPicSpec/*"dd"*/);
+				logger.info(imgUrls.get(picIndex).html());
+				media.setResContent(imgUrls.get(picIndex).html());
+				media.setResType(Resource.IMGURL);
+				media.setDbFile(strDbFile);
+				processPageImage(imgUrls.get(picIndex).html(), media);
+			}
+			return true;
+		}
+		
+		private void processPageImage(String url, Resource res)
+		{
+			try {
+				URL imgUrl = new URL(url);
+				URLConnection connection = imgUrl.openConnection();
+				connection.setConnectTimeout(timeOut);
+				connection.setReadTimeout(timeOut);
+
+				BufferedImage bufImage = ImageIO.read(connection
+						.getInputStream());
+				res.setHeitht(bufImage.getHeight());
+				res.setWidth(bufImage.getWidth());
+				curArticle.addMedia(res);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				// System.out.println(url);				
+			}
+		}
+	}
+	
 	private List<NewsArea> newsAreaList = null ;
 	public List<NewsArea> getNewsAreaList() { return newsAreaList; }
 	

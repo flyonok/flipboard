@@ -140,6 +140,9 @@ public class JsoupTest {
 			String content = getCotentFromUrl("http://slide.news.sina.com.cn/c/slide_1_2841_27053.html");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			// Elements contentEls = doc.select(/*"div#tab01_con1"*/"div#sinashareto");
+			System.out.println(doc.html());
+			Elements htmlContentEls = doc.select("div#d_picIntro");
+			System.out.println(htmlContentEls.first().html());
 			Elements contentEls = doc.select("div#eData");
 			// contentEls.select("div#sinashareto").remove();
 			// System.out.println(contentEls.outerHtml());

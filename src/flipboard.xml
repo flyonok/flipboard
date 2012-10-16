@@ -185,16 +185,18 @@
 				</item>
 			</newsPageProcess>
 			<picturePageProcess>
-				<picContentTag>div#bigPicArea</picContentTag>
-				<picAbstractPattern>div.slide_subtitle</picAbstractPattern>
-				<picSlide>div#slide_pic</picSlide>
-				<picCountMax>font.pic_count_max</picCountMax>
-				<picCount>font.pic_count</picCount>
-				<picCountIndex>1</picCountIndex>
-				<firstPicCountLetter>/</firstPicCountLetter>
-				<secondPicCountLetter>)</secondPicCountLetter>
-				<nextPicturePattern>a.pic_next</nextPicturePattern>
-				<nextPictureAttr>href</nextPictureAttr>
+			    <hexun>
+					<picContentTag>div#bigPicArea</picContentTag>
+					<picAbstractPattern>div.slide_subtitle</picAbstractPattern>
+					<picSlide>div#slide_pic</picSlide>
+					<picCountMax>font.pic_count_max</picCountMax>
+					<picCount>font.pic_count</picCount>
+					<picCountIndex>1</picCountIndex>
+					<firstPicCountLetter>/</firstPicCountLetter>
+					<secondPicCountLetter>)</secondPicCountLetter>
+					<nextPicturePattern>a.pic_next</nextPicturePattern>
+					<nextPictureAttr>href</nextPictureAttr>
+				</hexun>
 			</picturePageProcess>
 		</newsArea>
 	</hosts>

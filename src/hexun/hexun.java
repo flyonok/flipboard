@@ -269,6 +269,7 @@ public class hexun implements Job{
 				// String pattern = "^\\[(.+?)\\]";
 				for (org.jsoup.nodes.Element ele : contentEles) {
 					// Elements links = caijing.getElementsByTag("a");
+					
 					if (curContentArea.getMustHaveChild().length() > 0 ) {
 						Elements childEles = ele.select(curContentArea.getMustHaveChild());
 						if (childEles.first() == null) continue;
@@ -281,23 +282,25 @@ public class hexun implements Job{
 						String linkHref = link.attr(curNewsArea.getNewsUrlPattern());
 						String linkText = link.text();
 						// for debug
-						/*String linkHref = "http://finance.sina.com.cn/chanjing/cyxw/20121009/165613319550.shtml";
-						String linkText = "强生等30家药企反对广告禁令 齐声质问药监局";*/
+						
+						/*String linkHref = "http://slide.news.sina.com.cn/w/slide_1_2841_27080.html";
+						String linkText = "奥地利男子自太空边缘超音速跳伞创新纪录";*/
 						//debug end
 						
 
 						try {
 							// if (!linkText.matches(pattern))
 							// if (!linkText.contains("["))
+							// logger.info(linkHref.matches(curNewsArea.getUrlLinkReg()));
 							if (linkHref.matches(curNewsArea.getUrlLinkReg())
 									&& ( ( curNewsArea.getExcludePattern().length() > 0 ? !linkText.matches(curNewsArea.getExcludePattern()) : true )) ) {
 								// System.out.println("href=" + linkHref);
 								// System.out.println("title=" + linkText);
-
+								// logger.info("process sina....");
 								if (Article.isContentExist(linkHref,curHostConfig.getDbFile())) {
 									continue;
 								}
-
+								
 								curArticle = new Article();
 								curArticle.setTitle(linkText);
 								curArticle.setOrgUrl(linkHref);
@@ -488,7 +491,7 @@ public class hexun implements Job{
 			// curCont.setHtml(text.toString());
 			// for debug end
 
-		} else if (processPictureHtml(doc)) { // 图片网页处理
+		} else if (curNewsArea.processPicHtml(doc, curArticle)/*processPictureHtml(doc)*/) { // 图片网页处理
 			logger.info("full picture html:" + url);
 			isCorrect = true;
 		} else {
@@ -749,12 +752,12 @@ public class hexun implements Job{
 	// image end
 	
 	// 纯图片网页
-	private boolean processPictureHtml(org.jsoup.nodes.Document doc) {
-		Elements els = doc.select( curNewsArea.getPicContentTag()/*strPicContentTag*/ /*"div#bigPicArea"*/ );
+	/*private boolean processPictureHtml(org.jsoup.nodes.Document doc) {
+		Elements els = doc.select( curNewsArea.getPicContentTag()strPicContentTag "div#bigPicArea" );
 		try {
 			if (els.first() != null) {
-				Elements subTitles = els.select( curNewsArea.getPicAbstractPattern()/*strPicAbstractPattern*/ /* "div.slide_subtitle" */);
-				Elements pics = els.select( curNewsArea.getPicSlide()/*strPicSlide*/ /* "div#slide_pic" */);
+				Elements subTitles = els.select( curNewsArea.getPicAbstractPattern()strPicAbstractPattern  "div.slide_subtitle" );
+				Elements pics = els.select( curNewsArea.getPicSlide()strPicSlide  "div#slide_pic" );
 				if (subTitles.first() != null  ) {
 					// curArticle.setAbstract( subTitles.first().html() );
 					curArticle.setHtml(subTitles.first().html());
@@ -762,17 +765,17 @@ public class hexun implements Job{
 						curArticle.setHtml( subTitles.first().html() + pics.first().html() );
 						curArticle.setArcType(Article.ALLRESOURCE);
 						processPageImage(els);
-						Elements count_max = els.select( curNewsArea.getPicCountMax()/*strPicCountMax*//* "font.pic_count_max" */);
+						Elements count_max = els.select( curNewsArea.getPicCountMax()strPicCountMax "font.pic_count_max" );
 						String strMax = count_max.first().text();
-						Elements pic_count = els.select( curNewsArea.getPicCount()/*strPicCount*//* "font.pic_count" */);
-						String strCount = pic_count.get( curNewsArea.getPicCountIndex()/*picCountIndex*/ ).text();
+						Elements pic_count = els.select( curNewsArea.getPicCount()strPicCount "font.pic_count" );
+						String strCount = pic_count.get( curNewsArea.getPicCountIndex()picCountIndex ).text();
 						// System.out.println( strMax + "\t" + strCount );
 						if ( Integer.parseInt(strMax) != Integer.parseInt( strCount.substring( 
-								strCount.indexOf(curNewsArea.getFirstPicCountLetter()/*strFirstPicCountLetter*/) + 1, 
-									strCount.indexOf(curNewsArea.getSecondPicCountLetter()/*strSecondPicCountLetter*/) ) ) ) {
+								strCount.indexOf(curNewsArea.getFirstPicCountLetter()strFirstPicCountLetter) + 1, 
+									strCount.indexOf(curNewsArea.getSecondPicCountLetter()strSecondPicCountLetter) ) ) ) {
 							
-							Elements nexts = els.select( curNewsArea.getNextPicturePattern()/*strNextPicturePattern*//* "a.pic_next" */);
-							String href = nexts.first().attr( curNewsArea.getNextPictureAttr()/*strNextPictureAttr*//* "href" */);
+							Elements nexts = els.select( curNewsArea.getNextPicturePattern()strNextPicturePattern "a.pic_next" );
+							String href = nexts.first().attr( curNewsArea.getNextPictureAttr()strNextPictureAttr "href" );
 							processMorePictureHtml(href);
 						}
 						
@@ -790,16 +793,16 @@ public class hexun implements Job{
 		}
 		
 		return false;
-	}
+	}*/
 	
 	
-	private boolean processMorePictureHtml(String url) {
+	/*private boolean processMorePictureHtml(String url) {
 		boolean isRight = true;
 
-		/*
+		
 		 * org.jsoup.nodes.Document doc =
 		 * Jsoup.connect(url).timeout(curHostConfig.getTimeOut()).get();
-		 */
+		 
 		String strWebContent = null;
 		try {
 			strWebContent = getContentFromUrl(url);
@@ -813,10 +816,10 @@ public class hexun implements Job{
 			logger.error(e.getMessage());
 			isRight = false;
 		}
-		/*
+		
 		 * org.jsoup.nodes.Document doc =
 		 * Jsoup.connect(url).timeout(curHostConfig.getTimeOut()).get();
-		 */
+		 
 		org.jsoup.nodes.Document doc = Jsoup.parse(strWebContent, baseUrl);
 		Elements els = doc.select(curNewsArea.getPicContentTag());
 		if (els.first() != null) {
@@ -849,7 +852,7 @@ public class hexun implements Job{
 		return isRight;
 	}
 	// test end
-	
+*/	
 	private String getFileName(String url) {
 		int last = url.indexOf("//");
 		if (last == -1)
@@ -1168,7 +1171,7 @@ public class hexun implements Job{
 				isCorrect = false;
 				return isCorrect;
 			}
-		} else if (processPictureHtml(doc)) {
+		} else if (curNewsArea.processPicHtml(doc, curArticle)) {
 			logger.info("full picture html:" + url);
 			isCorrect = true;
 		} else {

@@ -20,7 +20,7 @@
 			    <listTagPattern>a</listTagPattern>
 				<newsUrlPattern>href</newsUrlPattern>
 				<excludePattern></excludePattern>
-				<urlLinkReg><![CDATA[[a-zA-z]+://[^\s]*.shtm.?]]></urlLinkReg>
+				<urlLinkReg><![CDATA[[a-zA-z]+://[^\s]*.htm.?]]></urlLinkReg>
 				<newsTitlePattern></newsTitlePattern>
 			</newsList>
 			<newsPageProcess>
@@ -104,12 +104,12 @@
 			
 			<picturePageProcess>
 				<sina>
-					<htmlContent>div#d_picIntro</htmlContent><!-- 获取图片网页摘要 -->
 					<picContentTag>div#eData</picContentTag><!-- 图片内容开始 -->
 					<picElements>dl</picElements><!-- 图片元素集合 -->
 					<picDesc>dt</picDesc><!-- 图片文本描述 -->
 					<picSpec>dd</picSpec><!-- 具体图片元素 -->
 					<picIndex>0</picIndex><!-- 图片元素索引 -->
+					<htmlContentIndex>4</htmlContentIndex><!-- 获取图片网页摘要 -->
 				</sina>
 				
 			</picturePageProcess>
