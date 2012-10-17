@@ -1182,10 +1182,15 @@ public class HostConfig {
 			if (article == null) {
 				return false;
 			}
+			boolean isCorrect = false;
 			curArticle = article;
 			
 			Elements picContentEls = doc.select(strPicContentTag/*"div#eData"*/);
+			if (picContentEls.first() == null)
+				return isCorrect;
 			Elements imgCollections = picContentEls.select(strPicElements/*"dl"*/);
+			if (imgCollections.first() == null)
+				return isCorrect;
 			if (imgCollections.first() != null)
 			{
 				curArticle.setHtml(imgCollections.first().select(strPicSpec).get(htmlContentIndex).html());
@@ -1203,7 +1208,8 @@ public class HostConfig {
 				media.setDbFile(strDbFile);
 				processPageImage(imgUrls.get(picIndex).html(), media);
 			}
-			return true;
+			isCorrect = true;
+			return isCorrect;
 		}
 		
 		private void processPageImage(String url, Resource res)

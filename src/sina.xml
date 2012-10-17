@@ -44,10 +44,10 @@
 							<orgPattern>div.blkComment.otherContent_01</orgPattern>
 							<newContent></newContent>
 						</item>
-						<item>
+						<!-- <item>
 							<orgPattern>style</orgPattern>
 							<newContent></newContent>
-						</item>
+						</item> -->
 						<item>
 							<orgPattern>script</orgPattern>
 							<newContent></newContent>

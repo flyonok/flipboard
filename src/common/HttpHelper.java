@@ -28,8 +28,10 @@ public class HttpHelper {
 			int nFind = html.indexOf("window.location.href");
 			if ( nFind != -1)
 			{
-				redirectUrl = html.substring(html.indexOf('\'', nFind)+ 1, html.indexOf(';', nFind) - 1);
-				break;
+				if ( (html.indexOf('\'', nFind) != -1)  && (html.indexOf(';', nFind) != -1)) {
+					redirectUrl = html.substring(html.indexOf('\'', nFind)+ 1, html.indexOf(';', nFind) - 1);
+					break;
+				}
 				/*try
 				{
 					Object obj = null;

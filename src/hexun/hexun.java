@@ -169,6 +169,7 @@ public class hexun implements Job{
 		hexun test = new hexun();
 		try {
 			test.processFileXml("/sina.xml");
+			test.processFileXml("/flipboard.xml");
 			// test.setConfigInit(true);
 		}catch (HostConfigException e) {
 			e.printStackTrace();
@@ -190,6 +191,7 @@ public class hexun implements Job{
 		for (HostConfig item : hostConfigList) {
 			curHostConfig = item;
 			saveHostToDb(item);
+			logger.info(curHostConfig.getUrl());
 			processHostUrl(curHostConfig.getUrl());
 			// test
 			/*curNewsArea = item.getNewsAreaList().get(0);
@@ -197,7 +199,7 @@ public class hexun implements Job{
 			// test end
 			// database file copy for debug
 			URL url = hexun.class.getResource(item.getDbFile());
-			String dstFile = "E:\\tools\\php\\APMServ5.2.6\\APMServ5.2.6\\www\\htdocs\\xxtebook.db";
+			String dstFile = "E:\\tools\\php\\APMServ5.2.6\\APMServ5.2.6\\www\\htdocs\\" + item.getDbFile();
 			copyDb(url.getFile(), dstFile);
 			
 		}
@@ -283,8 +285,8 @@ public class hexun implements Job{
 						String linkText = link.text();
 						// for debug
 						
-						/*String linkHref = "http://slide.news.sina.com.cn/w/slide_1_2841_27080.html";
-						String linkText = "奥地利男子自太空边缘超音速跳伞创新纪录";*/
+						/*String linkHref = "http://city.sina.com.cn/dhcs.html";
+						String linkText = "行走中国 对话城市";*/
 						//debug end
 						
 
@@ -585,7 +587,7 @@ public class hexun implements Job{
 		}
 		// logger.info(els.outerHtml());
 		String contents = els.outerHtml();
-		logger.info(contents);
+		// logger.info(contents);
 		/*
 		contents = contents.replaceAll("<script(?:[^<]++|<(?!/script>))*+</script>", "");
 		while(contents.contains("</script>")){
