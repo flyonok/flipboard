@@ -33,7 +33,9 @@ public class JsoupTest {
 		// test.testJsoup();
 		// test.testSinaNews();
 		// test.testSinaPageContent();
-		test.testSinaPicContent();
+		// test.testSinaPicContent();
+		test.testSinaHuNan();
+		// test.testSinaSports();
 		
 	}
 	
@@ -104,6 +106,62 @@ public class JsoupTest {
 		}finally {
 			
 		}
+	}
+	
+	private void testSinaHuNan()
+	{
+		try {
+			/*String content = getCotentFromUrl("http://www.sina.com.cn");*/
+			String content = getCotentFromUrl("http://www.sina.com.cn");
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			/*String sina = doc.html();
+			System.out.println(sina.indexOf("news_con_2"));
+			System.out.println(sina.substring(sina.indexOf("news_con_2") - 50, sina.indexOf("news_con_2") + 300));*/
+			Elements contentEls = doc.select("span");
+			// System.out.println(contentEls.html());
+			// System.out.println(contentEls.select("span#news_con_2").html());
+			for (Element ele : contentEls) {
+				// System.out.println(ele.id());
+				if (ele.id().trim().equals("news_con_1")) {
+					System.out.println("find");
+					System.out.println(ele.html());
+				}
+				/*Elements links = ele.getElementsByTag("a");
+				for (Element link : links) {
+					String linkHref = link.attr("href");
+					String linkText = link.text();
+					System.out.println(linkText);
+					System.out.println(linkHref);
+				}*/
+			}
+		}finally {
+			
+		}
+		System.out.println("end");
+	}
+	
+	private void testSinaSports()
+	{
+		try {
+			/*String content = getCotentFromUrl("http://www.sina.com.cn");*/
+			String content = getCotentFromUrl("http://www.sina.com.cn");
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			Elements contentEls = doc.select("div#blk_sports_2"/*"span#news_con_2"*/);
+			// System.out.println(contentEls.html());
+			// System.out.println(contentEls.select("span#news_con_2").html());
+			for (Element ele : contentEls) {
+				Elements links = ele.getElementsByTag("a");
+				for (Element link : links) {
+					String linkHref = link.attr("href");
+					String linkText = link.text();
+					System.out.println(linkText);
+					System.out.println(linkHref);
+				}
+			}
+		}finally {
+			
+		}
+		System.out.println("end");
 	}
 	
 	private void testSinaPageContent() {
