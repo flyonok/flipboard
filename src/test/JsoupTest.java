@@ -114,15 +114,15 @@ public class JsoupTest {
 			/*String content = getCotentFromUrl("http://www.sina.com.cn");*/
 			String content = getCotentFromUrl("http://www.sina.com.cn");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
-			/*String sina = doc.html();
-			System.out.println(sina.indexOf("news_con_2"));
-			System.out.println(sina.substring(sina.indexOf("news_con_2") - 50, sina.indexOf("news_con_2") + 300));*/
+			String sina = doc.html();
+			System.out.println(sina.indexOf("http://hunan.sina.com.cn/news/s/2012-10-20/090221606.html"));
+			// System.out.println(sina.substring(sina.indexOf("news_con_2") - 50, sina.indexOf("news_con_2") + 300));
 			Elements contentEls = doc.select("span");
 			// System.out.println(contentEls.html());
 			// System.out.println(contentEls.select("span#news_con_2").html());
 			for (Element ele : contentEls) {
 				// System.out.println(ele.id());
-				if (ele.id().trim().equals("news_con_1")) {
+				if (ele.id().trim().equals("news_con_2")) {
 					System.out.println("find");
 					System.out.println(ele.html());
 				}
@@ -179,14 +179,26 @@ public class JsoupTest {
 			contentEls.select("style").remove();
 			contentEls.select("script").remove();
 			System.out.println(contentEls.outerHtml());*/
-			/*for (Element ele : contentEls) {
-				Elements links = ele.getElementsByTag("a");
-				for (Element link : links) {
-					String linkHref = link.attr("href");
-					String linkText = link.text();
-					System.out.println(linkText);
-				}
-			}*/
+		}finally {
+			
+		}
+	}
+	
+	private void testSinaYLPageContent() {
+		try {
+			String content = getCotentFromUrl("http://ent.sina.com.cn/s/m/2012-10-20/02593767997.shtml");
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			// Elements contentEls = doc.select(/*"div#tab01_con1"*/"div#sinashareto");
+			Elements contentEls = doc.select("div.blkContainerSblk");
+			// contentEls.select("div#sinashareto").remove();
+			System.out.println(contentEls.outerHtml());
+			/*Elements els = contentEls.select("div#sinashareto");
+			if (els.first() != null) {
+				System.out.println(contentEls.outerHtml());
+			}
+			contentEls.select("style").remove();
+			contentEls.select("script").remove();
+			System.out.println(contentEls.outerHtml());*/
 		}finally {
 			
 		}
