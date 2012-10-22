@@ -169,7 +169,7 @@ public class hexun implements Job{
 		hexun test = new hexun();
 		try {
 			test.processFileXml("/sina.xml");
-			test.processFileXml("/flipboard.xml");
+			// test.processFileXml("/flipboard.xml");
 			// test.setConfigInit(true);
 		}catch (HostConfigException e) {
 			e.printStackTrace();
@@ -189,18 +189,29 @@ public class hexun implements Job{
 	public void startCrawl() {
 		logger.info("start crawl.....");
 		for (HostConfig item : hostConfigList) {
-			curHostConfig = item;
-			saveHostToDb(item);
-			logger.info(curHostConfig.getUrl());
-			processHostUrl(curHostConfig.getUrl());
+			try {
+				curHostConfig = item;
+				saveHostToDb(item);
+				logger.info(curHostConfig.getUrl());
+				processHostUrl(curHostConfig.getUrl());
+			} catch(Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				continue;
+			}
 			// test
 			/*curNewsArea = item.getNewsAreaList().get(0);
 			processSpecialLink("http://funds.hexun.com/2012-09-29/146390810.html");*/
 			// test end
 			// database file copy for debug
-			URL url = hexun.class.getResource(item.getDbFile());
-			String dstFile = "E:\\tools\\php\\APMServ5.2.6\\APMServ5.2.6\\www\\htdocs\\" + item.getDbFile();
-			copyDb(url.getFile(), dstFile);
+			try {
+				URL url = hexun.class.getResource(item.getDbFile());
+				String dstFile = "E:\\php\\APMServ\\APMServ5.2.6\\www\\htdocs\\phptest\\" + item.getDbFile();
+				copyDb(url.getFile(), dstFile);
+			} catch(Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+			}
 			
 		}
 		logger.info("crawl end....");

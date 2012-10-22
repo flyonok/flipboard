@@ -9,12 +9,12 @@
 		<dbFile>/sina.db</dbFile>
 		<newsArea>
 		     <contentArea>
-		         <item>
+		         <!-- <item>
 				     <contentSelector>span#news_con_1</contentSelector>
 				     <mustHaveChild></mustHaveChild> 
 					 <title>新浪|财经</title>
 					 <type>1</type>
-				 </item>
+				 </item> -->
 				  <item>
 				     <contentSelector>div#ent_con_1</contentSelector>
 				     <mustHaveChild></mustHaveChild> 
@@ -30,7 +30,7 @@
 				<newsTitlePattern></newsTitlePattern>
 			</newsList>
 			<newsPageProcess>
-				<item>
+				<item><!-- 新闻财经 and 娱乐-->
 					<newsContentTag>div#artibody</newsContentTag>
 					<abstractPattern>p+p+p</abstractPattern>
 					<elementReplace>
@@ -49,6 +49,26 @@
 						<item>
 							<orgPattern>div.blkComment.otherContent_01</orgPattern>
 							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern>div.content_about_video.clearfix</orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern>div.content_label_list</orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern>div.content_shareto.clearfix</orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>div.sv_cont_c14</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>div.artical-player-wrap</orgPattern>
+						    <newContent></newContent>
 						</item>
 						<item>
 							<orgPattern>style</orgPattern>
@@ -94,67 +114,17 @@
 						    <relatedItemsType>1</relatedItemsType>
 						    <ignoreTags></ignoreTags>
 						</item>
+						 <item>
+						    <relatedPattern>div.content_aboutNews.clearfix</relatedPattern>
+						    <relatedItemsType>0</relatedItemsType>
+						    <ignoreTags></ignoreTags>
+						</item>
 						<!-- <item>
 							<relatedPattern>div.guessulike2</relatedPattern>
 						    <relatedItemsType>1</relatedItemsType>
 						    <ignoreTags></ignoreTags>
 						</item> -->
 												
-					</relatedItems>
-					<pages>
-						<selectPattern></selectPattern>
-						<urlValue></urlValue>
-					</pages>
-				</item>
-				<item>
-					<newsContentTag>div.blkContainerSblk</newsContentTag>
-					<abstractPattern>p+p+p</abstractPattern>
-					<elementReplace>
-						<item>
-							<orgPattern>div.content_about_video.clearfix</orgPattern>
-							<newContent></newContent>
-						</item>
-						<!-- <item>
-							<orgPattern>a#guessulike2Change</orgPattern>
-							<newContent></newContent>
-						</item> -->
-						<item>
-							<orgPattern>div.content_label_list</orgPattern>
-							<newContent></newContent>
-						</item>
-						<item>
-							<orgPattern>div.content_shareto.clearfix</orgPattern>
-							<newContent></newContent>
-						</item>
-						<item>
-							<orgPattern>style</orgPattern>
-							<newContent></newContent>
-						</item>
-						<item>
-							<orgPattern>script</orgPattern>
-							<newContent></newContent>
-						</item>
-						<!-- <item>
-							<orgPattern>iframe</orgPattern>
-							<newContent></newContent>
-						</item> -->
-					</elementReplace>
-					<contentReplace>
-						<item>
-							<orgPattern><![CDATA[ <script(?:[^<]++|<(?!/script>))*+</script> ]]></orgPattern>
-							<newContent></newContent>
-						</item>
-						<item>
-							<orgPattern><![CDATA[ <style(?:[^<]++|<(?!/style>))*+</style> ]]></orgPattern>
-							<newContent></newContent>
-						</item>
-					</contentReplace>
-					<relatedItems>
-						 <item>
-						    <relatedPattern>div.content_aboutNews.clearfix</relatedPattern>
-						    <relatedItemsType>0</relatedItemsType>
-						    <ignoreTags></ignoreTags>
-						</item>												
 					</relatedItems>
 					<pages>
 						<selectPattern></selectPattern>
