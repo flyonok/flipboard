@@ -23,10 +23,16 @@ public class Article {
 	
 	// html content type 
 	public static final int LITERAL = 1; // 纯文字
-	public static final int ONERESOURCE = 2; // 只有一张图片或者视频
-	public static final int MULTIRESOURCE  = 3; // 有多个图片
-	public static final int HDPICTURES = 4; // 包含高清图片
-	public static final int ALLRESOURCE = 5; // 以图片为主
+	public static final int ONE_HVHD_RES = 2; // 包含1张横版高清图片的 – 简称"横版高清"
+	public static final int ONE_VVHD_RES = 3; // 包含1张竖版高清图片的 – 简称"竖版高清
+	public static final int ONE_VIDEO_RES = 4; // 只有一个视频的 – 简称"视频"
+	public static final int OVER_THREE_HV_RES = 5; // 超过3个横版图片的 – 简称"多个横版小图"
+	public static final int OVER_THREE_VV_RES = 6; // 超过3个竖版图片的 – 简称"多个竖版小图"
+	public static final int OVER_TWO_HVHD_RES = 7; // 包含2张以上横版高清图片的 – 简称"多张横版高清"
+	public static final int OVER_TWO_VVHD_RES = 8; // 包含2张以上竖版高清图片的 – 简称"多张竖版高清"
+	// 包含至少一张横版和至少一张竖版高清图片的 – 简称"横竖高清"
+	public static final int OVER_ONE_VVHD_AND_OVER_ONE_HVHD_RES = 9;
+	public static final int ALLRESOURCE = 10; // 以图片为主的 – 简称"图片集"
 	// html content type end
 	
 	// theTitle
@@ -77,18 +83,18 @@ public class Article {
 			return ;
 		}
 		if (mediaList.size() == 1) {
-			arcType = ONERESOURCE;
+			arcType = ONE_HVHD_RES;
 			return ;
 		}
 		if (mediaList.size() > 1) {
-			arcType = MULTIRESOURCE;
+			// arcType = MULTIRESOURCE;
 			return;
 		}
 	}	
 	
 	public boolean containsText() { 
 		decideArcType();
-		if ( (arcType == LITERAL )  || (arcType == ONERESOURCE) || (arcType == MULTIRESOURCE) )
+		if ( (arcType == LITERAL )  || (arcType == ONE_HVHD_RES) || (arcType == ONE_VVHD_RES) )
 			return true;
 		else
 			return false;
