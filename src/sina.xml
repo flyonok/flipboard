@@ -6,7 +6,7 @@
 		<charset>gbk</charset>
 		<getsMethod>html</getsMethod>
 		<timeout>10000</timeout>
-		<dbFile>/sina.db</dbFile>
+		<dbFile>/xxtebook.db</dbFile>
 		<newsArea>
 		     <contentArea>
 		         <item>

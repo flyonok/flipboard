@@ -75,6 +75,10 @@ public class Article {
 	private int arcType = LITERAL;
 	public int getArcType() { return arcType; }
 	public void setArcType(int type) { arcType = type; }
+	
+	private int resCnt = 0; // 记录资源个数
+	public int getResCnt() { return resCnt; }
+	
 	private void decideArcType() {
 		if (arcType == ALLRESOURCE) 
 			return ;
@@ -87,13 +91,14 @@ public class Article {
 			return ;
 		}
 		if (mediaList.size() > 1) {
-			// arcType = MULTIRESOURCE;
+			// arcType = ALLRESOURCE;
+			arcType = OVER_THREE_HV_RES;
 			return;
 		}
 	}	
 	
 	public boolean containsText() { 
-		decideArcType();
+		// decideArcType();
 		if ( (arcType == LITERAL )  || (arcType == ONE_HVHD_RES) || (arcType == ONE_VVHD_RES) )
 			return true;
 		else
@@ -108,7 +113,10 @@ public class Article {
 	public int getArticleId( ) { return _id; }
 	
 	private List<Resource> mediaList = new LinkedList<Resource>();
-	public void addMedia(Resource media) { mediaList.add(media); }
+	public void addMedia(Resource media) {
+		resCnt++;
+		mediaList.add(media); 
+		}
 	
 	private ResJson json = new ResJson();
 	
@@ -271,6 +279,7 @@ public class Article {
 				json.addPicture(res.getResouceId(), res.getWidth(), res.getHeight());
 			}
 		}
+		decideArcType();
 		String sql = null;
 		Gson gson = new Gson();
 		String jsonRes = gson.toJson(json);

@@ -24,12 +24,12 @@ public class ResJson {
 	
 	private List<Integer> res = null; // 图片资源，不做他用
 	
-	private int resCnt = 0; // 记录资源个数
-	public int getResCnt() { return resCnt; }
+	/*private int resCnt = 0; // 记录资源个数
+	public int getResCnt() { return resCnt; }*/
 	
 	
 	public void addPicture(int id, int width, int height) {
-		resCnt++;
+		// resCnt++;
 		if ( (width > 720)  && (height > 720)) {
 			if (bh == null) {
 				bh = new ArrayList<Integer>();

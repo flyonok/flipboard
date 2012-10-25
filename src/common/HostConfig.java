@@ -349,7 +349,8 @@ public class HostConfig {
 		
 		// pictureProcess
 		private PicProcess picProcess = null;
-		private String strPicContentTag = null;
+		public PicProcess getPicHandler() { return picProcess; }
+		/*private String strPicContentTag = null;
 		public String getPicContentTag() { return strPicContentTag; }
 		
 		private String strPicAbstractPattern = null;
@@ -377,7 +378,7 @@ public class HostConfig {
 		public String getNextPicturePattern() { return strNextPicturePattern; }
 		
 		private String strNextPictureAttr = null;
-		public String getNextPictureAttr() { return strNextPictureAttr; }
+		public String getNextPictureAttr() { return strNextPictureAttr; }*/
 		// pictureProcess end
 		
 		public boolean processPicHtml(org.jsoup.nodes.Document doc, Article article) {

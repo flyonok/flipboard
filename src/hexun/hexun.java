@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.regex.PatternSyntaxException;
 
 import javax.imageio.ImageIO;
@@ -89,6 +90,9 @@ public class hexun implements Job{
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+		TimeZone tz = TimeZone.getTimeZone("Asia/Shanghai");
+		TimeZone.setDefault(tz);
 		
 		startSchedule();
 		
@@ -292,7 +296,7 @@ public class hexun implements Job{
 
 					for (org.jsoup.nodes.Element link : links) {
 						
-						String linkHref = link.attr(curNewsArea.getNewsUrlPattern());
+						String linkHref = link.attr(curNewsArea.getNewsUrlPattern()).trim();
 						String linkText = link.text();
 						// for debug
 						
@@ -722,14 +726,14 @@ public class hexun implements Job{
 				}
 					
 				// case Article.PICTURE:
-				if (curArticle.getArcType() == Article.ALLRESOURCE) {
-					Elements subTitles = els.select(/*"div.slide_subtitle"*/curNewsArea.getPicSlide());
+				/*if (curArticle.getArcType() == Article.ALLRESOURCE) {
+					Elements subTitles = els.select("div.slide_subtitle"curNewsArea.getPicHandler().getPicSlide());
 					if (subTitles.first() != null
 							&& (subTitles.first().text().length() > 0)) {
-						/*media.setTitle(subTitles.first().html());*/
+						media.setTitle(subTitles.first().html());
 						media.setResText(subTitles.first().html());
 					} else {
-						/*media.setTitle(curArticle.getTitle());*/
+						media.setTitle(curArticle.getTitle());
 						String strAlt = image.attr("alt");
 						if (strAlt.length() > 0) {
 							// media.setTitle(strAlt);
@@ -740,7 +744,7 @@ public class hexun implements Job{
 						}
 						// media.setResText(curArticle.getTitle());
 					}
-				}
+				}*/
 				// default:
 					// break;
 				// }
