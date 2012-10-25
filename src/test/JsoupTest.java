@@ -34,8 +34,9 @@ public class JsoupTest {
 		// test.testSinaNews();
 		// test.testSinaPageContent();
 		// test.testSinaPicContent();
-		test.testSinaHuNan();
+		// test.testSinaHuNan();
 		// test.testSinaSports();
+		test.testHexunNews();
 		
 	}
 	
@@ -95,6 +96,26 @@ public class JsoupTest {
 			String content = getCotentFromUrl("http://www.sina.com.cn");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			Elements contentEls = doc.select(/*"div#tab01_con1"*/"span#news_con_1");
+			for (Element ele : contentEls) {
+				Elements links = ele.getElementsByTag("a");
+				for (Element link : links) {
+					String linkHref = link.attr("href");
+					String linkText = link.text();
+					System.out.println(linkText);
+				}
+			}
+		}finally {
+			
+		}
+	}
+	
+	private void testHexunNews()
+	{
+		try {
+			String content = getCotentFromUrl("http://www.hexun.com");
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			Elements contentEls = doc.select(/*"div#tab01_con1"*/"div.con_A_a");
+			contentEls = contentEls.select("div.b_rm02");
 			for (Element ele : contentEls) {
 				Elements links = ele.getElementsByTag("a");
 				for (Element link : links) {

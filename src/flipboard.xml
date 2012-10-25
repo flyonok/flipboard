@@ -26,7 +26,7 @@
 				 
 				 <item>
 				     <contentSelector>div.con_A_a</contentSelector>
-				     <mustHaveChild></mustHaveChild>
+				     <mustHaveChild>div.b_rm02</mustHaveChild>
 					 <title>热点新闻</title>
 					 <type>3</type>
 				 </item>
@@ -150,7 +150,7 @@
 						<urlValue>value</urlValue>
 					</pages>
 				</item>
-				<item>
+				<item><!-- 博客 -->
 					<newsContentTag>div#ArticeTextID</newsContentTag>
 					<abstractPattern>p+p+p</abstractPattern>
 					<elementReplace>

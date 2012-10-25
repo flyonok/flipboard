@@ -71,6 +71,14 @@
 						    <newContent></newContent>
 						</item>
 						<item>
+						    <orgPattern>div.blk-video</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>span.blk_video_news</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
 							<orgPattern>style</orgPattern>
 							<newContent></newContent>
 						</item>

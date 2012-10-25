@@ -172,7 +172,7 @@ public class hexun implements Job{
 		// test.processCaiJing("http://news.hexun.com/");
 		hexun test = new hexun();
 		try {
-			test.processFileXml("/sina.xml");
+			// test.processFileXml("/sina.xml");
 			test.processFileXml("/flipboard.xml");
 			// test.setConfigInit(true);
 		}catch (HostConfigException e) {
@@ -296,12 +296,12 @@ public class hexun implements Job{
 
 					for (org.jsoup.nodes.Element link : links) {
 						
-						String linkHref = link.attr(curNewsArea.getNewsUrlPattern()).trim();
-						String linkText = link.text();
+						/*String linkHref = link.attr(curNewsArea.getNewsUrlPattern()).trim();
+						String linkText = link.text();*/
 						// for debug
 						
-						/*String linkHref = "http://city.sina.com.cn/dhcs.html";
-						String linkText = "行走中国 对话城市";*/
+						String linkHref = "http://jnoc.blog.hexun.com/80678372_d.html";
+						String linkText = "中日旅游战中谁的损失最大";
 						//debug end
 						
 
@@ -341,7 +341,7 @@ public class hexun implements Job{
 								curArticle.setSeasonId(curPart.getId());
 								curArticle.saveArticle();
 								// debug comment end
-								// return; // for debug
+								return; // for debug
 
 							}
 						} catch (PatternSyntaxException e) {
