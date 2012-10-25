@@ -169,7 +169,7 @@ public class hexun implements Job{
 		hexun test = new hexun();
 		try {
 			test.processFileXml("/sina.xml");
-			// test.processFileXml("/flipboard.xml");
+			test.processFileXml("/flipboard.xml");
 			// test.setConfigInit(true);
 		}catch (HostConfigException e) {
 			e.printStackTrace();

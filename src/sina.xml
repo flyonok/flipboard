@@ -9,12 +9,12 @@
 		<dbFile>/sina.db</dbFile>
 		<newsArea>
 		     <contentArea>
-		         <!-- <item>
+		         <item>
 				     <contentSelector>span#news_con_1</contentSelector>
 				     <mustHaveChild></mustHaveChild> 
 					 <title>新浪|财经</title>
 					 <type>1</type>
-				 </item> -->
+				 </item>
 				  <item>
 				     <contentSelector>div#ent_con_1</contentSelector>
 				     <mustHaveChild></mustHaveChild> 
