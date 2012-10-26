@@ -210,6 +210,7 @@ public class hexun implements Job{
 			// database file copy for debug
 			try {
 				URL url = hexun.class.getResource(item.getDbFile());
+				// String dstFile = "E:\\php\\APMServ\\APMServ5.2.6\\www\\htdocs\\phptest\\" + item.getDbFile()
 				String dstFile = "E:\\php\\APMServ\\APMServ5.2.6\\www\\htdocs\\phptest\\" + item.getDbFile();
 				copyDb(url.getFile(), dstFile);
 			} catch(Exception e) {
