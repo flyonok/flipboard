@@ -36,7 +36,9 @@ public class JsoupTest {
 		// test.testSinaPicContent();
 		// test.testSinaHuNan();
 		// test.testSinaSports();
-		test.testHexunNews();
+		// test.testHexunNews();
+		// test.testHexunBlog();
+		test.testHexunGuoJi();
 		
 	}
 	
@@ -114,14 +116,69 @@ public class JsoupTest {
 		try {
 			String content = getCotentFromUrl("http://www.hexun.com");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
-			Elements contentEls = doc.select(/*"div#tab01_con1"*/"div.con_A_a");
-			contentEls = contentEls.select("div.b_rm02");
-			for (Element ele : contentEls) {
-				Elements links = ele.getElementsByTag("a");
-				for (Element link : links) {
-					String linkHref = link.attr("href");
-					String linkText = link.text();
-					System.out.println(linkText);
+			Elements contentEls = doc.select(/*"div#tab01_con1"*/"div.b_rm02");
+			for (Element conEl : contentEls) 
+			{
+				Elements listEls = conEl.select("div.sy_dot8x8");
+				System.out.println(listEls.size());
+				for (Element ele : listEls) {
+					Elements links = ele.getElementsByTag("a");
+					for (Element link : links) {
+						String linkHref = link.attr("href");
+						String linkText = link.text();
+						System.out.println(linkHref);
+						System.out.println(linkText);
+					}
+				}
+			}
+		}finally {
+			
+		}
+	}
+	
+	private void testHexunBlog()
+	{
+		try {
+			String content = getCotentFromUrl("http://www.hexun.com");
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			Elements contentEls = doc.select(/*"div#tab01_con1"*/"div.b_rm03");
+			for (Element conEl : contentEls) 
+			{
+				Elements listEls = conEl.select("ul.gb_ul14b");
+				System.out.println(listEls.size());
+				for (Element ele : listEls) {
+					Elements links = ele.getElementsByTag("a");
+					for (Element link : links) {
+						String linkHref = link.attr("href");
+						String linkText = link.text();
+						System.out.println(linkHref);
+						System.out.println(linkText);
+					}
+				}
+			}
+		}finally {
+			
+		}
+	}
+	
+	private void testHexunGuoJi()
+	{
+		try {
+			String content = getCotentFromUrl("http://www.hexun.com");
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			Elements contentEls = doc.select(/*"div#tab01_con1"*/"div.b_rm03");
+			for (Element conEl : contentEls) 
+			{
+				Elements listEls = conEl.select("ul.sy_ul14c");
+				System.out.println(listEls.size());
+				for (Element ele : listEls) {
+					Elements links = ele.getElementsByTag("a");
+					for (Element link : links) {
+						String linkHref = link.attr("href");
+						String linkText = link.text();
+						System.out.println(linkHref);
+						System.out.println(linkText);
+					}
 				}
 			}
 		}finally {

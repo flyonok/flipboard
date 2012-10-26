@@ -210,8 +210,10 @@ public class hexun implements Job{
 			// database file copy for debug
 			try {
 				URL url = hexun.class.getResource(item.getDbFile());
+				// for pc
 				// String dstFile = "E:\\php\\APMServ\\APMServ5.2.6\\www\\htdocs\\phptest\\" + item.getDbFile()
-				String dstFile = "E:\\php\\APMServ\\APMServ5.2.6\\www\\htdocs\\phptest\\" + item.getDbFile();
+				// for notebook
+				String dstFile = "E:\\tools\\php\\APMServ5.2.6\\APMServ5.2.6\\www\\htdocs\\page\\phptest\\" + item.getDbFile();
 				copyDb(url.getFile(), dstFile);
 			} catch(Exception e) {
 				e.printStackTrace();
@@ -289,6 +291,7 @@ public class hexun implements Job{
 					// Elements links = caijing.getElementsByTag("a");
 					
 					if (curContentArea.getMustHaveChild().length() > 0 ) {
+						logger.info(curContentArea.getMustHaveChild());
 						Elements childEles = ele.select(curContentArea.getMustHaveChild());
 						if (childEles.first() == null) continue;
 					}
@@ -297,12 +300,12 @@ public class hexun implements Job{
 
 					for (org.jsoup.nodes.Element link : links) {
 						
-						/*String linkHref = link.attr(curNewsArea.getNewsUrlPattern()).trim();
-						String linkText = link.text();*/
+						String linkHref = link.attr(curNewsArea.getNewsUrlPattern()).trim();
+						String linkText = link.text();
 						// for debug
 						
-						String linkHref = "http://jnoc.blog.hexun.com/80678372_d.html";
-						String linkText = "中日旅游战中谁的损失最大";
+						/*String linkHref = "http://jnoc.blog.hexun.com/80678372_d.html";
+						String linkText = "中日旅游战中谁的损失最大";*/
 						//debug end
 						
 
@@ -342,7 +345,7 @@ public class hexun implements Job{
 								curArticle.setSeasonId(curPart.getId());
 								curArticle.saveArticle();
 								// debug comment end
-								return; // for debug
+								// return; // for debug
 
 							}
 						} catch (PatternSyntaxException e) {

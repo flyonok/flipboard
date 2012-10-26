@@ -25,8 +25,8 @@
 				 </item>
 				 
 				 <item>
-				     <contentSelector>div.con_A_a</contentSelector>
-				     <mustHaveChild>div.b_rm02</mustHaveChild>
+				     <contentSelector>div.b_rm02</contentSelector>
+				     <mustHaveChild>div.sy_dot8x8</mustHaveChild>
 					 <title>热点新闻</title>
 					 <type>3</type>
 				 </item>
@@ -39,8 +39,8 @@
 				 </item>
 				 
 				 <item>
-				     <contentSelector>div.con_A_b</contentSelector>
-				      <mustHaveChild>p:contains(国际市场)</mustHaveChild>
+				     <contentSelector>div.b_rm03</contentSelector>
+				      <mustHaveChild>ul.sy_ul14c</mustHaveChild>
 					 <title>国际市场</title>
 					 <type>5</type>
 				 </item>
@@ -157,7 +157,15 @@
 						<item>
 							<orgPattern>table:has(form#theForm14322)</orgPattern>
 							<newContent></newContent>
-						</item>				
+						</item>
+						<item>
+							<orgPattern>style</orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern>script</orgPattern>
+							<newContent></newContent>
+						</item>								
 					</elementReplace>
 					<contentReplace> 
 						<item>
