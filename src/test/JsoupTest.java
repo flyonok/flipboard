@@ -38,7 +38,9 @@ public class JsoupTest {
 		// test.testSinaSports();
 		// test.testHexunNews();
 		// test.testHexunBlog();
-		test.testHexunGuoJi();
+		// test.testHexunGuoJi();
+		// test.testSinaYuLe();
+		test.testSinaBlog();
 		
 	}
 	
@@ -97,7 +99,7 @@ public class JsoupTest {
 		try {
 			String content = getCotentFromUrl("http://www.sina.com.cn");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
-			Elements contentEls = doc.select(/*"div#tab01_con1"*/"span#news_con_1");
+			Elements contentEls = doc.select(/*"div#tab01_con1"*/"span#news_con_2");
 			for (Element ele : contentEls) {
 				Elements links = ele.getElementsByTag("a");
 				for (Element link : links) {
@@ -242,7 +244,80 @@ public class JsoupTest {
 		System.out.println("end");
 	}
 	
-	private void testSinaPageContent() {
+	private void testSinaYuLe()
+	{
+		try {
+			/*String content = getCotentFromUrl("http://www.sina.com.cn");*/
+			String content = getCotentFromUrl("http://www.sina.com.cn");
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			Elements contentEls = doc.select("div#ent_con_3"/*"span#news_con_2"*/);
+			// System.out.println(contentEls.html());
+			// System.out.println(contentEls.select("span#news_con_2").html());
+			for (Element ele : contentEls) {
+				Elements links = ele.getElementsByTag("a");
+				for (Element link : links) {
+					String linkHref = link.attr("href");
+					String linkText = link.text();
+					System.out.println(linkText);
+					System.out.println(linkHref);
+				}
+			}
+		}finally {
+			
+		}
+		System.out.println("end");
+	}
+	
+	private void testSinaBlog()
+	{
+		try {
+			/*String content = getCotentFromUrl("http://www.sina.com.cn");*/
+			String content = getCotentFromUrl("http://www.sina.com.cn");
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			Elements contentEls = doc.select("div#blog"/*"span#news_con_2"*/);
+			// System.out.println(contentEls.html());
+			// System.out.println(contentEls.select("span#news_con_2").html());
+			for (Element ele : contentEls) {
+				Elements links = ele.getElementsByTag("a");
+				for (Element link : links) {
+					String linkHref = link.attr("href");
+					String linkText = link.text();
+					System.out.println(linkText);
+					System.out.println(linkHref);
+					testSinaBlogContent(linkHref);
+				}
+			}
+		}finally {
+			
+		}
+		System.out.println("end");
+	}
+	
+	private void testSinaBlogContent(String linkRef) {
+		try {
+			String content = getCotentFromUrl(linkRef);
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			// Elements contentEls = doc.select(/*"div#tab01_con1"*/"div#sinashareto");
+			Elements contentEls = doc.select("div#column_2");
+			// contentEls.select("div#sinashareto").remove();
+			if (contentEls.first() != null) {
+				System.out.println("find!");
+			} else {
+				System.out.println("not find!");
+			}
+			/*Elements els = contentEls.select("div#sinashareto");
+			if (els.first() != null) {
+				System.out.println(contentEls.outerHtml());
+			}
+			contentEls.select("style").remove();
+			contentEls.select("script").remove();
+			System.out.println(contentEls.outerHtml());*/
+		}finally {
+			
+		}
+	}
+	
+	private void testSinaNewsPageContent() {
 		try {
 			String content = getCotentFromUrl("http://tech.sina.com.cn/t/2012-10-10/09037688071.shtml");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);

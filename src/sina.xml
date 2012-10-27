@@ -15,18 +15,36 @@
 					 <title>新浪|财经</title>
 					 <type>1</type>
 				 </item>
-				  <item>
+				 <item>
 				     <contentSelector>div#ent_con_1</contentSelector>
 				     <mustHaveChild></mustHaveChild> 
 					 <title>娱乐</title>
 					 <type>2</type>
+				 </item>
+				 <item>
+				 	<contentSelector>div#blk_sports_1</contentSelector>
+				 	<mustHaveChild></mustHaveChild>
+				 	<title>体育</title>
+				 	<type>3</type>
+				 </item>
+				 <item>
+				 	<contentSelector>div#blk_sports_2</contentSelector>
+				 	<mustHaveChild></mustHaveChild>
+				 	<title>NBA</title>
+				 	<type>4</type>
+				 </item>
+				 <item>
+				 	<contentSelector>div#blog</contentSelector>
+				 	<mustHaveChild></mustHaveChild>
+				 	<title>博客</title>
+				 	<type>5</type>
 				 </item>
 			 </contentArea>
 			<newsList>
 			    <listTagPattern>a</listTagPattern>
 				<newsUrlPattern>href</newsUrlPattern>
 				<excludePattern></excludePattern>
-				<urlLinkReg><![CDATA[[a-zA-z]+://[^\s]*.htm.?]]></urlLinkReg>
+				<urlLinkReg><![CDATA[[a-zA-z]+://[^\s]*.html[^\s]*]]></urlLinkReg>
 				<newsTitlePattern></newsTitlePattern>
 			</newsList>
 			<newsPageProcess>
@@ -77,6 +95,14 @@
 						<item>
 						    <orgPattern>span.blk_video_news</orgPattern>
 						    <newContent></newContent>
+						</item>
+						<item>
+							<orgPattern>div.myCommPages.SG_j_linedot1</orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern>div.writeComm</orgPattern>
+							<newContent></newContent>
 						</item>
 						<item>
 							<orgPattern>style</orgPattern>
@@ -133,6 +159,56 @@
 						    <ignoreTags></ignoreTags>
 						</item> -->
 												
+					</relatedItems>
+					<pages>
+						<selectPattern></selectPattern>
+						<urlValue></urlValue>
+					</pages>
+				</item>
+				<item><!-- 博客 -->
+					<newsContentTag>div#articlebody</newsContentTag>
+					<abstractPattern>p+p+p</abstractPattern>
+					<elementReplace>
+						<item>
+							<orgPattern>div.articalList.borderc</orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern>div.shareUp</orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern>articalInfo</orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern>div.new_nextprev_b2f474c40101e5k5</orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern>style</orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern>script</orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern>iframe</orgPattern>
+							<newContent></newContent>
+						</item>
+					</elementReplace>
+					<contentReplace>
+						<item>
+							<orgPattern><![CDATA[ <script(?:[^<]++|<(?!/script>))*+</script> ]]></orgPattern>
+							<newContent></newContent>
+						</item>
+						<item>
+							<orgPattern><![CDATA[ <style(?:[^<]++|<(?!/style>))*+</style> ]]></orgPattern>
+							<newContent></newContent>
+						</item>
+					</contentReplace>
+					<relatedItems>
 					</relatedItems>
 					<pages>
 						<selectPattern></selectPattern>

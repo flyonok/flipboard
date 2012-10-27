@@ -33,6 +33,7 @@
 				<item>
 					<newsContentTag>div#artibody</newsContentTag><!-- 新闻内容开始 -->
 					<abstractPattern>p+p+p</abstractPattern> <!-- 获取新闻网页摘要 -->
+					<pageCharset>gbk</pageCharset><!-- 页面字符编码 -->
 					<elementReplace> <!-- DOM元素替换 -->
 						<item>
 							<orgPattern>table:has(form#theForm14322)</orgPattern><!-- 要替换的DOM元素表达式 -->

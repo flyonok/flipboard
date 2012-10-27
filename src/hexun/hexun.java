@@ -172,8 +172,8 @@ public class hexun implements Job{
 		// test.processCaiJing("http://news.hexun.com/");
 		hexun test = new hexun();
 		try {
-			// test.processFileXml("/sina.xml");
-			test.processFileXml("/flipboard.xml");
+			test.processFileXml("/sina.xml");
+			// test.processFileXml("/flipboard.xml");
 			// test.setConfigInit(true);
 		}catch (HostConfigException e) {
 			e.printStackTrace();
