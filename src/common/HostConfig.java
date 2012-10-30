@@ -109,6 +109,10 @@ public class HostConfig {
 		public String getMustHaveChild() { return mustHaveChild;}
 		public void setMustHaveChild(String child) { mustHaveChild = child; }
 		
+		private String strPageCharset = null;
+		public String getPageCharset() { return strPageCharset; }
+		public void setPageCharset(String charset) { strPageCharset = charset; }
+		
 	}
 	
 	public class NewsPageProcess {
@@ -124,7 +128,7 @@ public class HostConfig {
 		public String getAbstractPattern() {
 			return strAbstractPattern;
 		}
-
+		
 		private List<ConfigItem> elementReplaceList = null;
 
 		public List<ConfigItem> getElementReplaceList() {
@@ -171,6 +175,9 @@ public class HostConfig {
 				throw new HostConfigException("newsPageProcess node must have abstractPattern child node!");
 			strAbstractPattern = abstractPatternNode.getTextTrim();
 			logger.info("abstractPattern: " + strAbstractPattern);
+			
+			
+			
 			try {
 				processElementReplace(newsPageItemNode);
 				processContentReplace(newsPageItemNode);
@@ -447,6 +454,13 @@ public class HostConfig {
 				throw new HostConfigException("contentArea's item node must have title child node!");
 			area.setTitle(titleNode.getTextTrim());
 			logger.info("title: " + titleNode.getTextTrim());
+			
+			Element pageCharsetNode = contentAreaItem.element("pageCharset");
+			if (pageCharsetNode == null) {
+				throw new HostConfigException("contentArea's item node must have title pageCharset node!");
+			}
+			area.setPageCharset(pageCharsetNode.getTextTrim());
+			logger.info("pageCharset: " + pageCharsetNode.getTextTrim());
 			
 			Element typeNode = contentAreaItem.element("type");
 			if (typeNode == null)

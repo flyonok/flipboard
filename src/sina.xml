@@ -13,30 +13,35 @@
 				     <contentSelector>span#news_con_1</contentSelector>
 				     <mustHaveChild></mustHaveChild> 
 					 <title>新浪|财经</title>
+					 <pageCharset>gbk</pageCharset>
 					 <type>1</type>
 				 </item>
 				 <item>
 				     <contentSelector>div#ent_con_1</contentSelector>
 				     <mustHaveChild></mustHaveChild> 
 					 <title>娱乐</title>
+					 <pageCharset>gbk</pageCharset>
 					 <type>2</type>
 				 </item>
 				 <item>
 				 	<contentSelector>div#blk_sports_1</contentSelector>
 				 	<mustHaveChild></mustHaveChild>
 				 	<title>体育</title>
+				 	<pageCharset>gbk</pageCharset>
 				 	<type>3</type>
 				 </item>
 				 <item>
 				 	<contentSelector>div#blk_sports_2</contentSelector>
 				 	<mustHaveChild></mustHaveChild>
 				 	<title>NBA</title>
+				 	<pageCharset>gbk</pageCharset>
 				 	<type>4</type>
 				 </item>
 				 <item>
 				 	<contentSelector>div#blog</contentSelector>
 				 	<mustHaveChild></mustHaveChild>
 				 	<title>博客</title>
+				 	<pageCharset>utf-8</pageCharset>
 				 	<type>5</type>
 				 </item>
 			 </contentArea>
@@ -178,12 +183,32 @@
 							<newContent></newContent>
 						</item>
 						<item>
-							<orgPattern>articalInfo</orgPattern>
+							<orgPattern>div.articalInfo</orgPattern>
 							<newContent></newContent>
 						</item>
 						<item>
-							<orgPattern>div.new_nextprev_b2f474c40101e5k5</orgPattern>
+							<orgPattern>div.articalfrontback.SG_j_linedot1.clearfix</orgPattern>
 							<newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>div.articalfrontback.articalfrontback2.clearfix</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>div.allComm</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>span.time.SG_txtc</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>div.turnBoxzz</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>div#sina_keyword_ad_area</orgPattern>
+						    <newContent></newContent>
 						</item>
 						<item>
 							<orgPattern>style</orgPattern>
@@ -196,6 +221,10 @@
 						<item>
 							<orgPattern>iframe</orgPattern>
 							<newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>ins</orgPattern>
+						    <newContent></newContent>
 						</item>
 					</elementReplace>
 					<contentReplace>

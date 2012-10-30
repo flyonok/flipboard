@@ -14,6 +14,7 @@
 				     <contentSelector>div#tab01_con1</contentSelector>
 				      <mustHaveChild></mustHaveChild>
 					 <title>财经要闻</title>
+					 <pageCharset>gbk</pageCharset>
 					 <type>1</type>
 				 </item>
 				
@@ -21,6 +22,7 @@
 				     <contentSelector>div#tab01_con2</contentSelector>
 				     <mustHaveChild></mustHaveChild>
 					 <title>时事要闻</title>
+					 <pageCharset>gbk</pageCharset>
 					 <type>2</type>
 				 </item>
 				 
@@ -28,6 +30,7 @@
 				     <contentSelector>div.b_rm02</contentSelector>
 				     <mustHaveChild>div.sy_dot8x8</mustHaveChild>
 					 <title>热点新闻</title>
+					 <pageCharset>gbk</pageCharset>
 					 <type>3</type>
 				 </item>
 				
@@ -35,6 +38,7 @@
 				     <contentSelector>div#add_gupiaojj</contentSelector>
 				     <mustHaveChild></mustHaveChild>
 					 <title>股票基金</title>
+					 <pageCharset>gbk</pageCharset>
 					 <type>4</type>
 				 </item>
 				 
@@ -42,6 +46,7 @@
 				     <contentSelector>div.b_rm03</contentSelector>
 				      <mustHaveChild>ul.sy_ul14c</mustHaveChild>
 					 <title>国际市场</title>
+					 <pageCharset>gbk</pageCharset>
 					 <type>5</type>
 				 </item>
 				 
@@ -49,12 +54,14 @@
 				     <contentSelector>div#add_pinglun</contentSelector>
 				     <mustHaveChild></mustHaveChild>
 					 <title>评论</title>
+					 <pageCharset>gbk</pageCharset>
 					 <type>6</type>
 				 </item>
 				 <item>
 				     <contentSelector>div.b_rm03</contentSelector>
 				     <mustHaveChild>ul.gb_ul14b</mustHaveChild>
 					 <title>博客</title>
+					 <pageCharset>gbk</pageCharset>
 					 <type>7</type>
 				 </item>
 			 </contentArea>
@@ -69,6 +76,7 @@
 				<item>
 					<newsContentTag>div#artibody</newsContentTag>
 					<abstractPattern>p+p+p</abstractPattern>
+					<pageCharset>gbk</pageCharset>
 					<elementReplace>
 						<item>
 							<orgPattern>table:has(form#theForm14322)</orgPattern>
@@ -153,6 +161,7 @@
 				<item><!-- 博客 -->
 					<newsContentTag>div#ArticeTextID</newsContentTag>
 					<abstractPattern>p+p+p</abstractPattern>
+					<pageCharset>gbk</pageCharset>
 					<elementReplace>
 						<item>
 							<orgPattern>table:has(form#theForm14322)</orgPattern>

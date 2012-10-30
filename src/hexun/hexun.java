@@ -25,8 +25,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -195,6 +197,7 @@ public class hexun implements Job{
 		for (HostConfig item : hostConfigList) {
 			try {
 				curHostConfig = item;
+				// strCharset = curHostConfig.getCharset();
 				saveHostToDb(item);
 				logger.info(curHostConfig.getUrl());
 				processHostUrl(curHostConfig.getUrl());
@@ -211,9 +214,9 @@ public class hexun implements Job{
 			try {
 				URL url = hexun.class.getResource(item.getDbFile());
 				// for pc
-				// String dstFile = "E:\\php\\APMServ\\APMServ5.2.6\\www\\htdocs\\phptest\\" + item.getDbFile()
+				String dstFile = "E:\\php\\APMServ\\APMServ5.2.6\\www\\htdocs\\phptest\\" + item.getDbFile();
 				// for notebook
-				String dstFile = "E:\\tools\\php\\APMServ5.2.6\\APMServ5.2.6\\www\\htdocs\\page\\phptest\\" + item.getDbFile();
+				// String dstFile = "E:\\tools\\php\\APMServ5.2.6\\APMServ5.2.6\\www\\htdocs\\page\\phptest\\" + item.getDbFile();
 				copyDb(url.getFile(), dstFile);
 			} catch(Exception e) {
 				e.printStackTrace();
@@ -257,7 +260,7 @@ public class hexun implements Job{
 		logger.info("start crawl: " + url);
 		String strWebContent = null;
 		try {
-			strWebContent = getContentFromUrl(url);
+			strWebContent = getContentFromUrl(url, curHostConfig.getCharset());
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
@@ -325,6 +328,8 @@ public class hexun implements Job{
 								curArticle = new Article();
 								curArticle.setTitle(linkText);
 								curArticle.setOrgUrl(linkHref);
+								curArticle.SetArtTime(getCrawlTime());
+								curArticle.setArtSource(curHostConfig.getHostDescription());
 								/*
 								 * curArticle.setTime(HttpHelper
 								 * .getHtmlPageTime(linkHref));
@@ -391,7 +396,7 @@ public class hexun implements Job{
 		// contList.add(curCont);
 		String strWebContent = null;
 		try {
-			strWebContent = getContentFromUrl(url);
+			strWebContent = getContentFromUrl(url, curContentArea.getPageCharset());
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
@@ -418,7 +423,7 @@ public class hexun implements Job{
 				&& (!url.equalsIgnoreCase(strRedirectUrl))) {
 			// url = strRedirectUrl;
 			try {
-				strWebContent = getContentFromUrl(url);
+				strWebContent = getContentFromUrl(url, curContentArea.getPageCharset());
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());
@@ -665,7 +670,7 @@ public class hexun implements Job{
 
 		String strWebContent = null;
 		try {
-			strWebContent = getContentFromUrl(url);
+			strWebContent = getContentFromUrl(url, curContentArea.getPageCharset());
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
@@ -931,6 +936,7 @@ public class hexun implements Job{
 	private ContentArea curContentArea = null;
 	private RelatedItem curRelatedItem = null;
 	private NewsPageProcess curNewsPageItem = null;
+	// private String strCharset = null;
 	
 	// static members
 	
@@ -1061,7 +1067,7 @@ public class hexun implements Job{
 
 		String strWebContent = null;
 		try {
-			strWebContent = getContentFromUrl(url);
+			strWebContent = getContentFromUrl(url, "GBK");
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
@@ -1091,7 +1097,7 @@ public class hexun implements Job{
 				&& (!url.equalsIgnoreCase(strRedirectUrl))) {
 			// url = strRedirectUrl;
 			try {
-				strWebContent = getContentFromUrl(url);
+				strWebContent = getContentFromUrl(url, "GBK");
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());
@@ -1205,7 +1211,7 @@ public class hexun implements Job{
 		return isCorrect;
 	}
 	
-	private String getContentFromUrl(String url) throws ClientProtocolException, IOException {
+	private String getContentFromUrl(String url, String strCharset) throws ClientProtocolException, IOException {
 		String content = null;
 		try {
 			HttpClient client = new DefaultHttpClient();
@@ -1215,7 +1221,7 @@ public class hexun implements Job{
 			// request.getParams()
 			HttpResponse response = client.execute(request);
 			byte[] bytes = EntityUtils.toByteArray(response.getEntity());
-			content = new String(bytes,"gbk");
+			content = new String(bytes, strCharset);
 			/*// Get the response
 			BufferedReader rd = new BufferedReader(new InputStreamReader(
 					response.getEntity().getContent()));
@@ -1296,6 +1302,12 @@ public class hexun implements Job{
 			}
 		}
 		
+	}
+	
+	private String getCrawlTime() {
+		Date date = new Date(System.currentTimeMillis());
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+		return formatter.format(date);
 	}
 
 }

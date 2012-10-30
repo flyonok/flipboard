@@ -11,6 +11,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 import javax.imageio.ImageIO;
 
@@ -22,7 +26,8 @@ public class CommonTest {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		CommonTest test = new CommonTest();
-		test.copyDb("e:\\private\\Flipboard.docx", "e:\\private\\test.docx");
+		// test.copyDb("e:\\private\\Flipboard.docx", "e:\\private\\test.docx");
+		test.testDate();
 	}
 	
 	// image
@@ -49,10 +54,10 @@ public class CommonTest {
 			try {
 				URL test = new URL(url);
 				HttpURLConnection conn=(HttpURLConnection)test.openConnection();
-				System.out.println("HTTPÏìÓ¦´úÂë" + conn.getResponseCode());
+				System.out.println("HTTPï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½" + conn.getResponseCode());
 				String realUrl=conn.getURL().toString();
 				conn.disconnect();
-				System.out.println("ÕæÊµURL:"+realUrl);
+				System.out.println("ï¿½ï¿½ÊµURL:"+realUrl);
 				
 			} catch (MalformedURLException e ) {
 				e.printStackTrace();
@@ -125,6 +130,15 @@ public class CommonTest {
 			
 		}
 
+		
+		private void testDate()
+		{
+			TimeZone tz = TimeZone.getTimeZone("Asia/Shanghai");
+			TimeZone.setDefault(tz);
+			Date date = new Date(System.currentTimeMillis());
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyyå¹´MMæœˆddæ—¥ HH:mm:ss");
+			System.out.println(formatter.format(date));
+		}
 		// test function end
 
 

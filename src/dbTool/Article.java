@@ -76,6 +76,14 @@ public class Article {
 	public int getArcType() { return arcType; }
 	public void setArcType(int type) { arcType = type; }
 	
+	private String artTime = null;
+	public String getArtTime() { return artTime; }
+	public void SetArtTime(String time) { artTime = time ; }
+	
+	private String artSource = null;
+	public String getArtSource() { return artSource; }
+	public void setArtSource(String source) { artSource = source; }
+	
 	private int resCnt = 0; // 记录资源个数
 	public int getResCnt() { return resCnt; }
 	
@@ -130,119 +138,6 @@ public class Article {
 	// logger
 	static Logger logger = Logger.getLogger(Article.class.getName());
 	
-	/*public boolean saveContent() {
-		System.out.println("title: " + title);
-		System.out.println("abstract: " + Abstract);
-		System.out.println("html: " + Html);
-		if (dbFile == null) {
-			URL url = this.getClass().getResource("/db.db");
-			dbFile=url.getFile();
-		}
-		// System.out.println(dbFile);
-		boolean isIcon = true;
-		StringBuilder sqlBuf = new StringBuilder();
-		
-		
-		
-		try {
-			Class.forName("org.sqlite.JDBC");
-		}catch(ClassNotFoundException e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-		}
-	    
-	    Connection connection = null;
-	    try
-	    {
-			// create a database connection
-			connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
-			Statement statement = connection.createStatement();
-			statement.setQueryTimeout(30); // set timeout to 30 sec.
-
-			for (Resource media : mediaList) {
-				
-				 * System.out.println("title: " + media.getTitle());
-				 * System.out.println("url: " + media.getUrl());
-				 * System.out.println("height: " + media.getHeight());
-				 * System.out.println("width: " + media.getWidth());
-				 
-				sqlBuf.delete(0, sqlBuf.length());
-				sqlBuf.append("insert into Media(Title, URL, Width, Height, Type) values ( '");
-				sqlBuf.append(media.getTitle());
-				sqlBuf.append("','");
-				sqlBuf.append(media.getUrl());
-				sqlBuf.append("',");
-				sqlBuf.append(media.getWidth());
-				sqlBuf.append(",");
-				sqlBuf.append(media.getHeight());
-				sqlBuf.append(",");
-				sqlBuf.append(media.getType());
-				sqlBuf.append(")");
-				statement.executeUpdate(sqlBuf.toString());
-				sqlBuf.delete(0, sqlBuf.length());
-				sqlBuf.append("select MediaID from Media where URL='");
-				sqlBuf.append(media.getUrl());
-				sqlBuf.append("'");
-				ResultSet rs = statement.executeQuery(sqlBuf.toString());
-				if (isIcon) {
-					while (rs.next())
-					{
-						mediaIcon = rs.getInt("MediaID");
-						mediaBuf.append(mediaIcon);
-						isIcon = false;
-					}
-				} else {
-					mediaBuf.append(",");
-					while (rs.next()) {
-						mediaBuf.append(rs.getInt("MediaID"));
-					}
-				}
-			}
-			// media end
-			sqlBuf.delete(0, sqlBuf.length());
-			sqlBuf.append("insert into Content(Title, Abstract, Html, ImageList, Icon, Type, orgURL, time) values( '");
-			sqlBuf.append(title.replaceAll("'", "''"));
-			sqlBuf.append("','");
-			sqlBuf.append(Abstract.replaceAll("'", "''"));
-			sqlBuf.append("','");
-			sqlBuf.append(StringEscapeUtils.escapeHtml4(Html).replaceAll("'", "''"));
-			sqlBuf.append("','");
-			sqlBuf.append(mediaBuf);
-			sqlBuf.append("',");
-			sqlBuf.append(mediaIcon);
-			sqlBuf.append(",");
-			sqlBuf.append(Type);
-			sqlBuf.append(",'");
-			sqlBuf.append(orgURL);
-			sqlBuf.append("',");
-			sqlBuf.append(time);
-			sqlBuf.append(")");
-			statement.executeUpdate(sqlBuf.toString());
-	    }
-	    catch(SQLException e)
-	    {
-	    	e.printStackTrace();
-	    	logger.error(e.getMessage());
-	    	logger.error(sqlBuf.toString());
-	    	return false;
-	    }
-	    finally
-	    {
-	      try
-	      {
-	    	 if(connection != null)
-	          connection.close();
-	      }
-	      catch(SQLException e)
-	      {
-	        // connection close failed.
-	    	  e.printStackTrace();
-	    	  logger.error(e.getMessage());
-	    	  return false;
-	      }
-	    }
-		return true;
-	}*/
 	
 	public static boolean isContentExist(String url, String sqlDbFile /*/xxtebook.db */) {
 		/*System.out.println("title: " + title);
@@ -286,16 +181,16 @@ public class Article {
 		if (!jsonRes.equals("{}")) {
 			jsonRes = jsonRes.replaceAll("\\[", "\\{");
 			jsonRes = jsonRes.replaceAll("\\]", "\\}");
-			sql = "insert into Article(theTitle, content, resList, oriUrl, artType, seasonId) " +
+			sql = "insert into Article(theTitle, content, resList, oriUrl, artType, seasonId, artTime, artSource) " +
 					"values('" + title.replaceAll("'", "''") + "','" + Html.replaceAll("'", "''")
 					+ "','" + jsonRes + "','" + orgURL + "',"
-					+ arcType + "," + season_id+ ")" ;
+					+ arcType + "," + season_id + ",'" + artTime + "','" + artSource +"')" ;
 		}
 		else {
-			sql = "insert into Article(theTitle, content, oriUrl, artType, seasonId) " +
+			sql = "insert into Article(theTitle, content, oriUrl, artType, seasonId, artTime, artSource) " +
 					"values('" + title.replaceAll("'", "''") + "','" + Html.replaceAll("'", "''")
 					+ "','" + orgURL + "',"
-					+ arcType + "," + season_id+ ")" ;
+					+ arcType + "," + season_id+ ",'" + artTime + "','" + artSource +"')" ;
 		}
 		
 		
