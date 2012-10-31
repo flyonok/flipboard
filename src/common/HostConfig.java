@@ -459,7 +459,7 @@ public class HostConfig {
 			if (pageCharsetNode == null) {
 				throw new HostConfigException("contentArea's item node must have title pageCharset node!");
 			}
-			area.setPageCharset(pageCharsetNode.getTextTrim());
+			area.setPageCharset(pageCharsetNode.getTextTrim().toLowerCase());
 			logger.info("pageCharset: " + pageCharsetNode.getTextTrim());
 			
 			Element typeNode = contentAreaItem.element("type");
@@ -1268,7 +1268,7 @@ public class HostConfig {
 		Element charsetNode = hostNode.element("charset");
 		if (charsetNode == null)
 			throw new HostConfigException("hosts node must have charset child node!");
-		charset = charsetNode.getTextTrim();
+		charset = charsetNode.getTextTrim().toLowerCase();
 		logger.info("charset:" + charset);
 		
 		Element methodNode = hostNode.element("getsMethod");

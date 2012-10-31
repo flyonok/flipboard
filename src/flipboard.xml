@@ -3,7 +3,7 @@
 	<hosts>
 		<description>和讯</description>
 		<url>http://www.hexun.com</url>
-		<charset>gbk</charset>
+		<charset>gb2312</charset>
 		<getsMethod>html</getsMethod>
 		<timeout>10000</timeout>
 		<dbFile>/xxtebook.db</dbFile>
@@ -14,7 +14,7 @@
 				     <contentSelector>div#tab01_con1</contentSelector>
 				      <mustHaveChild></mustHaveChild>
 					 <title>财经要闻</title>
-					 <pageCharset>gbk</pageCharset>
+					 <pageCharset>gb2312</pageCharset>
 					 <type>1</type>
 				 </item>
 				
@@ -22,7 +22,7 @@
 				     <contentSelector>div#tab01_con2</contentSelector>
 				     <mustHaveChild></mustHaveChild>
 					 <title>时事要闻</title>
-					 <pageCharset>gbk</pageCharset>
+					 <pageCharset>gb2312</pageCharset>
 					 <type>2</type>
 				 </item>
 				 
@@ -30,7 +30,7 @@
 				     <contentSelector>div.b_rm02</contentSelector>
 				     <mustHaveChild>div.sy_dot8x8</mustHaveChild>
 					 <title>热点新闻</title>
-					 <pageCharset>gbk</pageCharset>
+					 <pageCharset>gb2312</pageCharset>
 					 <type>3</type>
 				 </item>
 				
@@ -38,7 +38,7 @@
 				     <contentSelector>div#add_gupiaojj</contentSelector>
 				     <mustHaveChild></mustHaveChild>
 					 <title>股票基金</title>
-					 <pageCharset>gbk</pageCharset>
+					 <pageCharset>gb2312</pageCharset>
 					 <type>4</type>
 				 </item>
 				 
@@ -46,7 +46,7 @@
 				     <contentSelector>div.b_rm03</contentSelector>
 				      <mustHaveChild>ul.sy_ul14c</mustHaveChild>
 					 <title>国际市场</title>
-					 <pageCharset>gbk</pageCharset>
+					 <pageCharset>gb2312</pageCharset>
 					 <type>5</type>
 				 </item>
 				 
@@ -54,14 +54,14 @@
 				     <contentSelector>div#add_pinglun</contentSelector>
 				     <mustHaveChild></mustHaveChild>
 					 <title>评论</title>
-					 <pageCharset>gbk</pageCharset>
+					 <pageCharset>gb2312</pageCharset>
 					 <type>6</type>
 				 </item>
 				 <item>
 				     <contentSelector>div.b_rm03</contentSelector>
 				     <mustHaveChild>ul.gb_ul14b</mustHaveChild>
 					 <title>博客</title>
-					 <pageCharset>gbk</pageCharset>
+					 <pageCharset>gb2312</pageCharset>
 					 <type>7</type>
 				 </item>
 			 </contentArea>

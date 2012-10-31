@@ -40,7 +40,8 @@ public class JsoupTest {
 		// test.testHexunBlog();
 		// test.testHexunGuoJi();
 		// test.testSinaYuLe();
-		test.testSinaBlog();
+		// test.testSinaBlog();
+		test.testSinaCaiJing();
 		
 	}
 	
@@ -293,6 +294,32 @@ public class JsoupTest {
 		System.out.println("end");
 	}
 	
+	private void testSinaCaiJing()
+	{
+		try {
+			/*String content = getCotentFromUrl("http://www.sina.com.cn");*/
+			String content = getCotentFromUrl("http://www.sina.com.cn");
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			Elements contentEls = doc.select("div#blk_finance_1"/*"span#news_con_2"*/);
+			// System.out.println(contentEls.html());
+			// System.out.println(contentEls.select("span#news_con_2").html());
+			for (Element ele : contentEls) {
+				Elements links = ele.getElementsByTag("a");
+				for (Element link : links) {
+					String linkHref = link.attr("href");
+					String linkText = link.text();
+					// System.out.println(linkText);
+					// System.out.println(linkHref);
+					// testSinaBlogContent(linkHref);
+					testSinaCaiJingContent(linkHref);
+				}
+			}
+		}finally {
+			
+		}
+		System.out.println("end");
+	}
+	
 	private void testSinaBlogContent(String linkRef) {
 		try {
 			String content = getCotentFromUrl(linkRef);
@@ -314,6 +341,54 @@ public class JsoupTest {
 			System.out.println(contentEls.outerHtml());*/
 		}finally {
 			
+		}
+	}
+	
+	private void testSinaCaiJingContent(String linkRef) {
+		try {
+			String content = getCotentFromUrl(linkRef);
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			// Elements contentEls = doc.select(/*"div#tab01_con1"*/"div#sinashareto");
+			// Elements contentEls = doc.select("div#artibody");
+			Elements contentEls = doc.select("meta[http-equiv=Content-type]");
+			// System.out.println(contentEls.size());
+			// contentEls.select("div#sinashareto").remove();
+			for (Element el : contentEls) {
+				String charset = el.attr("content").trim();
+				int charsetIndex = charset.indexOf("charset");
+				String encode = "";
+				if ( charsetIndex != -1) {
+					int spaceIndex = charset.indexOf(' ', charsetIndex);
+					if (spaceIndex != -1){
+						encode = charset.substring(charsetIndex, spaceIndex);	
+					}
+					else {
+						encode = charset.substring(charsetIndex);
+					}
+				}
+				processCharset(encode);
+			}
+			/*Elements els = contentEls.select("div#sinashareto");
+			if (els.first() != null) {
+				System.out.println(contentEls.outerHtml());
+			}
+			contentEls.select("style").remove();
+			contentEls.select("script").remove();
+			System.out.println(contentEls.outerHtml());*/
+		}finally {
+			
+		}
+	}
+	
+	private void processCharset(String charset) {
+		int equalIndex = charset.indexOf('=');
+		String encode = "";
+		if (equalIndex != -1) {
+			encode = charset.substring(equalIndex+1);
+		}
+		
+		if ( encode.toLowerCase().indexOf("gb") == -1 && encode != "gbk") {
+			System.out.println(encode);
 		}
 	}
 	

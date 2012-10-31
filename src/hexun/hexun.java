@@ -420,10 +420,12 @@ public class hexun implements Job{
 		org.jsoup.nodes.Element head = doc.head();
 		String strRedirectUrl = HttpHelper.processUrlRedirect(head);
 		if ((strRedirectUrl.length() > 0)
-				&& (!url.equalsIgnoreCase(strRedirectUrl))) {
-			// url = strRedirectUrl;
+				&& (!url.equalsIgnoreCase(strRedirectUrl)) && (strRedirectUrl.indexOf("http") != -1)) {
+			url = strRedirectUrl;
+			logger.info("redirect:" + url);
 			try {
 				strWebContent = getContentFromUrl(url, curContentArea.getPageCharset());
+				doc = Jsoup.parse(strWebContent, baseUrl);
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());
@@ -436,7 +438,11 @@ public class hexun implements Job{
 			}
 		}
 		// Elements els = doc.select("div#artibody");
-		doc = Jsoup.parse(strWebContent, baseUrl);
+		// process page charset
+		strWebContent = processDocCharset(doc, curContentArea.getPageCharset(), url);
+		if (strWebContent.length() > 0 ) {
+			doc = Jsoup.parse(strWebContent, baseUrl);
+		}
 		Elements newsContentEls = null;
 		for (NewsPageProcess newsPageItem : curNewsArea.getPageProcessList() ) {
 			curNewsPageItem = newsPageItem;
@@ -527,6 +533,59 @@ public class hexun implements Job{
 		// System.out.println(text.toString());
 		// System.out.println(relItemBuf.toString());
 		return isCorrect;
+	}
+	
+	// @SuppressWarnings("finally")
+	private String processDocCharset(org.jsoup.nodes.Document doc, String orgCharset, String url) {
+		Elements metaEls = doc.select("meta[http-equiv=Content-type]");
+		String webContent = "";
+		for (org.jsoup.nodes.Element el : metaEls) {
+			String charset = el.attr("content").trim();
+			String encode = getCharset(charset);
+			if (encode.length() > 0) {
+				if ( !encode.equals(orgCharset) ) {
+					try {
+						logger.info("process charset:" + encode);
+						webContent = getContentFromUrl(url, encode);
+						// doc = Jsoup.parse(webContent, baseUrl);
+						break;
+					} catch (ClientProtocolException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						logger.error(e.getMessage());
+						webContent = "";
+						// return false;
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						logger.error(e.getMessage());
+						webContent = "";
+						// return false;
+					}
+				}
+			}
+			
+		}
+		return webContent;
+	}
+	
+	private String getCharset(String content) {
+		// String charset = "";
+		int charsetIndex = content.indexOf("charset");
+		String encode = "";
+		if ( charsetIndex != -1) {
+			int equalIndex = content.indexOf('=', charsetIndex);
+			if ( equalIndex != -1) {
+				int spaceIndex = content.indexOf(' ', equalIndex);
+				if (spaceIndex != -1){
+					encode = content.substring(equalIndex + 1, spaceIndex);	
+				}
+				else {
+					encode = content.substring(equalIndex + 1);
+				}
+			}
+		}
+		return encode;
 	}
 	
 	// 网页相关处理

@@ -3,7 +3,7 @@
     <hosts>
 		<description>新浪</description>
 		<url>http://www.sina.com.cn</url>
-		<charset>gbk</charset>
+		<charset>gb2312</charset>
 		<getsMethod>html</getsMethod>
 		<timeout>10000</timeout>
 		<dbFile>/xxtebook.db</dbFile>
@@ -13,28 +13,28 @@
 				     <contentSelector>span#news_con_1</contentSelector>
 				     <mustHaveChild></mustHaveChild> 
 					 <title>新浪|财经</title>
-					 <pageCharset>gbk</pageCharset>
+					 <pageCharset>gb2312</pageCharset>
 					 <type>1</type>
 				 </item>
 				 <item>
 				     <contentSelector>div#ent_con_1</contentSelector>
 				     <mustHaveChild></mustHaveChild> 
 					 <title>娱乐</title>
-					 <pageCharset>gbk</pageCharset>
+					 <pageCharset>gb2312</pageCharset>
 					 <type>2</type>
 				 </item>
 				 <item>
 				 	<contentSelector>div#blk_sports_1</contentSelector>
 				 	<mustHaveChild></mustHaveChild>
 				 	<title>体育</title>
-				 	<pageCharset>gbk</pageCharset>
+				 	<pageCharset>gb2312</pageCharset>
 				 	<type>3</type>
 				 </item>
 				 <item>
 				 	<contentSelector>div#blk_sports_2</contentSelector>
 				 	<mustHaveChild></mustHaveChild>
 				 	<title>NBA</title>
-				 	<pageCharset>gbk</pageCharset>
+				 	<pageCharset>gb2312</pageCharset>
 				 	<type>4</type>
 				 </item>
 				 <item>
@@ -43,6 +43,13 @@
 				 	<title>博客</title>
 				 	<pageCharset>utf-8</pageCharset>
 				 	<type>5</type>
+				 </item>
+				 <item>
+				     <contentSelector>div#blk_finance_1</contentSelector>
+				     <mustHaveChild></mustHaveChild>
+				     <title>财经</title>
+				     <pageCharset>gb2312</pageCharset>
+				     <type>6</type>
 				 </item>
 			 </contentArea>
 			<newsList>
@@ -108,6 +115,10 @@
 						<item>
 							<orgPattern>div.writeComm</orgPattern>
 							<newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>p:contains(进入)</orgPattern>
+						    <newContent></newContent>
 						</item>
 						<item>
 							<orgPattern>style</orgPattern>
