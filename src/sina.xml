@@ -51,6 +51,20 @@
 				     <pageCharset>gb2312</pageCharset>
 				     <type>6</type>
 				 </item>
+				 <item>
+				   	<contentSelector>div#blk_finance_2</contentSelector>
+				   	<mustHaveChild></mustHaveChild>
+				   	<title>股票</title>
+				   	<pageCharset>gb2312</pageCharset>
+				   	<type>7</type>
+				 </item>
+				 <item>
+				   	<contentSelector>div#blk_finance_3</contentSelector>
+				   	<mustHaveChild></mustHaveChild>
+				   	<title>理财</title>
+				   	<pageCharset>gb2312</pageCharset>
+				   	<type>8</type>
+				 </item>
 			 </contentArea>
 			<newsList>
 			    <listTagPattern>a</listTagPattern>
@@ -77,8 +91,16 @@
 							<newContent></newContent>
 						</item>
 						<item>
+						    <orgPattern>div.content_aboutNews.clearfix</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
 							<orgPattern>div.blkComment.otherContent_01</orgPattern>
 							<newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>div.otherContent_01</orgPattern>
+						    <newContent></newContent>
 						</item>
 						<item>
 							<orgPattern>div.content_about_video.clearfix</orgPattern>
@@ -164,11 +186,11 @@
 						    <relatedItemsType>1</relatedItemsType>
 						    <ignoreTags></ignoreTags>
 						</item>
-						 <item>
+						<!-- <item>
 						    <relatedPattern>div.content_aboutNews.clearfix</relatedPattern>
 						    <relatedItemsType>0</relatedItemsType>
 						    <ignoreTags></ignoreTags>
-						</item>
+						</item> -->
 						<!-- <item>
 							<relatedPattern>div.guessulike2</relatedPattern>
 						    <relatedItemsType>1</relatedItemsType>
