@@ -41,7 +41,8 @@ public class JsoupTest {
 		// test.testHexunGuoJi();
 		// test.testSinaYuLe();
 		// test.testSinaBlog();
-		test.testSinaCaiJing();
+		// test.testSinaCaiJing();
+		test.testSinaHuNanTravel();
 		
 	}
 	
@@ -312,6 +313,34 @@ public class JsoupTest {
 					// System.out.println(linkHref);
 					// testSinaBlogContent(linkHref);
 					testSinaCaiJingContent(linkHref);
+				}
+			}
+		}finally {
+			
+		}
+		System.out.println("end");
+	}
+	
+	private void testSinaHuNanTravel()
+	{
+		try {
+			/*String content = getCotentFromUrl("http://www.sina.com.cn");*/
+			String content = getCotentFromUrl("http://www.sina.com.cn");
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			Elements contentEls = doc.select("div#blk_auto_1"/*"span#news_con_2"*/);
+			// Elements childs = contentEls.select("div.ShCon2");
+			System.out.println(contentEls.size());
+			// System.out.println(contentEls.html());
+			// System.out.println(contentEls.select("span#news_con_2").html());
+			for (Element ele : contentEls) {
+				Elements links = ele.getElementsByTag("a");
+				for (Element link : links) {
+					String linkHref = link.attr("href");
+					String linkText = link.text();
+					System.out.println(linkText);
+					System.out.println(linkHref);
+					// testSinaBlogContent(linkHref);
+					// testSinaCaiJingContent(linkHref);
 				}
 			}
 		}finally {

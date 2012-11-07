@@ -179,8 +179,8 @@ public class Article {
 		Gson gson = new Gson();
 		String jsonRes = gson.toJson(json);
 		if (!jsonRes.equals("{}")) {
-			jsonRes = jsonRes.replaceAll("\\[", "\\{");
-			jsonRes = jsonRes.replaceAll("\\]", "\\}");
+			/*jsonRes = jsonRes.replaceAll("\\[", "\\{");
+			jsonRes = jsonRes.replaceAll("\\]", "\\}");*/
 			sql = "insert into Article(theTitle, content, resList, oriUrl, artType, seasonId, artTime, artSource) " +
 					"values('" + title.replaceAll("'", "''") + "','" + Html.replaceAll("'", "''")
 					+ "','" + jsonRes + "','" + orgURL + "',"

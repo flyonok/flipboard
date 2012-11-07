@@ -65,6 +65,27 @@
 				   	<pageCharset>gb2312</pageCharset>
 				   	<type>8</type>
 				 </item>
+				 <item>
+				   	<contentSelector>div#blk_auto_1</contentSelector>
+				   	<mustHaveChild></mustHaveChild>
+				   	<title>汽车</title>
+				   	<pageCharset>gb2312</pageCharset>
+				   	<type>9</type>
+				 </item>
+				 <item>
+				   	<contentSelector>div#blk_society_1</contentSelector>
+				   	<mustHaveChild></mustHaveChild>
+				   	<title>社会</title>
+				   	<pageCharset>gb2312</pageCharset>
+				   	<type>10</type>
+				 </item>
+				 <item>
+				   	<contentSelector>div#blk_mil_1</contentSelector>
+				   	<mustHaveChild></mustHaveChild>
+				   	<title>军事</title>
+				   	<pageCharset>gb2312</pageCharset>
+				   	<type>11</type>
+				 </item>
 			 </contentArea>
 			<newsList>
 			    <listTagPattern>a</listTagPattern>
@@ -140,6 +161,10 @@
 						</item>
 						<item>
 						    <orgPattern>p:contains(进入)</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>div.tab_qa.clearfix</orgPattern>
 						    <newContent></newContent>
 						</item>
 						<item>
