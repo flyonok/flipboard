@@ -1203,7 +1203,7 @@ public class HostConfig {
 		public boolean processPageNode(Element pageConfigNode)
 				throws HostConfigException {
 			// TODO Auto-generated method stub
-			Element pagesNode = newsPageItemNode.element("pages");
+			Element pagesNode = pageConfigNode.element("pages");
 			if (pagesNode == null) throw new HostConfigException("newsPageProcess node must have pages child node!");
 			Element selectPatternNode = pagesNode.element("selectPattern");
 			if (selectPatternNode == null ) throw new HostConfigException("pages node must have selectPattern child node!");
