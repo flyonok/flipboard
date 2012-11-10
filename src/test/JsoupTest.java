@@ -42,7 +42,9 @@ public class JsoupTest {
 		// test.testSinaYuLe();
 		// test.testSinaBlog();
 		// test.testSinaCaiJing();
-		test.testSinaHuNanTravel();
+		// test.testSinaHuNanTravel();
+		// test.testSinaTechPage();
+		test.testSinaBlogImgPage();
 		
 	}
 	
@@ -79,7 +81,7 @@ public class JsoupTest {
 			System.out.println(strCount);
 			System.out.println(strCount.substring(strCount.indexOf('/') + 1,
 					strCount.indexOf(')')));*/
-			String content = getCotentFromUrl("http://news.hexun.com/2012-09-27/146324525.html");
+			String content = getCotentFromUrl("http://news.hexun.com/2012-09-27/146324525.html", "gbk");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			Elements els = doc.select(/*"div#tab01_con1"*/"div#artibody");
 			// els.select("table:has(form#theForm14322)").remove();
@@ -99,7 +101,7 @@ public class JsoupTest {
 	private void testSinaNews()
 	{
 		try {
-			String content = getCotentFromUrl("http://www.sina.com.cn");
+			String content = getCotentFromUrl("http://www.sina.com.cn", "gbk");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			Elements contentEls = doc.select(/*"div#tab01_con1"*/"span#news_con_2");
 			for (Element ele : contentEls) {
@@ -118,7 +120,7 @@ public class JsoupTest {
 	private void testHexunNews()
 	{
 		try {
-			String content = getCotentFromUrl("http://www.hexun.com");
+			String content = getCotentFromUrl("http://www.hexun.com", "gbk");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			Elements contentEls = doc.select(/*"div#tab01_con1"*/"div.b_rm02");
 			for (Element conEl : contentEls) 
@@ -143,7 +145,7 @@ public class JsoupTest {
 	private void testHexunBlog()
 	{
 		try {
-			String content = getCotentFromUrl("http://www.hexun.com");
+			String content = getCotentFromUrl("http://www.hexun.com", "gbk");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			Elements contentEls = doc.select(/*"div#tab01_con1"*/"div.b_rm03");
 			for (Element conEl : contentEls) 
@@ -168,7 +170,7 @@ public class JsoupTest {
 	private void testHexunGuoJi()
 	{
 		try {
-			String content = getCotentFromUrl("http://www.hexun.com");
+			String content = getCotentFromUrl("http://www.hexun.com", "gbk");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			Elements contentEls = doc.select(/*"div#tab01_con1"*/"div.b_rm03");
 			for (Element conEl : contentEls) 
@@ -194,7 +196,7 @@ public class JsoupTest {
 	{
 		try {
 			/*String content = getCotentFromUrl("http://www.sina.com.cn");*/
-			String content = getCotentFromUrl("http://www.sina.com.cn");
+			String content = getCotentFromUrl("http://www.sina.com.cn", "gbk");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			String sina = doc.html();
 			System.out.println(sina.indexOf("http://hunan.sina.com.cn/news/s/2012-10-20/090221606.html"));
@@ -226,7 +228,7 @@ public class JsoupTest {
 	{
 		try {
 			/*String content = getCotentFromUrl("http://www.sina.com.cn");*/
-			String content = getCotentFromUrl("http://www.sina.com.cn");
+			String content = getCotentFromUrl("http://www.sina.com.cn", "gbk");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			Elements contentEls = doc.select("div#blk_sports_2"/*"span#news_con_2"*/);
 			// System.out.println(contentEls.html());
@@ -250,7 +252,7 @@ public class JsoupTest {
 	{
 		try {
 			/*String content = getCotentFromUrl("http://www.sina.com.cn");*/
-			String content = getCotentFromUrl("http://www.sina.com.cn");
+			String content = getCotentFromUrl("http://www.sina.com.cn", "gbk");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			Elements contentEls = doc.select("div#ent_con_3"/*"span#news_con_2"*/);
 			// System.out.println(contentEls.html());
@@ -274,7 +276,7 @@ public class JsoupTest {
 	{
 		try {
 			/*String content = getCotentFromUrl("http://www.sina.com.cn");*/
-			String content = getCotentFromUrl("http://www.sina.com.cn");
+			String content = getCotentFromUrl("http://www.sina.com.cn", "gbk");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			Elements contentEls = doc.select("div#blog"/*"span#news_con_2"*/);
 			// System.out.println(contentEls.html());
@@ -299,7 +301,7 @@ public class JsoupTest {
 	{
 		try {
 			/*String content = getCotentFromUrl("http://www.sina.com.cn");*/
-			String content = getCotentFromUrl("http://www.sina.com.cn");
+			String content = getCotentFromUrl("http://www.sina.com.cn", "gbk");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			Elements contentEls = doc.select("div#blk_finance_1"/*"span#news_con_2"*/);
 			// System.out.println(contentEls.html());
@@ -325,7 +327,7 @@ public class JsoupTest {
 	{
 		try {
 			/*String content = getCotentFromUrl("http://www.sina.com.cn");*/
-			String content = getCotentFromUrl("http://www.sina.com.cn");
+			String content = getCotentFromUrl("http://www.sina.com.cn", "gbk");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			Elements contentEls = doc.select("div#blk_auto_1"/*"span#news_con_2"*/);
 			// Elements childs = contentEls.select("div.ShCon2");
@@ -349,9 +351,57 @@ public class JsoupTest {
 		System.out.println("end");
 	}
 	
+	private void testSinaTechPage()
+	{
+		try {
+			/*String content = getCotentFromUrl("http://www.sina.com.cn");*/
+			String content = getCotentFromUrl("http://blog.sina.com.cn/s/blog_6061bc970102eo67.html?tj=1", "utf-8");
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			Elements contentEls = doc.select("img"/*"span#news_con_2"*/);
+			// Elements childs = contentEls.select("div.ShCon2");
+			System.out.println(contentEls.size());
+			// System.out.println(contentEls.html());
+			// System.out.println(contentEls.select("span#news_con_2").html());
+			for (Element ele : contentEls) {
+				System.out.println(ele.outerHtml());
+			}
+		}finally {
+			
+		}
+		System.out.println("end");
+	}
+	
+	private void testSinaBlogImgPage()
+	{
+		try {
+			/*String content = getCotentFromUrl("http://www.sina.com.cn");*/
+			String content = getCotentFromUrl("http://blog.sina.com.cn/s/blog_6877ab470102edsg.html?tj=1?tj=2", "utf-8");
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			Elements contentEls = doc.select("img"/*"span#news_con_2"*/);
+			// Elements childs = contentEls.select("div.ShCon2");
+			// System.out.println(contentEls.size());
+			// System.out.println(contentEls.html());
+			// System.out.println(contentEls.select("span#news_con_2").html());
+			for (Element ele : contentEls) {
+				String strImgSrc = ele.attr("src");
+				String strImgRealSrc = ele.attr("real_src");
+				// System.out.println(ele.outerHtml());
+				System.out.println(strImgSrc);
+				// System.out.println(strImgRealSrc);
+				if (strImgRealSrc.length() > 0) {
+					ele.attr("src", strImgRealSrc);
+					System.out.println("after: " + ele.attr("src"));
+				}
+			}
+		}finally {
+			
+		}
+		System.out.println("end");
+	}
+	
 	private void testSinaBlogContent(String linkRef) {
 		try {
-			String content = getCotentFromUrl(linkRef);
+			String content = getCotentFromUrl(linkRef, "gbk");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			// Elements contentEls = doc.select(/*"div#tab01_con1"*/"div#sinashareto");
 			Elements contentEls = doc.select("div#column_2");
@@ -375,7 +425,7 @@ public class JsoupTest {
 	
 	private void testSinaCaiJingContent(String linkRef) {
 		try {
-			String content = getCotentFromUrl(linkRef);
+			String content = getCotentFromUrl(linkRef, "gbk");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			// Elements contentEls = doc.select(/*"div#tab01_con1"*/"div#sinashareto");
 			// Elements contentEls = doc.select("div#artibody");
@@ -423,7 +473,7 @@ public class JsoupTest {
 	
 	private void testSinaNewsPageContent() {
 		try {
-			String content = getCotentFromUrl("http://tech.sina.com.cn/t/2012-10-10/09037688071.shtml");
+			String content = getCotentFromUrl("http://tech.sina.com.cn/t/2012-10-10/09037688071.shtml", "gbk");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			// Elements contentEls = doc.select(/*"div#tab01_con1"*/"div#sinashareto");
 			Elements contentEls = doc.select("div.guessulike2");
@@ -443,7 +493,7 @@ public class JsoupTest {
 	
 	private void testSinaYLPageContent() {
 		try {
-			String content = getCotentFromUrl("http://ent.sina.com.cn/s/m/2012-10-20/02593767997.shtml");
+			String content = getCotentFromUrl("http://ent.sina.com.cn/s/m/2012-10-20/02593767997.shtml", "gbk");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			// Elements contentEls = doc.select(/*"div#tab01_con1"*/"div#sinashareto");
 			Elements contentEls = doc.select("div.blkContainerSblk");
@@ -464,7 +514,7 @@ public class JsoupTest {
 	private void testSinaPicContent()
 	{
 		try {
-			String content = getCotentFromUrl("http://slide.news.sina.com.cn/c/slide_1_2841_27053.html");
+			String content = getCotentFromUrl("http://slide.news.sina.com.cn/c/slide_1_2841_27053.html", "gbk");
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
 			// Elements contentEls = doc.select(/*"div#tab01_con1"*/"div#sinashareto");
 			System.out.println(doc.html());
@@ -512,7 +562,7 @@ public class JsoupTest {
 		}
 	}
 	
-	private String getCotentFromUrl(String url) {
+	private String getCotentFromUrl(String url, String charset) {
 		// strBuf.delete(0, strBuf.length());
 		String content = null;
 		try {
@@ -523,7 +573,7 @@ public class JsoupTest {
 			// request.getParams()
 			HttpResponse response = client.execute(request);
 			byte[] bytes = EntityUtils.toByteArray(response.getEntity());
-			content = new String(bytes,"gbk");
+			content = new String(bytes, charset);
 			/*// Get the response
 			BufferedReader rd = new BufferedReader(new InputStreamReader(
 					response.getEntity().getContent()));

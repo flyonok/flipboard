@@ -443,6 +443,7 @@ public class hexun implements Job{
 		if (strWebContent.length() > 0 ) {
 			doc = Jsoup.parse(strWebContent, baseUrl);
 		}
+		processHtmlImgAttr(doc);
 		Elements newsContentEls = null;
 		for (NewsPageProcess newsPageItem : curNewsArea.getPageProcessList() ) {
 			curNewsPageItem = newsPageItem;
@@ -836,108 +837,25 @@ public class hexun implements Job{
 	}
 	// image end
 	
-	// 纯图片网页
-	/*private boolean processPictureHtml(org.jsoup.nodes.Document doc) {
-		Elements els = doc.select( curNewsArea.getPicContentTag()strPicContentTag "div#bigPicArea" );
-		try {
-			if (els.first() != null) {
-				Elements subTitles = els.select( curNewsArea.getPicAbstractPattern()strPicAbstractPattern  "div.slide_subtitle" );
-				Elements pics = els.select( curNewsArea.getPicSlide()strPicSlide  "div#slide_pic" );
-				if (subTitles.first() != null  ) {
-					// curArticle.setAbstract( subTitles.first().html() );
-					curArticle.setHtml(subTitles.first().html());
-					if ( pics.first() != null ) {
-						curArticle.setHtml( subTitles.first().html() + pics.first().html() );
-						curArticle.setArcType(Article.ALLRESOURCE);
-						processPageImage(els);
-						Elements count_max = els.select( curNewsArea.getPicCountMax()strPicCountMax "font.pic_count_max" );
-						String strMax = count_max.first().text();
-						Elements pic_count = els.select( curNewsArea.getPicCount()strPicCount "font.pic_count" );
-						String strCount = pic_count.get( curNewsArea.getPicCountIndex()picCountIndex ).text();
-						// System.out.println( strMax + "\t" + strCount );
-						if ( Integer.parseInt(strMax) != Integer.parseInt( strCount.substring( 
-								strCount.indexOf(curNewsArea.getFirstPicCountLetter()strFirstPicCountLetter) + 1, 
-									strCount.indexOf(curNewsArea.getSecondPicCountLetter()strSecondPicCountLetter) ) ) ) {
-							
-							Elements nexts = els.select( curNewsArea.getNextPicturePattern()strNextPicturePattern "a.pic_next" );
-							String href = nexts.first().attr( curNewsArea.getNextPictureAttr()strNextPictureAttr "href" );
-							processMorePictureHtml(href);
-						}
-						
-					}
-				}
-				return true;
+	private void processHtmlImgAttr(org.jsoup.nodes.Document doc) {
+		Elements imgEls = doc.select("img"/*"span#news_con_2"*/);
+		// Elements childs = contentEls.select("div.ShCon2");
+		// System.out.println(contentEls.size());
+		// System.out.println(contentEls.html());
+		// System.out.println(contentEls.select("span#news_con_2").html());
+		for (org.jsoup.nodes.Element ele : imgEls) {
+			// String strImgSrc = ele.attr("src");
+			String strImgRealSrc = ele.attr("real_src");
+			// System.out.println(ele.outerHtml());
+			// System.out.println(strImgSrc);
+			// System.out.println(strImgRealSrc);
+			if (strImgRealSrc.length() > 0) {
+				ele.attr("src", strImgRealSrc);
+				// System.out.println("after: " + ele.attr("src"));
 			}
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
 		}
-		catch(Exception e){
-			e.printStackTrace();
-			logger.error(e.getMessage());
-		}
-		
-		return false;
-	}*/
-	
-	
-	/*private boolean processMorePictureHtml(String url) {
-		boolean isRight = true;
-
-		
-		 * org.jsoup.nodes.Document doc =
-		 * Jsoup.connect(url).timeout(curHostConfig.getTimeOut()).get();
-		 
-		String strWebContent = null;
-		try {
-			strWebContent = getContentFromUrl(url);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-			isRight = false;
-
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-			isRight = false;
-		}
-		
-		 * org.jsoup.nodes.Document doc =
-		 * Jsoup.connect(url).timeout(curHostConfig.getTimeOut()).get();
-		 
-		org.jsoup.nodes.Document doc = Jsoup.parse(strWebContent, baseUrl);
-		Elements els = doc.select(curNewsArea.getPicContentTag());
-		if (els.first() != null) {
-			processPageImage(els);
-			Elements count_max = els.select(curNewsArea.getPicCountMax());
-			String strMax = count_max.first().text();
-			Elements pic_count = els.select(curNewsArea.getPicCount());
-			String strCount = pic_count.get(curNewsArea.getPicCountIndex())
-					.text();
-			try {
-				if (Integer.parseInt(strMax) != Integer
-						.parseInt(strCount.substring(
-								strCount.indexOf(curNewsArea
-										.getFirstPicCountLetter()) + 1,
-								strCount.indexOf(curNewsArea
-										.getSecondPicCountLetter())))) {
-					Elements nexts = els.select(curNewsArea
-							.getNextPicturePattern());
-					String href = nexts.first().attr(
-							curNewsArea.getNextPictureAttr());
-					processMorePictureHtml(href);
-				}
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-				logger.error(e.getMessage());
-				isRight = false;
-			}
-
-		}
-		return isRight;
 	}
-	// test end
-*/	
+	
 	private String getFileName(String url) {
 		int last = url.indexOf("//");
 		if (last == -1)

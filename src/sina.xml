@@ -86,6 +86,62 @@
 				   	<pageCharset>gb2312</pageCharset>
 				   	<type>11</type>
 				 </item>
+				 <item>
+				   	<contentSelector>div#blk_tech_1</contentSelector>
+				   	<mustHaveChild></mustHaveChild>
+				   	<title>科技</title>
+				   	<pageCharset>gb2312</pageCharset>
+				   	<type>12</type>
+				 </item>
+				 <item>
+				   	<contentSelector>div#blk_tech_2</contentSelector>
+				   	<mustHaveChild></mustHaveChild>
+				   	<title>探索</title>
+				   	<pageCharset>gb2312</pageCharset>
+				   	<type>13</type>
+				 </item>
+				 <item>
+				   	<contentSelector>div#blk_photo_1</contentSelector>
+				   	<mustHaveChild></mustHaveChild>
+				   	<title>图片</title>
+				   	<pageCharset>gb2312</pageCharset>
+				   	<type>14</type>
+				 </item>
+				 <item>
+				   	<contentSelector>div#blk_ladies_01</contentSelector>
+				   	<mustHaveChild></mustHaveChild>
+				   	<title>女性</title>
+				   	<pageCharset>gb2312</pageCharset>
+				   	<type>15</type>
+				 </item>
+				 <item>
+				   	<contentSelector>div#blk_ladies_02</contentSelector>
+				   	<mustHaveChild></mustHaveChild>
+				   	<title>时尚</title>
+				   	<pageCharset>gb2312</pageCharset>
+				   	<type>16</type>
+				 </item>
+				 <item>
+				   	<contentSelector>div#blk_ladies_03</contentSelector>
+				   	<mustHaveChild></mustHaveChild>
+				   	<title>情感</title>
+				   	<pageCharset>gb2312</pageCharset>
+				   	<type>17</type>
+				 </item>
+				 <item>
+				   	<contentSelector>div#house_auto</contentSelector>
+				   	<mustHaveChild></mustHaveChild>
+				   	<title>房产汽车</title>
+				   	<pageCharset>gb2312</pageCharset>
+				   	<type>18</type>
+				 </item>
+				 <item>
+				   	<contentSelector>div#mobile_down</contentSelector>
+				   	<mustHaveChild></mustHaveChild>
+				   	<title>手机</title>
+				   	<pageCharset>gb2312</pageCharset>
+				   	<type>19</type>
+				 </item>
 			 </contentArea>
 			<newsList>
 			    <listTagPattern>a</listTagPattern>

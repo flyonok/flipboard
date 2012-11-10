@@ -684,74 +684,7 @@ public class HostConfig {
 				return;
 			}
 			throw new HostConfigException("picturePageProcess node must have hexun or sina node");
-			/*logger.info("picturePageProcess----begin");
-			Element picContentTagNode = pictureNode.element("picContentTag");
-			if (picContentTagNode == null)
-				throw new HostConfigException("picturePageProcess node must have picContentTag child node!");
-			strPicContentTag = picContentTagNode.getTextTrim();
-			logger.info("picContentTag:" + strPicContentTag);
 			
-			Element picAbstractPatternNode = pictureNode.element("picAbstractPattern");
-			if (picAbstractPatternNode == null)
-				throw new HostConfigException("picturePageProcess node must have picAbstractPattern child node!");
-			strPicAbstractPattern = picAbstractPatternNode.getTextTrim();
-			logger.info("picAbstractPattern:" + strPicAbstractPattern);
-			
-			Element picSlideNode = pictureNode.element("picSlide");
-			if (picSlideNode == null)
-				throw new HostConfigException("picturePageProcess node must have picSlide child node!");
-			strPicSlide = picSlideNode.getTextTrim();
-			logger.info("picSlide:" + strPicSlide );
-			
-			Element picCountMaxNode = pictureNode.element("picCountMax");
-			if (picCountMaxNode == null)
-				throw new HostConfigException("picturePageProcess node must have picCountMax child node!");
-			strPicCountMax = picCountMaxNode.getTextTrim();
-			logger.info("picCountMax:" + strPicCountMax);
-			
-			Element picCountNode = pictureNode.element("picCount");
-			if (picCountNode == null)
-				throw new HostConfigException("picturePageProcess node must have picCount child node!");
-			strPicCount = picCountNode.getTextTrim();
-			logger.info("picCount:" + strPicCount);
-			
-			Element firstPicCountLetterNode = pictureNode.element("firstPicCountLetter");
-			if (firstPicCountLetterNode == null)
-				throw new HostConfigException("picturePageProcess node must have firstPicCountLetter child node!");
-			strFirstPicCountLetter = firstPicCountLetterNode.getTextTrim();
-			logger.info("firstPicCountLetter:" + strFirstPicCountLetter );
-			
-			Element secondPicCountLetterNode = pictureNode.element("secondPicCountLetter");
-			if (secondPicCountLetterNode == null)
-				throw new HostConfigException("picturePageProcess node must have secondPicCountLetter child node!");
-			strSecondPicCountLetter = secondPicCountLetterNode.getTextTrim();
-			logger.info("secondPicCountLetter:" + strSecondPicCountLetter );
-			
-			Element nextPicturePatternNode = pictureNode.element("nextPicturePattern");
-			if (nextPicturePatternNode == null)
-				throw new HostConfigException("picturePageProcess node must have nextPicturePattern child node!");
-			strNextPicturePattern = nextPicturePatternNode.getTextTrim();
-			logger.info("nextPicturePattern:" + strNextPicturePattern);
-			
-			Element nextPictureAttrNode = pictureNode.element("nextPictureAttr");
-			if (nextPictureAttrNode == null)
-				throw new HostConfigException("picturePageProcess node must have nextPictureAttr child node!");
-			strNextPictureAttr = nextPictureAttrNode.getTextTrim();
-			logger.info("nextPictureAttr:" + strNextPictureAttr);
-			
-			try {
-				Element picCountIndexNode = pictureNode.element("picCountIndex");
-				if (picCountIndexNode == null)
-					throw new HostConfigException("picturePageProcess node must have picCountIndex child node!");
-				picCountIndex = Integer.parseInt( picCountIndexNode.getTextTrim());
-				logger.info("picCountIndex:" + picCountIndex );
-				
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-				logger.error(e.getMessage());
-				throw new HostConfigException("picCountIndex node must be number!");
-			}
-			logger.info("picturePageProcess----end");*/
 		}
 		
 		
@@ -1249,6 +1182,62 @@ public class HostConfig {
 				// System.out.println(url);				
 			}
 		}
+	}
+	
+	public class HexunPaging implements HtmlPaging {
+		
+		// pages
+		private String strSelectPattern = null;
+
+		public String getPageSelectorPattern() {
+			return strSelectPattern;
+		}
+
+		private String strUrlValue = null;
+
+		public String getPageUrl() {
+			return strUrlValue;
+		}
+
+		// pages end
+		public boolean processPageNode(Element pageConfigNode)
+				throws HostConfigException {
+			// TODO Auto-generated method stub
+			Element pagesNode = newsPageItemNode.element("pages");
+			if (pagesNode == null) throw new HostConfigException("newsPageProcess node must have pages child node!");
+			Element selectPatternNode = pagesNode.element("selectPattern");
+			if (selectPatternNode == null ) throw new HostConfigException("pages node must have selectPattern child node!");
+			strSelectPattern = selectPatternNode.getTextTrim();
+			logger.info("pages -------begin");
+			logger.info("selectPattern:" + strSelectPattern );
+			Element urlValueNode = pagesNode.element("urlValue");
+			if (urlValueNode == null ) throw new HostConfigException("pages node must have urlValue child node!");
+			strUrlValue = urlValueNode.getTextTrim();
+			logger.info("urlValue:" + strUrlValue );
+			logger.info("pages -------end");
+			return false;
+		}
+
+		public List<String> getPageUrls(org.jsoup.nodes.Document doc) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	}
+	
+	public class SinaPaging implements HtmlPaging {
+
+		public boolean processPageNode(Element pageConfigNode)
+				throws HostConfigException {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		public List<String> getPageUrls(org.jsoup.nodes.Document doc) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
 	}
 	
 	private List<NewsArea> newsAreaList = null ;
