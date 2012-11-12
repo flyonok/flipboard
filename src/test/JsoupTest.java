@@ -44,7 +44,8 @@ public class JsoupTest {
 		// test.testSinaCaiJing();
 		// test.testSinaHuNanTravel();
 		// test.testSinaTechPage();
-		test.testSinaBlogImgPage();
+		// test.testSinaBlogImgPage();
+		test.testSinaNewsPaging();
 		
 	}
 	
@@ -486,6 +487,25 @@ public class JsoupTest {
 			contentEls.select("style").remove();
 			contentEls.select("script").remove();
 			System.out.println(contentEls.outerHtml());*/
+		}finally {
+			
+		}
+	}
+	
+	private void testSinaNewsPaging() {
+		try {
+			String content = getCotentFromUrl("http://jiaju.sina.com.cn/news/jz/2012-09-14/090408167505.shtml", "gbk");
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			// Elements contentEls = doc.select(/*"div#tab01_con1"*/"div#sinashareto");
+			Elements pageEls = doc.select("div#_function_code_page");
+			Elements pageNumbs = pageEls.select("span.pagebox_num");
+			for (Element page : pageNumbs) {
+				Elements aEls = page.select("a");
+				for (Element a : aEls) {
+					String strHref = a.attr("href");
+					System.out.println(strHref);
+				}
+			}
 		}finally {
 			
 		}

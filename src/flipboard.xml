@@ -215,6 +215,13 @@
 					<nextPictureAttr>href</nextPictureAttr>
 				</hexun>
 			</picturePageProcess>
+			<pages>
+			    <hexun>
+					<selectPattern><![CDATA[ select > option ]]></selectPattern>
+					<urlValue>value</urlValue>
+				</hexun>
+			</pages>
+			
 		</newsArea>
 	</hosts>
 </flipboard>
