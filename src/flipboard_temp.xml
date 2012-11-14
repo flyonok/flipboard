@@ -104,10 +104,6 @@
 						    <ignoreTags>h1</ignoreTags>
 						</item>
 					</relatedItems>
-					<pages> <!-- 分页处理 -->
-						<selectPattern><![CDATA[ select > option ]]></selectPattern> <!-- 分页元素reg -->
-						<urlValue>value</urlValue><!-- 页面的url -->
-					</pages>
 				</item>
 			</newsPageProcess>
 			
@@ -125,6 +121,12 @@
 					<nextPictureAttr>href</nextPictureAttr> <!-- 获取下一张图片链接地址 -->
 				</hexun>
 			</picturePageProcess>
+			<pages> <!-- 分页处理 -->
+			    <hexun>
+					<selectPattern><![CDATA[ select > option ]]></selectPattern> <!-- 分页元素reg -->
+					<urlValue>value</urlValue><!-- 页面的url -->
+				</hexun>
+			</pages>
 		</newsArea>
 	</hosts>
 </flipboard>

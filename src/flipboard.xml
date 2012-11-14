@@ -153,10 +153,6 @@
 						    <ignoreTags>h1</ignoreTags>
 						</item>
 					</relatedItems>
-					<pages>
-						<selectPattern><![CDATA[ select > option ]]></selectPattern>
-						<urlValue>value</urlValue>
-					</pages>
 				</item>
 				<item><!-- 博客 -->
 					<newsContentTag>div#ArticeTextID</newsContentTag>
@@ -195,10 +191,6 @@
 						</item>
 						-->
 					</relatedItems>
-					<pages>
-						<selectPattern><![CDATA[ select > option ]]></selectPattern>
-						<urlValue>value</urlValue>
-					</pages>
 				</item>
 			</newsPageProcess>
 			<picturePageProcess>

@@ -224,6 +224,14 @@
 						    <newContent></newContent>
 						</item>
 						<item>
+						    <orgPattern>div#_function_code_page</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>p.page</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
 							<orgPattern>style</orgPattern>
 							<newContent></newContent>
 						</item>
@@ -279,10 +287,6 @@
 						</item> -->
 												
 					</relatedItems>
-					<pages>
-						<selectPattern></selectPattern>
-						<urlValue></urlValue>
-					</pages>
 				</item>
 				<item><!-- 博客 -->
 					<newsContentTag>div#articlebody</newsContentTag>
@@ -353,10 +357,6 @@
 					</contentReplace>
 					<relatedItems>
 					</relatedItems>
-					<pages>
-						<selectPattern></selectPattern>
-						<urlValue></urlValue>
-					</pages>
 				</item>
 			</newsPageProcess>
 			
@@ -371,6 +371,16 @@
 				</sina>
 				
 			</picturePageProcess>
+			<pages>
+			    <sina>
+					<!-- <pagingID>div#_function_code_page</pagingID> --> <!-- page class id -->
+					<!-- <pageNumClass>span.pagebox_num</pageNumClass> --> <!-- paging collection -->
+					<!-- <pageHrefTag>a</pageHrefTag> -->
+					<!-- <pageHrefValue>href</pageHrefValue> -->
+					<pageNumClass>a:contains(下一页)</pageNumClass> <!-- paging collection -->
+					<pageUrlValue>href</pageUrlValue> <!-- next page url value -->
+				</sina>
+			</pages>
 		</newsArea>
 	</hosts>
 </flipboard>

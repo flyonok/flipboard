@@ -148,14 +148,17 @@ public class HostConfig {
 		}
 		
 		// pages
+		@Deprecated
 		private String strSelectPattern = null;
 
+		@Deprecated
 		public String getPageSelectorPattern() {
 			return strSelectPattern;
 		}
-
+		@Deprecated
 		private String strUrlValue = null;
 
+		@Deprecated
 		public String getPageUrl() {
 			return strUrlValue;
 		}
@@ -182,7 +185,7 @@ public class HostConfig {
 				processElementReplace(newsPageItemNode);
 				processContentReplace(newsPageItemNode);
 				processRelatedItems(newsPageItemNode);
-				processPages(newsPageItemNode);
+				// processPages(newsPageItemNode);
 			} catch (HostConfigException e) {
 				throw e;
 			}
@@ -285,6 +288,7 @@ public class HostConfig {
 			logger.info("relatedItems-----end");
 		}
 		
+		@Deprecated
 		private void processPages(Element newsPageItemNode) throws HostConfigException {
 			// pages
 			Element pagesNode = newsPageItemNode.element("pages");
@@ -357,39 +361,15 @@ public class HostConfig {
 		// pictureProcess
 		private PicProcess picProcess = null;
 		public PicProcess getPicHandler() { return picProcess; }
-		/*private String strPicContentTag = null;
-		public String getPicContentTag() { return strPicContentTag; }
-		
-		private String strPicAbstractPattern = null;
-		public String getPicAbstractPattern() { return strPicAbstractPattern; }
-		
-		private String strPicSlide = null;
-		public String getPicSlide() { return strPicSlide; }
-		
-		private String strPicCountMax = null;
-		public String getPicCountMax() { return strPicCountMax; }
-		
-		private String strPicCount = null;
-		public String getPicCount() { return strPicCount; }
-		
-		private int picCountIndex = 0;
-		public int getPicCountIndex() { return picCountIndex; }
-		
-		private String strFirstPicCountLetter = null;
-		public String getFirstPicCountLetter() { return strFirstPicCountLetter; }
-		
-		private String strSecondPicCountLetter = null;
-		public String getSecondPicCountLetter() { return strSecondPicCountLetter; }
-		
-		private String strNextPicturePattern = null;
-		public String getNextPicturePattern() { return strNextPicturePattern; }
-		
-		private String strNextPictureAttr = null;
-		public String getNextPictureAttr() { return strNextPictureAttr; }*/
-		// pictureProcess end
+		private HtmlPaging pagingProcess = null;
+		public HtmlPaging getPagingHandler() { return pagingProcess; }
 		
 		public boolean processPicHtml(org.jsoup.nodes.Document doc, Article article) {
 			return picProcess.processHtml(doc, article);
+		}
+		
+		public List<String> processHtmlPaging(org.jsoup.nodes.Document doc, String charset) {
+			return pagingProcess.getPageUrls(doc, charset);
 		}
 		
 		public void processNewsArea(Element newsAreaNode) throws HostConfigException {
@@ -425,6 +405,7 @@ public class HostConfig {
 			try {
 				processNewsPageProcess(newsPageProcessNode);
 				processPicturePage(newsAreaNode);
+				processPages(newsAreaNode);
 			} catch (HostConfigException e) {
 				throw e;
 			}
@@ -552,6 +533,30 @@ public class HostConfig {
 			logger.info("newsPageProcess---------end");
 		}
 		
+		private void processPages(Element newsAreaNode) throws HostConfigException {
+			// pages
+			Element pageNode = newsAreaNode.element("pages");
+			if (pageNode == null) {
+				throw new HostConfigException("newsArea node must have pages child node!");
+			}
+			logger.info("pages-------------begin");
+			Element sinaPagingNode = pageNode.element("sina");
+			if (sinaPagingNode != null) {
+				pagingProcess = new SinaPaging();
+				pagingProcess.processPageNode(sinaPagingNode);
+				logger.info("pages---------------end");
+				return;
+			}
+			Element hexunPagingNode = pageNode.element("hexun");
+			if (hexunPagingNode != null) {
+				pagingProcess = new HexunPaging();
+				pagingProcess.processPageNode(hexunPagingNode);
+				logger.info("pages---------------end");
+				return;
+			}
+			throw new HostConfigException("pages node must have hexun or sina node");
+			
+		}
 		/*private void processElementReplace(Element newsPageProcessNode) throws HostConfigException {
 			Element elementReplaceNode = newsPageProcessNode.element("elementReplace");
 			if (elementReplaceNode == null) 
@@ -669,11 +674,13 @@ public class HostConfig {
 			if (pictureNode == null)
 				throw new HostConfigException("newsArea node must have picturePageProcess child node!");
 			
+			logger.info("picturePageProcess------begin");
 			Element hexunNode = pictureNode.element("hexun");
 			if (hexunNode != null)
 			{
 				picProcess = new HexunPicProcess();
 				picProcess.processPicNode(hexunNode);
+				logger.info("picturePageProcess------end");
 				return;
 			}
 			
@@ -681,6 +688,7 @@ public class HostConfig {
 			if (sinaNode != null) {
 				picProcess = new SinaPicProcess();
 				picProcess.processPicNode(sinaNode);
+				logger.info("picturePageProcess------end");
 				return;
 			}
 			throw new HostConfigException("picturePageProcess node must have hexun or sina node");
@@ -1200,45 +1208,176 @@ public class HostConfig {
 		}
 
 		// pages end
-		public boolean processPageNode(Element pageConfigNode)
+		public boolean processPageNode(Element hexunPagingNode)
 				throws HostConfigException {
 			// TODO Auto-generated method stub
-			Element pagesNode = pageConfigNode.element("pages");
-			if (pagesNode == null) throw new HostConfigException("newsPageProcess node must have pages child node!");
-			Element selectPatternNode = pagesNode.element("selectPattern");
-			if (selectPatternNode == null ) throw new HostConfigException("pages node must have selectPattern child node!");
+			// Element pagesNode = hexunPagingNode.element("pages");
+			// if (pagesNode == null) throw new HostConfigException("newsPageProcess node must have pages child node!");
+			Element selectPatternNode = hexunPagingNode.element("selectPattern");
+			if (selectPatternNode == null ) {
+				throw new HostConfigException("hexun paging node must have selectPattern child node!");
+			}
 			strSelectPattern = selectPatternNode.getTextTrim();
-			logger.info("pages -------begin");
+			logger.info("hexun paging -------begin");
 			logger.info("selectPattern:" + strSelectPattern );
-			Element urlValueNode = pagesNode.element("urlValue");
-			if (urlValueNode == null ) throw new HostConfigException("pages node must have urlValue child node!");
+			Element urlValueNode = hexunPagingNode.element("urlValue");
+			if (urlValueNode == null ) {
+				throw new HostConfigException("hexun paging node must have urlValue child node!");
+			}
 			strUrlValue = urlValueNode.getTextTrim();
 			logger.info("urlValue:" + strUrlValue );
-			logger.info("pages -------end");
-			return false;
+			logger.info("hexun paging -------end");
+			return true;
 		}
 
-		public List<String> getPageUrls(org.jsoup.nodes.Document doc) {
+		public List<String> getPageUrls(org.jsoup.nodes.Document doc, String charset) {
 			// TODO Auto-generated method stub
-			return null;
+			List<String> pageUrlList = null;
+			if ( (strSelectPattern.length() > 0) && (strUrlValue.length() > 0) ) {
+				Elements options = doc.select(strSelectPattern);
+				for (org.jsoup.nodes.Element option : options) {
+					String strUrl = option.attr(strUrlValue);
+					if (strUrl.length() > 0) {
+						if (pageUrlList == null) {
+							pageUrlList = new ArrayList<String>();
+						}
+						pageUrlList.add(strUrl);
+					}
+				}
+			}
+			return pageUrlList;
 		}
 		
 	}
 	
 	public class SinaPaging implements HtmlPaging {
+		
+		@Deprecated
+		private String strPagingID = null;
+		
+		private String strPageNumClass = null;
+		
+		@Deprecated
+		private String strPageHrefTag = null;
+		
+		@Deprecated
+		private String strPageHrefValue = null;
+		
+		private String strPageUrlValue = null;
 
-		public boolean processPageNode(Element pageConfigNode)
+		private String baseUrl = null ;
+
+		private List<String> pageUrlList = null;
+
+		public boolean processPageNode(Element sinaPagingNode)
 				throws HostConfigException {
 			// TODO Auto-generated method stub
-			return false;
+			/*Element pagingIDNode = sinaPagingNode.element("pagingID");
+			if (pagingIDNode == null) {
+				throw new HostConfigException("sina paging node must have pagingID child node!");
+			}
+			strPagingID = pagingIDNode.getTextTrim();*/
+			
+			Element pageNumClassNode = sinaPagingNode.element("pageNumClass");
+			if (pageNumClassNode == null) {
+				throw new HostConfigException("sina paging node must have pageNumClass child node!");
+			}
+			strPageNumClass = pageNumClassNode.getTextTrim();
+			logger.info("sina paging-------begin");
+			logger.info("pageNumClass: " + strPageNumClass);
+			
+			Element pageUrlValueNode = sinaPagingNode.element("pageUrlValue");
+			if (pageUrlValueNode == null) {
+				throw new HostConfigException("sina paging node must have pageUrlValue child node!");
+			}
+			strPageUrlValue = pageUrlValueNode.getTextTrim();
+			logger.info("pageUrlValue: " + strPageUrlValue);
+			logger.info("sina paging-------end");
+			
+			/*Element pageHrefTagNode = sinaPagingNode.element("pageHrefTag");
+			if (pageHrefTagNode == null) {
+				throw new HostConfigException("sina paging node must have pageHrefTag child node!");
+			}
+			strPageHrefTag = pageHrefTagNode.getTextTrim();*/
+			
+			/*Element pageHrefValueNode = sinaPagingNode.element("pageHrefValue");
+			if (pageHrefValueNode == null) {
+				throw new HostConfigException("sina paging node must have pageHrefValue child node!");
+			}
+			strPageHrefValue = pageHrefValueNode.getTextTrim();*/
+			
+			
+			return true;
 		}
 
-		public List<String> getPageUrls(org.jsoup.nodes.Document doc) {
+		public List<String> getPageUrls(org.jsoup.nodes.Document doc, String charset) {
 			// TODO Auto-generated method stub
-			return null;
+			// List<String> pageUrlList = null;
+			String reg = "[a-zA-z]+://[^\\s]*.html[^\\s]*";
+			if (strPageNumClass.length() > 0) {
+				Elements pageNumbs = doc.select(strPageNumClass);
+				if (pageNumbs.first() == null) {
+					logger.info("No found: " + strPageNumClass);
+					return null ;
+				}
+				for (org.jsoup.nodes.Element page : pageNumbs) {
+
+					if (strPageUrlValue.length() > 0) {
+						String strHref = page.attr(strPageUrlValue);
+						if (strHref.length() > 0 && strHref.matches(reg) ) {
+							if (pageUrlList == null) {
+								pageUrlList = new ArrayList<String>();
+							}
+							pageUrlList.add(strHref);
+							logger.info("page url: " + strHref);
+							try {
+								String content = getContentFromUrl(strHref, charset);
+								org.jsoup.nodes.Document docTmp = org.jsoup.Jsoup.parse(content,baseUrl);
+								getPageUrls(docTmp, charset);
+								
+							} catch (ClientProtocolException e) {
+								e.printStackTrace();
+								logger.error(e.getMessage());
+								
+							} catch (IOException e) {
+								e.printStackTrace();
+								logger.error(e.getMessage());
+							}
+						}
+					}
+
+				}
+			}
+			
+			
+			return pageUrlList;
 		}
 		
-	}
+		private String getContentFromUrl(String url, String strCharset) throws ClientProtocolException, IOException {
+			String content = null;
+			try {
+				HttpClient client = new DefaultHttpClient();
+				client.getParams();
+				HttpGet request = new HttpGet(url);
+				baseUrl = request.getURI().getHost();
+				// request.getParams()
+				HttpResponse response = client.execute(request);
+				byte[] bytes = EntityUtils.toByteArray(response.getEntity());
+				content = new String(bytes, strCharset);
+			} catch(ClientProtocolException e) {
+				e.printStackTrace();
+				logger.error("process URL:" + url + "failed! " + e.getMessage());
+				throw e;
+				
+			} catch(IOException e) {
+				e.printStackTrace();
+				logger.error("process URL:" + url + "failed! " + e.getMessage());
+				throw e;
+			}
+			return content;
+		}
+		
+	} // end SinaPaging
 	
 	private List<NewsArea> newsAreaList = null ;
 	public List<NewsArea> getNewsAreaList() { return newsAreaList; }

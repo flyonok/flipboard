@@ -284,6 +284,7 @@ public class hexun implements Job{
 			curNewsArea = newsArea;
 			for (ContentArea contentArea : curNewsArea.getContentSelectorList()) {
 				curContentArea = contentArea;
+				strCharset = contentArea.getPageCharset();
 				saveContentAreaToDb(contentArea);
 				String tag = curContentArea.getContentSelector();
 				logger.info("process news area tag:" + tag);
@@ -443,7 +444,7 @@ public class hexun implements Job{
 		if (strWebContent.length() > 0 ) {
 			doc = Jsoup.parse(strWebContent, baseUrl);
 		}
-		processHtmlImgAttr(doc);
+		
 		Elements newsContentEls = null;
 		for (NewsPageProcess newsPageItem : curNewsArea.getPageProcessList() ) {
 			curNewsPageItem = newsPageItem;
@@ -453,6 +454,8 @@ public class hexun implements Job{
 		}
 
 		if (newsContentEls.first() != null) { // 正常网页处理
+			pageList = curNewsArea.processHtmlPaging(doc, strCharset);
+			processHtmlImgAttr(doc);
 			// 元素替换处理
 			for (ConfigItem eleRepItem : curNewsPageItem.getElementReplaceList()){
 				// logger.info(eleRepItem.getFirst());
@@ -516,7 +519,7 @@ public class hexun implements Job{
 			// process image
 			// getAbstract(els);
 			processPageImage(newsContentEls);
-			processMorePages(newsContentEls, url);
+			processMorePages(doc, url);
 			text.append(relItemBuf_WithinNewsContTag.toString());
 			text.append(relItemBuf_ExternalNewsContTag.toString());
 			isCorrect = true;
@@ -545,6 +548,7 @@ public class hexun implements Job{
 			String encode = getCharset(charset);
 			if (encode.length() > 0) {
 				if ( !encode.equals(orgCharset) ) {
+					strCharset = encode;
 					try {
 						logger.info("process charset:" + encode);
 						webContent = getContentFromUrl(url, encode);
@@ -694,6 +698,7 @@ public class hexun implements Job{
 	}
 	
 	// get abstact from html page
+	@Deprecated
 	private void getAbstract(Elements els) {
 		// Elements p_s = els.select("p+p+p");
 		Elements p_s = els.select(/*strAbstractPattern*/curNewsPageItem.getAbstractPattern());
@@ -705,21 +710,15 @@ public class hexun implements Job{
 		}
 	}
 		
-	private void processMorePages(Elements els, String orgUrl) {
-		// Elements selects = els.select("select");
-		// System.out.println(selects.outerHtml());
-		// Elements options = els.select("select > option");
-		if ((curNewsPageItem.getPageSelectorPattern().length() > 0)
-				&& (curNewsPageItem.getPageUrl().length() > 0)) {
-			Elements options = els.select(curNewsPageItem
-					.getPageSelectorPattern());
-			for (org.jsoup.nodes.Element option : options) {
-				// String strOption = option.attr("value");
-				String strOption = option.attr(curNewsPageItem.getPageUrl());
-				if ((strOption.length() > 0)
-						&& (!strOption.equalsIgnoreCase(orgUrl))) {
-					// System.out.println(strOption);
-					getPageContents(strOption);
+	// private void processMorePages(Elements els, String orgUrl) {
+	private void processMorePages(org.jsoup.nodes.Document doc, String orgUrl) {
+		
+		// List<String> pageList = curNewsArea.processHtmlPaging(doc, strCharset);
+		if (pageList != null) {
+			for (String url : pageList) {
+				if ((url.length() > 0)
+						&& (!url.equalsIgnoreCase(orgUrl))) {
+					getPageContents(url);
 				}
 			}
 		}
@@ -746,6 +745,11 @@ public class hexun implements Job{
 		 * Jsoup.connect(url).timeout(curHostConfig.getTimeOut()).get();
 		 */
 		org.jsoup.nodes.Document doc = Jsoup.parse(strWebContent, baseUrl);
+		// process charset of html
+		strWebContent = processDocCharset(doc, curContentArea.getPageCharset(), url);
+		if (strWebContent.length() > 0 ) {
+			doc = Jsoup.parse(strWebContent, baseUrl);
+		}
 		/*
 		 * org.jsoup.nodes.Document doc =
 		 * Jsoup.connect(url).timeout(timeOutcurHostConfig.getTimeOut()).get();
@@ -913,7 +917,9 @@ public class hexun implements Job{
 	private ContentArea curContentArea = null;
 	private RelatedItem curRelatedItem = null;
 	private NewsPageProcess curNewsPageItem = null;
-	// private String strCharset = null;
+	private String strCharset = null;
+	// more page
+	private List<String> pageList = null;
 	
 	// static members
 	
@@ -1015,6 +1021,7 @@ public class hexun implements Job{
 		}
 	}
 	
+	@Deprecated
 	private Boolean processSpecialLink(String url) {
 		// Document doc = Jsoup.connect("http://www.hexun.com/").get();
 		curArticle = new Article();
@@ -1158,7 +1165,7 @@ public class hexun implements Job{
 			// process image
 			// getAbstract(els);
 			processPageImage(newsPageContEls);
-			processMorePages(newsPageContEls, url);
+			processMorePages(doc, url);
 			text.append(relItemBuf_WithinNewsContTag.toString());
 			text.append(relItemBuf_ExternalNewsContTag.toString());
 			isCorrect = true;
@@ -1199,14 +1206,6 @@ public class hexun implements Job{
 			HttpResponse response = client.execute(request);
 			byte[] bytes = EntityUtils.toByteArray(response.getEntity());
 			content = new String(bytes, strCharset);
-			/*// Get the response
-			BufferedReader rd = new BufferedReader(new InputStreamReader(
-					response.getEntity().getContent()));
-
-			String line = "";
-			while ((line = rd.readLine()) != null) {
-				strBuf.append(line);
-			}*/
 		} catch(ClientProtocolException e) {
 			e.printStackTrace();
 			logger.error("process URL:" + url + "failed! " + e.getMessage());
