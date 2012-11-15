@@ -1255,6 +1255,7 @@ public class HostConfig {
 		@Deprecated
 		private String strPagingID = null;
 		
+		@Deprecated
 		private String strPageNumClass = null;
 		
 		@Deprecated
@@ -1262,6 +1263,10 @@ public class HostConfig {
 		
 		@Deprecated
 		private String strPageHrefValue = null;
+		
+		private String strPageNextEle = null;
+		
+		private String strPagePrevEle = null;
 		
 		private String strPageUrlValue = null;
 
@@ -1278,13 +1283,21 @@ public class HostConfig {
 			}
 			strPagingID = pagingIDNode.getTextTrim();*/
 			
-			Element pageNumClassNode = sinaPagingNode.element("pageNumClass");
-			if (pageNumClassNode == null) {
-				throw new HostConfigException("sina paging node must have pageNumClass child node!");
+			Element pagePrevEleNode = sinaPagingNode.element("pagePrevEle");
+			if (pagePrevEleNode == null) {
+				throw new HostConfigException("sina paging node must have pagePrevEle child node!");
 			}
-			strPageNumClass = pageNumClassNode.getTextTrim();
+			strPagePrevEle = pagePrevEleNode.getTextTrim();
 			logger.info("sina paging-------begin");
-			logger.info("pageNumClass: " + strPageNumClass);
+			logger.info("pagePrevEle: " + strPagePrevEle);
+			
+			Element pageNextEleNode = sinaPagingNode.element("pageNextEle");
+			if (pageNextEleNode == null) {
+				throw new HostConfigException("sina paging node must have pageNextEle child node!");
+			}
+			strPageNextEle = pageNextEleNode.getTextTrim();
+			// logger.info("sina paging-------begin");
+			logger.info("pageNextEle: " + strPageNextEle);
 			
 			Element pageUrlValueNode = sinaPagingNode.element("pageUrlValue");
 			if (pageUrlValueNode == null) {
@@ -1310,49 +1323,42 @@ public class HostConfig {
 			return true;
 		}
 
-		public List<String> getPageUrls(org.jsoup.nodes.Document doc, String charset) {
+		public List<String> getPageUrls(org.jsoup.nodes.Document doc,
+				String charset) {
 			// TODO Auto-generated method stub
 			// List<String> pageUrlList = null;
 			String reg = "[a-zA-z]+://[^\\s]*.html[^\\s]*";
-			if (strPageNumClass.length() > 0) {
-				Elements pageNumbs = doc.select(strPageNumClass);
-				if (pageNumbs.first() == null) {
-					logger.info("No found: " + strPageNumClass);
-					return null ;
-				}
-				for (org.jsoup.nodes.Element page : pageNumbs) {
-
-					if (strPageUrlValue.length() > 0) {
-						String strHref = page.attr(strPageUrlValue);
-						if (strHref.length() > 0 && strHref.matches(reg) ) {
-							if (pageUrlList == null) {
-								pageUrlList = new ArrayList<String>();
-							}
-							pageUrlList.add(strHref);
-							logger.info("page url: " + strHref);
-							try {
-								String content = getContentFromUrl(strHref, charset);
-								org.jsoup.nodes.Document docTmp = org.jsoup.Jsoup.parse(content,baseUrl);
-								getPageUrls(docTmp, charset);
-								
-							} catch (ClientProtocolException e) {
-								e.printStackTrace();
-								logger.error(e.getMessage());
-								
-							} catch (IOException e) {
-								e.printStackTrace();
-								logger.error(e.getMessage());
-							}
+			if (strPageNextEle.length() > 0 && strPagePrevEle.length() > 0
+					&& strPageUrlValue.length() > 0) {
+				Elements nextPageEls = doc
+						.select(strPageNextEle/* "a:contains(下一页)" */);
+				if (nextPageEls.first() == null)
+					return pageUrlList;
+				Elements prevPageEls = doc
+						.select(strPagePrevEle/* "span:contains(上一页)" */);
+				if (prevPageEls.first() == null)
+					return pageUrlList;
+				org.jsoup.nodes.Element prevFirst = prevPageEls.first();
+				org.jsoup.nodes.Element nextLast = nextPageEls.first();
+				// Elements pageNumbs = pageEls.select("span.pagebox_num");
+				for (; (prevFirst.nextElementSibling()!=null) && (!prevFirst.nextElementSibling().equals(nextLast));) {
+					prevFirst = prevFirst.nextElementSibling();
+					String strHref = prevFirst
+							.attr(strPageUrlValue/* "href" */);
+					if (strHref.length() > 0 && strHref.matches(reg)) {
+						if (pageUrlList == null) {
+							pageUrlList = new ArrayList<String>();
 						}
+						pageUrlList.add(strHref);
+						logger.info("page url: " + strHref);
 					}
-
 				}
 			}
-			
-			
+
 			return pageUrlList;
 		}
 		
+		@Deprecated
 		private String getContentFromUrl(String url, String strCharset) throws ClientProtocolException, IOException {
 			String content = null;
 			try {

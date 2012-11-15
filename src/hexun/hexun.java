@@ -154,7 +154,7 @@ public class hexun implements Job{
 					.startNow()
 					.withSchedule(
 							SimpleScheduleBuilder.simpleSchedule()
-									.withIntervalInHours(1).repeatForever())
+									.withIntervalInHours(2).repeatForever())
 					.build();
 
 			// Tell quartz to schedule the job using our trigger

@@ -80,10 +80,10 @@ public class Resource {
 			throw new SqliteException("Resouce sqlite db file is empty!please set it first!");
 		}
 		String sql = "insert into Resource(resType, resContent, resText, width, height) " +
-				"values('" + resType + "','" + resContent + "','" + resText + "'," 
+				"values('" + resType + "','" + resContent + "','" + resText.replaceAll("'", "''") + "'," 
 				+ Width + "," + Height+ ")" ;
 		if ( !SqliteHelper.saveToDB(dbFile, sql) ) {
-			logger.error("save season content failed!");
+			logger.error("save Resource failed!");
 			return;
 		}
 		sql = "select max(_id) from Resource";

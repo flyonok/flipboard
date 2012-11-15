@@ -377,7 +377,9 @@
 					<!-- <pageNumClass>span.pagebox_num</pageNumClass> --> <!-- paging collection -->
 					<!-- <pageHrefTag>a</pageHrefTag> -->
 					<!-- <pageHrefValue>href</pageHrefValue> -->
-					<pageNumClass>a:contains(下一页)</pageNumClass> <!-- paging collection -->
+					<!-- <pageNumClass>a:contains(下一页)</pageNumClass> --> <!-- paging collection -->
+					<pagePrevEle>span:contains(上一页)</pagePrevEle>
+					<pageNextEle>a:contains(下一页)</pageNextEle>
 					<pageUrlValue>href</pageUrlValue> <!-- next page url value -->
 				</sina>
 			</pages>

@@ -46,7 +46,8 @@ public class JsoupTest {
 		// test.testSinaTechPage();
 		// test.testSinaBlogImgPage();
 		// test.testSinaNewsPaging("http://jiaju.sina.com.cn/news/jz/2012-09-14/090408167505.shtml");
-		test.testSinaNewsPaging("http://fashion.eladies.sina.com.cn/industry/2012/1114/093535145.shtml");
+		// test.testSinaNewsPaging("http://fashion.eladies.sina.com.cn/industry/2012/1114/093535145.shtml");
+		test.testSinaNewsPaging("http://eladies.sina.com.cn/fa/2012/1115/07271196258.shtml");
 		
 	}
 	
@@ -580,6 +581,27 @@ public class JsoupTest {
 				processPageImage(dds.first().html());
 			}
 			
+		}finally {
+			
+		}
+	}
+	
+	private void test163News()
+	{
+		try {
+			String content = getCotentFromUrl("http://www.163.com", "gbk");
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			Elements contentEls = doc.select(/*"div#tab01_con1"*/"div.tab-con.con-wrapper.current");
+			System.out.println(contentEls.size());
+			for (Element ele : contentEls) {
+				Elements links = ele.getElementsByTag("a");
+				for (Element link : links) {
+					String linkHref = link.attr("href");
+					String linkText = link.text();
+					System.out.println(linkHref);
+					System.out.println(linkText);
+				}
+			}
 		}finally {
 			
 		}
