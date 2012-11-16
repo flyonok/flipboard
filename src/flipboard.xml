@@ -76,7 +76,7 @@
 				<item>
 					<newsContentTag>div#artibody</newsContentTag>
 					<abstractPattern>p+p+p</abstractPattern>
-					<pageCharset>gbk</pageCharset>
+					<pageCharset>gb2312</pageCharset>
 					<elementReplace>
 						<item>
 							<orgPattern>table:has(form#theForm14322)</orgPattern>
@@ -89,17 +89,25 @@
 						<item>
 							<orgPattern>script</orgPattern>
 							<newContent></newContent>
-						</item>				
+						</item>
+						<item>
+						    <orgPattern>select[name=gotopage]</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>table[width=80%]</orgPattern>
+						    <newContent></newContent>
+						</item>			
 					</elementReplace>
 					<contentReplace> 
 						<item>
 							<orgPattern><![CDATA[ <script(?:[^<]++|<(?!/script>))*+</script> ]]></orgPattern>
 							<newContent></newContent>
 						</item>
-						<item>
+						<!-- <item>
 							<orgPattern><![CDATA[ <select(?:[^<]++|<(?!/select>))*+</select> ]]></orgPattern>
 							<newContent></newContent>
-						</item>
+						</item> -->
 					</contentReplace>
 					<relatedItems>
 					    <item>
@@ -151,6 +159,11 @@
 						    <relatedPattern>p:contains(推荐阅读)</relatedPattern>
 						    <relatedItemsType>1</relatedItemsType>
 						    <ignoreTags>h1</ignoreTags>
+						</item>
+						<item>
+						    <relatedPattern>p:contains(相关阅读)</relatedPattern>
+						    <relatedItemsType>1</relatedItemsType>
+						    <ignoreTags></ignoreTags>
 						</item>
 					</relatedItems>
 				</item>
