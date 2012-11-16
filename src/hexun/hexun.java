@@ -25,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
@@ -198,7 +199,10 @@ public class hexun implements Job{
 			try {
 				curHostConfig = item;
 				// strCharset = curHostConfig.getCharset();
-				saveHostToDb(item);
+				if (!saveHostToDb(item)) {
+					logger.error("saveHostToDb failed! " + item.getHostDescription());
+					continue;
+				}
 				logger.info(curHostConfig.getUrl());
 				processHostUrl(curHostConfig.getUrl());
 			} catch(Exception e) {
@@ -227,7 +231,8 @@ public class hexun implements Job{
 		logger.info("crawl end....");
 	}
 	
-	private void saveHostToDb(HostConfig config) {
+	private boolean saveHostToDb(HostConfig config) {
+		boolean isOK = true;
 		if (curApp == null)
 			curApp = new Application();
 		curApp.setDbFile(config.getDbFile());
@@ -237,10 +242,17 @@ public class hexun implements Job{
 		} catch (SqliteException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
+			isOK = false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+			isOK = false;
 		}
+		return isOK;
 	}
 	
-	private void saveContentAreaToDb(ContentArea item) {
+	private boolean saveContentAreaToDb(ContentArea item) {
+		boolean isOK = true;
 		if (curPart == null)
 			curPart = new PartManager();
 		curPart.setTitle(item.getTitle());
@@ -251,25 +263,34 @@ public class hexun implements Job{
 		} catch (SqliteException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
+			isOK = false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+			isOK = false;
 		}
+		return isOK;
 	}
 	
 	
-	private void processHostUrl(String url) {
+	private boolean processHostUrl(String url) {
 
 		logger.info("start crawl: " + url);
 		String strWebContent = null;
+		boolean isOK = true;
 		try {
 			strWebContent = getContentFromUrl(url, curHostConfig.getCharset());
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
-			return;
+			isOK = false;
+			return isOK;
 
 		} catch (IOException e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
-			return;
+			isOK = false;
+			return isOK;
 		}
 		/*
 		 * org.jsoup.nodes.Document doc =
@@ -285,7 +306,10 @@ public class hexun implements Job{
 			for (ContentArea contentArea : curNewsArea.getContentSelectorList()) {
 				curContentArea = contentArea;
 				strCharset = contentArea.getPageCharset();
-				saveContentAreaToDb(contentArea);
+				if (!saveContentAreaToDb(contentArea)) {
+					logger.error("saveContentAreaToDb failed! " + contentArea.getTitle());
+					continue;
+				}
 				String tag = curContentArea.getContentSelector();
 				logger.info("process news area tag:" + tag);
 				Elements contentEles = doc.select(tag);
@@ -305,7 +329,10 @@ public class hexun implements Job{
 					for (org.jsoup.nodes.Element link : links) {
 						
 						String linkHref = link.attr(curNewsArea.getNewsUrlPattern()).trim();
-						String linkText = link.text();
+						String linkText = link.text().trim();
+						if (linkText.length() == 0) {
+							continue;
+						}
 						// for debug
 						
 						/*String linkHref = "http://jnoc.blog.hexun.com/80678372_d.html";
@@ -336,11 +363,18 @@ public class hexun implements Job{
 								 * .getHtmlPageTime(linkHref));
 								 */
 								logger.info(tag + ":" + linkHref);
-								if (!processLink(linkHref)) {
-									logger.error("process:" + linkHref
-											+ "failed");
-									// break;
+								try {
+									if (!processLink(linkHref)) {
+										logger.error("process:" + linkHref
+												+ " failed");
+										// break;
+										continue;
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									logger.error(e.getMessage());
 									continue;
+									
 								}
 								
 								// contList.add(curArticle);
@@ -362,6 +396,10 @@ public class hexun implements Job{
 							e.printStackTrace();
 							logger.error(e.getMessage());
 							continue;
+						} catch (SQLException e) {
+							e.printStackTrace();
+							logger.error(e.getMessage());
+							continue;
 						}
 					}
 
@@ -370,6 +408,7 @@ public class hexun implements Job{
 		}
 
 		logger.info("crawl: " + url + " end");
+		return isOK;
 	}
 	
 	private Boolean processLink(String url) {
@@ -440,7 +479,17 @@ public class hexun implements Job{
 		}
 		// Elements els = doc.select("div#artibody");
 		// process page charset
-		strWebContent = processDocCharset(doc, curContentArea.getPageCharset(), url);
+		try {
+			strWebContent = processDocCharset(doc, curContentArea.getPageCharset(), url);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+			return isCorrect;
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+			return isCorrect;
+		}
 		if (strWebContent.length() > 0 ) {
 			doc = Jsoup.parse(strWebContent, baseUrl);
 		}
@@ -518,8 +567,23 @@ public class hexun implements Job{
 			text.append(getContent(newsContentEls));
 			// process image
 			// getAbstract(els);
-			processPageImage(newsContentEls);
-			processMorePages(doc, url);
+			
+			try {
+				processPageImage(newsContentEls);
+				processMorePages(doc, url);
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				return isCorrect;
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				return isCorrect;
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				return isCorrect;
+			}
 			text.append(relItemBuf_WithinNewsContTag.toString());
 			text.append(relItemBuf_ExternalNewsContTag.toString());
 			isCorrect = true;
@@ -540,7 +604,8 @@ public class hexun implements Job{
 	}
 	
 	// @SuppressWarnings("finally")
-	private String processDocCharset(org.jsoup.nodes.Document doc, String orgCharset, String url) {
+	private String processDocCharset(org.jsoup.nodes.Document doc, String orgCharset, String url) 
+			throws ClientProtocolException, IOException {
 		Elements metaEls = doc.select("meta[http-equiv=Content-type]");
 		String webContent = "";
 		for (org.jsoup.nodes.Element el : metaEls) {
@@ -550,21 +615,25 @@ public class hexun implements Job{
 				if ( !encode.equals(orgCharset) ) {
 					strCharset = encode;
 					try {
-						logger.info("process charset:" + encode);
+						// logger.info("process charset:" + encode);
 						webContent = getContentFromUrl(url, encode);
 						// doc = Jsoup.parse(webContent, baseUrl);
 						break;
 					} catch (ClientProtocolException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
-						logger.error(e.getMessage());
+						/*e.printStackTrace();
+						logger.error(e.getMessage());*/
 						webContent = "";
+						// logger.error("process url: " + url + "occurs ClientProtocolException");
+						throw e;
 						// return false;
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
-						logger.error(e.getMessage());
+						/*e.printStackTrace();
+						logger.error(e.getMessage());*/
+						// logger.error("process url: " + url + "occurs IOException");
 						webContent = "";
+						throw e;
 						// return false;
 					}
 				}
@@ -660,7 +729,7 @@ public class hexun implements Job{
 		// elements replace
 		/*for ( String strRepKey : elementsRepMap.keySet() )*/
 		for (ConfigItem eleRepItem : curNewsPageItem.getElementReplaceList()){
-			logger.info(eleRepItem.getFirst());
+			// logger.info(eleRepItem.getFirst());
 			// logger.info(els.select(eleRepItem.getFirst()).outerHtml());
 			/*if (elementsRepMap.get(strRepKey).length() > 0 )*/ 
 			if (eleRepItem.getSecond().length() > 0 ){
@@ -685,7 +754,7 @@ public class hexun implements Job{
 		*/
 		/*for ( String strReplace : contentRepMap.keySet() )*/ 
 		for (ConfigItem contentRepItem : curNewsPageItem.getContentReplaceList()){
-			logger.info(contentRepItem.getFirst());
+			// logger.info(contentRepItem.getFirst());
 			contents = contents.replaceAll(contentRepItem.getFirst(), contentRepItem.getSecond());
 			// nested </script> process
 			if ( contentRepItem.getFirst().contains("</script>") ) {
@@ -711,34 +780,45 @@ public class hexun implements Job{
 	}
 		
 	// private void processMorePages(Elements els, String orgUrl) {
-	private void processMorePages(org.jsoup.nodes.Document doc, String orgUrl) {
+	private void processMorePages(org.jsoup.nodes.Document doc, String orgUrl) 
+			throws ClientProtocolException, IOException {
 		
 		// List<String> pageList = curNewsArea.processHtmlPaging(doc, strCharset);
 		if (pageList != null) {
 			for (String url : pageList) {
 				if ((url.length() > 0)
 						&& (!url.equalsIgnoreCase(orgUrl))) {
-					getPageContents(url);
+					try {
+						getPageContents(url);
+					} catch (ClientProtocolException e) {
+						throw e;
+					} catch (IOException e) {
+						throw e;
+					}
 				}
 			}
 		}
 	}
 	
-	private boolean getPageContents(String url) {
+	private boolean getPageContents(String url) throws ClientProtocolException, IOException {
 		boolean isRight = true;
 
 		String strWebContent = null;
 		try {
 			strWebContent = getContentFromUrl(url, curContentArea.getPageCharset());
 		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
+			/*e.printStackTrace();
+			logger.error(e.getMessage());*/
+			// logger.error("process url: " + url + "occurs ClientProtocolException");
 			isRight = false;
+			throw e;
 
 		} catch (IOException e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
+			/*e.printStackTrace();
+			logger.error(e.getMessage());*/
 			isRight = false;
+			// logger.error("process url: " + url + "occurs IOException");
+			throw e;
 		}
 		/*
 		 * org.jsoup.nodes.Document doc =
@@ -746,7 +826,15 @@ public class hexun implements Job{
 		 */
 		org.jsoup.nodes.Document doc = Jsoup.parse(strWebContent, baseUrl);
 		// process charset of html
-		strWebContent = processDocCharset(doc, curContentArea.getPageCharset(), url);
+		try { 
+			strWebContent = processDocCharset(doc, curContentArea.getPageCharset(), url);
+		} catch(ClientProtocolException e) {
+			isRight = false;
+			throw e;
+		} catch(IOException e) {
+			isRight = false;
+			throw e;
+		}
 		if (strWebContent.length() > 0 ) {
 			doc = Jsoup.parse(strWebContent, baseUrl);
 		}
@@ -763,13 +851,14 @@ public class hexun implements Job{
 		return isRight;
 	}
 		
-	private void processPageImage(Elements els)	{
+	private void processPageImage(Elements els)	throws MalformedURLException,
+		IOException {
 		Elements images = els.select("img");
 		for (org.jsoup.nodes.Element image : images) {
 			String url = image.absUrl("src");
 			
-			logger.info(url);
-			logger.info(curArticle.getOrgUrl());
+			// logger.info(url);
+			// logger.info(curArticle.getOrgUrl());
 			// testImage(url);
 			try {
 				URL imgUrl = new URL(url);
@@ -828,14 +917,17 @@ public class hexun implements Job{
 
 			} catch (MalformedURLException e) {
 				
-				e.printStackTrace();
+				/*e.printStackTrace();
 				logger.error(e.getMessage());
-				continue;
+				continue;*/
+				logger.error("process url: " + url + " occur MalformedURLException");
+				throw e;
 			} catch (IOException e) {
-				e.printStackTrace();
-				logger.error(e.getMessage());
-				logger.error(url);
-				continue;
+				/*e.printStackTrace();
+				logger.error(e.getMessage());*/
+				logger.error("process url:" + url + " occur IOExcption");
+				throw e;
+				// continue;
 			}
 		}
 	}
@@ -1164,8 +1256,23 @@ public class hexun implements Job{
 			text.append(getContent(newsPageContEls));
 			// process image
 			// getAbstract(els);
-			processPageImage(newsPageContEls);
-			processMorePages(doc, url);
+			
+			try {
+				processPageImage(newsPageContEls);
+				processMorePages(doc, url);
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				return isCorrect;
+			} catch (MalformedURLException e){
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				return isCorrect;
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				return isCorrect;
+			}
 			text.append(relItemBuf_WithinNewsContTag.toString());
 			text.append(relItemBuf_ExternalNewsContTag.toString());
 			isCorrect = true;
@@ -1177,6 +1284,11 @@ public class hexun implements Job{
 			try {
 				curArticle.saveArticle();
 			} catch (SqliteException e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				isCorrect = false;
+				return isCorrect;
+			} catch (SQLException e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());
 				isCorrect = false;
@@ -1207,12 +1319,12 @@ public class hexun implements Job{
 			byte[] bytes = EntityUtils.toByteArray(response.getEntity());
 			content = new String(bytes, strCharset);
 		} catch(ClientProtocolException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			logger.error("process URL:" + url + "failed! " + e.getMessage());
 			throw e;
 			
 		} catch(IOException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			logger.error("process URL:" + url + "failed! " + e.getMessage());
 			throw e;
 		}

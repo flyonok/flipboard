@@ -1,6 +1,7 @@
 package dbTool;
 
 import java.net.URL;
+import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
@@ -37,7 +38,7 @@ public class PartManager {
 		dbFile = url.getFile();
 	}
 	
-	public void savePart() throws SqliteException	{
+	public void savePart() throws SqliteException, SQLException	{
 		if (dbFile == null) {
 			throw new SqliteException("PartManager sqlite db file is empty!please set it first!");
 		}
@@ -61,7 +62,7 @@ public class PartManager {
 		}
 	}
 	
-	private boolean isPartExist() throws SqliteException {
+	private boolean isPartExist() throws SqliteException, SQLException {
 		boolean isExist = false;
 		if (dbFile == null) {
 			throw new SqliteException("PartManager sqlite db file is empty! please set it first!");

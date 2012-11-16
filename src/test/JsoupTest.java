@@ -45,9 +45,9 @@ public class JsoupTest {
 		// test.testSinaHuNanTravel();
 		// test.testSinaTechPage();
 		// test.testSinaBlogImgPage();
-		// test.testSinaNewsPaging("http://jiaju.sina.com.cn/news/jz/2012-09-14/090408167505.shtml");
+		test.testSinaNewsPaging("http://jiaju.sina.com.cn/news/jz/2012-09-14/090408167505.shtml");
 		// test.testSinaNewsPaging("http://fashion.eladies.sina.com.cn/industry/2012/1114/093535145.shtml");
-		test.testSinaNewsPaging("http://eladies.sina.com.cn/fa/2012/1115/07271196258.shtml");
+		// test.testSinaNewsPaging("http://eladies.sina.com.cn/fa/2012/1115/07271196258.shtml");
 		
 	}
 	
@@ -515,13 +515,23 @@ public class JsoupTest {
 				return;
 			Element prevFirst = prevPageEls.first();
 			Element nextLast = nextPageEls.first();
+			// System.out.println(prevFirst.nextElementSibling().nextElementSibling().nextElementSibling().html());
 			// Elements pageNumbs = pageEls.select("span.pagebox_num");
-			for (;!prevFirst.nextElementSibling().equals(nextLast);) {
+			for (;(prevFirst.nextElementSibling()!= null) && (!prevFirst.nextElementSibling().equals(nextLast));) {
 				prevFirst = prevFirst.nextElementSibling();
+				// System.out.println(prevFirst.html());
 				String strHref = prevFirst.attr("href");
 				if (strHref.length() > 0) {
 					System.out.println(strHref);
 					// testSinaNewsPaging(strHref);
+				}else {
+					Elements aEls = prevFirst.select("a");
+					for (Element a : aEls) {
+						strHref = a.attr("href");
+						if (strHref.length() > 0) {
+							System.out.println(strHref);
+						}
+					}
 				}
 			}
 			/*for (Element page : nextPageEls) {

@@ -1,6 +1,7 @@
 package dbTool;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class PageManager {
 		dbFile = url.getFile();
 	}
 	
-	public void savePage() throws SqliteException	{
+	public void savePage() throws SqliteException, SQLException	{
 		if (dbFile == null) {
 			throw new SqliteException("PartManager sqlite db file is empty!please set it first!");
 		}

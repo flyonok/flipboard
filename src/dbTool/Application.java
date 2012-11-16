@@ -1,6 +1,7 @@
 package dbTool;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -24,7 +25,7 @@ public class Application {
 		dbFile = url.getFile();
 	}
 	
-	public void saveApplication() throws SqliteException	{
+	public void saveApplication() throws SqliteException, SQLException	{
 		if (dbFile == null) {
 			throw new SqliteException("Application sqlite db file is empty!please set it first!");
 		}
@@ -55,7 +56,7 @@ public class Application {
 		}
 	}
 	
-	private boolean isApplicationExist() throws SqliteException {
+	private boolean isApplicationExist() throws SqliteException, SQLException {
 		boolean isExist = false;
 		if (dbFile == null) {
 			throw new SqliteException("Application sqlite db file is empty!please set it first!");
@@ -74,9 +75,5 @@ public class Application {
 			}
 		}
 		return isExist;
-	}
-	
-	private void getIdFromDb() {
-		
 	}
 }

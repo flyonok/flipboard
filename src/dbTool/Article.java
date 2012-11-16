@@ -139,7 +139,7 @@ public class Article {
 	static Logger logger = Logger.getLogger(Article.class.getName());
 	
 	
-	public static boolean isContentExist(String url, String sqlDbFile /*/xxtebook.db */) {
+	public static boolean isContentExist(String url, String sqlDbFile /*/xxtebook.db */) throws SQLException {
 		/*System.out.println("title: " + title);
 		System.out.println("abstract: " + Abstract);
 		System.out.println("html: " + Html);*/
@@ -163,7 +163,7 @@ public class Article {
 		return isExist;
 	}
 	
-	public void saveArticle() throws SqliteException	{
+	public void saveArticle() throws SqliteException, SQLException	{
 		if (dbFile == null) {
 			throw new SqliteException("Resouce sqlite db file is empty! please set it first!");
 		}

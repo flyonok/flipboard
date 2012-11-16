@@ -1,6 +1,7 @@
 package dbTool;
 
 import java.net.URL;
+import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
@@ -75,9 +76,12 @@ public class Resource {
 		dbFile = url.getFile();
 	}
 	
-	public void saveResouce() throws SqliteException	{
+	public void saveResouce() throws SqliteException, SQLException	{
 		if (dbFile == null) {
 			throw new SqliteException("Resouce sqlite db file is empty!please set it first!");
+		}
+		if (isResourceExist()) {
+			return;
 		}
 		String sql = "insert into Resource(resType, resContent, resText, width, height) " +
 				"values('" + resType + "','" + resContent + "','" + resText.replaceAll("'", "''") + "'," 
@@ -97,6 +101,26 @@ public class Resource {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private boolean isResourceExist() throws SqliteException, SQLException {
+		boolean isExist = false;
+		if (dbFile == null) {
+			throw new SqliteException("Resouce sqlite db file is empty!please set it first!");
+		}
+		String sql = "select _id from Resource where resContent = '" + resContent + "'";
+		String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);
+		if (ret != null) {
+			try {
+				_id = Integer.parseInt(ret);
+				isExist = true;
+			} catch (NumberFormatException e){
+				logger.error(e.getMessage());
+				logger.error("query error : " + sql);
+				e.printStackTrace();
+			}
+		}
+		return isExist;
 	}
 	
 	

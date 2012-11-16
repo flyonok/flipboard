@@ -12,7 +12,7 @@ public class SqliteHelper {
 	
 	static Logger logger = Logger.getLogger(SqliteHelper.class.getName());
 	
-	public static boolean saveToDB(String dbFile, String sql)
+	public static boolean saveToDB(String dbFile, String sql) throws SQLException
 	{
 		boolean isOK = false;
 		
@@ -38,7 +38,8 @@ public class SqliteHelper {
 	    	e.printStackTrace();
 	    	logger.error(e.getMessage());
 	    	logger.error(sql);
-	    	return isOK;
+	    	throw e;
+	    	// return isOK;
 	    }
 	    finally
 	    {
@@ -52,7 +53,8 @@ public class SqliteHelper {
 	        // connection close failed.
 	    	  e.printStackTrace();
 	    	  logger.error(e.getMessage());
-	    	  return isOK;
+	    	  throw e;
+	    	  // return isOK;
 	      }
 	    }
 		
@@ -60,7 +62,7 @@ public class SqliteHelper {
 	}
 	
 	// return first column to caller
-	public static String queryToDbRetFirst(String dbFile, String sql) {
+	public static String queryToDbRetFirst(String dbFile, String sql) throws SQLException {
 		String ret  = null;
 		
 		try {
@@ -90,7 +92,8 @@ public class SqliteHelper {
 	    	e.printStackTrace();
 	    	logger.error(e.getMessage());
 	    	logger.error(sql);
-	    	return ret;
+	    	// return ret;
+	    	throw e;
 	    }
 	    finally
 	    {
@@ -104,7 +107,8 @@ public class SqliteHelper {
 	        // connection close failed.
 	    	  e.printStackTrace();
 	    	  logger.error(e.getMessage());
-	    	  return ret;
+	    	  throw e;
+	    	  // return ret;
 	      }
 	    }
 		

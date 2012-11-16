@@ -364,8 +364,26 @@ public class HostConfig {
 		private HtmlPaging pagingProcess = null;
 		public HtmlPaging getPagingHandler() { return pagingProcess; }
 		
-		public boolean processPicHtml(org.jsoup.nodes.Document doc, Article article) {
-			return picProcess.processHtml(doc, article);
+		public boolean processPicHtml(org.jsoup.nodes.Document doc, Article article) 
+				/*throws NumberFormatException, IOException, ClientProtocolException*/ {
+			boolean isCorrect = false;
+			try {
+				isCorrect = picProcess.processHtml(doc, article);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				isCorrect = false;
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				isCorrect = false;
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				isCorrect = false;
+			}
+			return isCorrect;
+					
 		}
 		
 		public List<String> processHtmlPaging(org.jsoup.nodes.Document doc, String charset) {
@@ -841,7 +859,8 @@ public class HostConfig {
 			return true;
 		}
 		
-		public boolean processHtml(org.jsoup.nodes.Document doc, Article article) {
+		public boolean processHtml(org.jsoup.nodes.Document doc, Article article)
+				throws NumberFormatException, IOException, ClientProtocolException {
 			if (article == null) {
 				return false;
 			}
@@ -882,17 +901,22 @@ public class HostConfig {
 					return true;
 				}
 			} catch (NumberFormatException e) {
-				e.printStackTrace();
-				logger.error(e.getMessage());
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error(e.getMessage());
-			}
+				// e.printStackTrace();
+				// logger.error(e.getMessage());
+				throw e;
+			} catch (ClientProtocolException e) {
+				throw e;
+			} catch (IOException e) {
+				/*e.printStackTrace();
+				logger.error(e.getMessage());*/
+				throw e ;
+			} 
 
 			return false;
 		}
 		
-		private boolean processMorePictureHtml(String url) {
+		private boolean processMorePictureHtml(String url) 
+				throws NumberFormatException, IOException, ClientProtocolException{
 			boolean isRight = true;
 
 			/*
@@ -903,14 +927,16 @@ public class HostConfig {
 			try {
 				strWebContent = getContentFromUrl(url);
 			} catch (ClientProtocolException e) {
-				e.printStackTrace();
+				/*e.printStackTrace();
 				logger.error(e.getMessage());
-				isRight = false;
+				isRight = false;*/
+				throw e;
 
 			} catch (IOException e) {
-				e.printStackTrace();
+				/*e.printStackTrace();
 				logger.error(e.getMessage());
-				isRight = false;
+				isRight = false;*/
+				throw e;
 			}
 			/*
 			 * org.jsoup.nodes.Document doc =
@@ -934,9 +960,10 @@ public class HostConfig {
 						processMorePictureHtml(href);
 					}
 				} catch (NumberFormatException e) {
-					e.printStackTrace();
+					/*e.printStackTrace();
 					logger.error(e.getMessage());
-					isRight = false;
+					isRight = false;*/
+					throw e;
 				}
 
 			}
@@ -956,12 +983,12 @@ public class HostConfig {
 				byte[] bytes = EntityUtils.toByteArray(response.getEntity());
 				content = new String(bytes, "gbk");
 			} catch (ClientProtocolException e) {
-				e.printStackTrace();
+				// e.printStackTrace();
 				logger.error("process URL:" + url + "failed! " + e.getMessage());
 				throw e;
 
 			} catch (IOException e) {
-				e.printStackTrace();
+				// e.printStackTrace();
 				logger.error("process URL:" + url + "failed! " + e.getMessage());
 				throw e;
 			}
@@ -1134,7 +1161,8 @@ public class HostConfig {
 			logger.info("picturePageProcess-->sina  ----end");
 			return true;
 		}
-		public boolean processHtml(org.jsoup.nodes.Document doc, Article article ) {
+		public boolean processHtml(org.jsoup.nodes.Document doc, Article article ) 
+				throws NumberFormatException, IOException, ClientProtocolException {
 			if (article == null) {
 				return false;
 			}
@@ -1269,6 +1297,8 @@ public class HostConfig {
 		private String strPagePrevEle = null;
 		
 		private String strPageUrlValue = null;
+		
+		private String strPageUrlChild = null;
 
 		private String baseUrl = null ;
 
@@ -1299,6 +1329,13 @@ public class HostConfig {
 			// logger.info("sina paging-------begin");
 			logger.info("pageNextEle: " + strPageNextEle);
 			
+			Element pageUrlChildNode = sinaPagingNode.element("pageUrlChild");
+			if (pageUrlChildNode == null) {
+				throw new HostConfigException("sina paging node must have pageUrlChild child node!");
+			}
+			strPageUrlChild = pageUrlChildNode.getTextTrim();
+			logger.info("pageUrlChild: " + strPageUrlChild);
+			
 			Element pageUrlValueNode = sinaPagingNode.element("pageUrlValue");
 			if (pageUrlValueNode == null) {
 				throw new HostConfigException("sina paging node must have pageUrlValue child node!");
@@ -1328,6 +1365,9 @@ public class HostConfig {
 			// TODO Auto-generated method stub
 			// List<String> pageUrlList = null;
 			String reg = "[a-zA-z]+://[^\\s]*.html[^\\s]*";
+			if (pageUrlList != null) {
+				pageUrlList.clear();
+			}
 			if (strPageNextEle.length() > 0 && strPagePrevEle.length() > 0
 					&& strPageUrlValue.length() > 0) {
 				Elements nextPageEls = doc
@@ -1341,7 +1381,8 @@ public class HostConfig {
 				org.jsoup.nodes.Element prevFirst = prevPageEls.first();
 				org.jsoup.nodes.Element nextLast = nextPageEls.first();
 				// Elements pageNumbs = pageEls.select("span.pagebox_num");
-				for (; (prevFirst.nextElementSibling()!=null) && (!prevFirst.nextElementSibling().equals(nextLast));) {
+				for (; (prevFirst.nextElementSibling() != null)
+						&& (!prevFirst.nextElementSibling().equals(nextLast));) {
 					prevFirst = prevFirst.nextElementSibling();
 					String strHref = prevFirst
 							.attr(strPageUrlValue/* "href" */);
@@ -1351,6 +1392,22 @@ public class HostConfig {
 						}
 						pageUrlList.add(strHref);
 						logger.info("page url: " + strHref);
+					} else {
+						if (strPageUrlChild.length() > 0) {
+							Elements childEls = prevFirst
+									.select(strPageUrlChild);
+							for (org.jsoup.nodes.Element child : childEls) {
+								strHref = child.attr(strPageUrlValue);
+								if (strHref.length() > 0
+										&& strHref.matches(reg)) {
+									if (pageUrlList == null) {
+										pageUrlList = new ArrayList<String>();
+									}
+									pageUrlList.add(strHref);
+									logger.info("page url: " + strHref);
+								}
+							}
+						}
 					}
 				}
 			}

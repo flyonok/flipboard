@@ -232,6 +232,34 @@
 						    <newContent></newContent>
 						</item>
 						<item>
+						    <orgPattern>div.local_nav.clearfix</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>div.content_textNav</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>div#keyword</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>div#related</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>div.dealer_tab.news_block.news_blockr.hide</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>div.news_block.news_blockr</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
+						    <orgPattern>div.table_slide</orgPattern>
+						    <newContent></newContent>
+						</item>
+						<item>
 							<orgPattern>style</orgPattern>
 							<newContent></newContent>
 						</item>
@@ -380,6 +408,7 @@
 					<!-- <pageNumClass>a:contains(下一页)</pageNumClass> --> <!-- paging collection -->
 					<pagePrevEle>span:contains(上一页)</pagePrevEle>
 					<pageNextEle>a:contains(下一页)</pageNextEle>
+					<pageUrlChild>a</pageUrlChild> <!-- next page child element -->
 					<pageUrlValue>href</pageUrlValue> <!-- next page url value -->
 				</sina>
 			</pages>
