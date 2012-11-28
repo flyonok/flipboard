@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 public class SqliteHelper {
 	
-	static Logger logger = Logger.getLogger(SqliteHelper.class.getName());
+	static Logger logger = Logger.getLogger("newedu.webcrawl.hexun");
 	
 	public static boolean saveToDB(String dbFile, String sql) throws SQLException
 	{

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<baidu>
+   <host>http://www.baidu.com.cn</host>
+   <url>http://www.baidu.com.cn/s?wd=</url>
+   <searchType>&amp;cl=3</searchType>
+   <contentCharset>utf-8</contentCharset>
+   <encodeCharset>gb2312</encodeCharset>
+   <totalresultCount>50</totalresultCount>
+   <pageRecordCount>10</pageRecordCount>
+   <nextPage>a:contains(下一页>)</nextPage>
+   <nextPageValue>href</nextPageValue>
+   <record>
+       <tableSelect>table#</tableSelect>
+       <tdSelect>td</tdSelect>
+       <h3Select>h3</h3Select>
+       <urlSelect>a</urlSelect>
+       <urlValue>href</urlValue>
+       <titleSelect>font</titleSelect>
+       <descSelect>font[size=-1]</descSelect>
+   </record>
+</baidu>

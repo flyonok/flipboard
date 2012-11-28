@@ -29,7 +29,7 @@ public class Resource {
 	
 	public static final String WEBURL = "webUrl" ; // 资源是一个普通网页
 	
-	static Logger logger = Logger.getLogger(Resource.class.getName());
+	static Logger logger = Logger.getLogger("newedu.webcrawl.hexun");
 	
 	// must comment
 	private String title;
@@ -86,12 +86,14 @@ public class Resource {
 		String sql = "insert into Resource(resType, resContent, resText, width, height) " +
 				"values('" + resType + "','" + resContent + "','" + resText.replaceAll("'", "''") + "'," 
 				+ Width + "," + Height+ ")" ;
-		if ( !SqliteHelper.saveToDB(dbFile, sql) ) {
+		/*if ( !SqliteHelper.saveToDB(dbFile, sql) ) {*/
+		if ( !MysqlHelper.saveToDB(dbFile, sql) ) {
 			logger.error("save Resource failed!");
 			return;
 		}
 		sql = "select max(_id) from Resource";
-		String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);
+		/*String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);*/
+		String ret = MysqlHelper.queryToDbRetFirst(dbFile, sql);
 		if (ret != null) {
 			try {
 				_id = Integer.parseInt(ret);
@@ -109,7 +111,8 @@ public class Resource {
 			throw new SqliteException("Resouce sqlite db file is empty!please set it first!");
 		}
 		String sql = "select _id from Resource where resContent = '" + resContent + "'";
-		String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);
+		/*String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);*/
+		String ret = MysqlHelper.queryToDbRetFirst(dbFile, sql);
 		if (ret != null) {
 			try {
 				_id = Integer.parseInt(ret);

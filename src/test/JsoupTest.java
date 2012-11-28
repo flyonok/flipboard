@@ -54,7 +54,9 @@ public class JsoupTest {
 		// test.testSinaNewsPaging("http://fashion.eladies.sina.com.cn/industry/2012/1114/093535145.shtml");
 		// test.testSinaNewsPaging("http://eladies.sina.com.cn/fa/2012/1115/07271196258.shtml");
 		// test.testSinaHtmlPic("http://fashion.eladies.sina.com.cn/trend/2012/1115/092835164.shtml");
-		test.testBaiduSearch();
+		// test.testBaiduSearch();
+		// test.baiduConfig();
+		test.testChaoxingBrowse();
 		
 	}
 	
@@ -644,6 +646,56 @@ public class JsoupTest {
 		}
 	}
 	
+	private void testChaoxingBrowse()
+	{
+		try {
+			String content = getContentFromUrl("http://book.chaoxing.com/", "utf-8");
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			Elements contentEls = doc.select(/*"div#tab01_con1"*//*"ul.container"*/"div.left.classify");
+			System.out.println(contentEls.size());
+			Elements containerEls = contentEls.select("ul.container");
+			System.out.println(containerEls.size());
+			for (Element ele : containerEls) {
+				Elements lists = ele.getElementsByTag("li");
+				Element liFirst = lists.first();
+				for (Element list = liFirst ;list != null;list = list.nextElementSibling()) {
+					System.out.println("\n");
+					Elements aEls = list.select("a");
+					String linkHref = aEls.first().attr("href");
+					String linkText = aEls.first().text();
+					System.out.println(linkText);
+					System.out.println(linkHref);
+					
+					Element dlEle = list.select("dl").first();
+					if (dlEle != null) {
+						Element ddEle = dlEle.select("dd").first();
+						if (ddEle != null) {
+							Element ulEle = ddEle.select("ul").first();
+							if (ulEle != null) {
+								Elements liEles = ulEle.select("li");
+								for (Element liEle : liEles) {
+								if (liEle != null) {
+									Element aEle = liEle.select("a").first();
+									if (aEle != null) {
+										String Href = aEle.attr("href");
+										String Text = aEle.text();
+										System.out.println("\t" + Text);
+										System.out.println("\t" + Href);
+										
+									}
+								}
+							}
+							}
+						}
+					}
+					
+				}
+			}
+		}finally {
+			
+		}
+	}
+	
 	private void testBaiduSearch() {
 		 String key = "java"; //查询关键字
 		 try {
@@ -683,6 +735,14 @@ public class JsoupTest {
 			 }
 		 }*/
          
+	}
+	
+	private void baiduConfig() {
+		BaiduSearch baidu = new BaiduSearch();
+		for (SearchResultItem item :baidu.searchKey("java")) {
+			System.out.println("title: " + item.getTitle());
+			System.out.println("url: " + item.getUrl());
+		}
 	}
 	
 	private String getRealUrl(String url) {

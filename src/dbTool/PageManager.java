@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 
 // chapter
 public class PageManager {
-	static Logger logger = Logger.getLogger(PageManager.class.getName());
+	static Logger logger = Logger.getLogger("newedu.webcrawl.hexun");
 	
 	private String title = null;
 	public void setTitle(String title) { this.title = title; }
@@ -50,12 +50,14 @@ public class PageManager {
 		String strArcJson = gson.toJson(article_list);
 		String sql = "insert into Chapter(chapterTitle, seasonId, templateId, articleList) " +
 				"values('" + title + "'," + season_id + "," + template_id + ",'" + strArcJson +"')" ;
-		if ( !SqliteHelper.saveToDB(dbFile, sql) ) {
+		/*if ( !SqliteHelper.saveToDB(dbFile, sql) ) {*/
+		if ( !MysqlHelper.saveToDB(dbFile, sql) ) {
 			logger.error("save season content failed!");
 			return;
 		}
 		sql = "select max(_id) from Chapter";
-		String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);
+		/*String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);*/
+		String ret = MysqlHelper.queryToDbRetFirst(dbFile, sql);
 		if (ret != null) {
 			try {
 				_id = Integer.parseInt(ret);
