@@ -175,7 +175,7 @@ public class hexun implements Job{
 		// test.processCaiJing("http://news.hexun.com/");
 		hexun test = new hexun();
 		try {
-			// test.processFileXml("/sina.xml");
+			test.processFileXml("/sina.xml");
 			test.processFileXml("/flipboard.xml");
 			// test.setConfigInit(true);
 		}catch (HostConfigException e) {
@@ -215,7 +215,8 @@ public class hexun implements Job{
 			processSpecialLink("http://funds.hexun.com/2012-09-29/146390810.html");*/
 			// test end
 			// database file copy for debug
-			try {
+			// mysql must commented
+			/*try {
 				URL url = hexun.class.getResource(item.getDbFile());
 				// for pc
 				String dstFile = "E:\\php\\APMServ\\APMServ5.2.6\\www\\htdocs\\phptest\\" + item.getDbFile();
@@ -225,7 +226,7 @@ public class hexun implements Job{
 			} catch(Exception e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());
-			}
+			}*/
 			
 		}
 		logger.info("crawl end....");
