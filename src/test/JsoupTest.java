@@ -56,7 +56,8 @@ public class JsoupTest {
 		// test.testSinaHtmlPic("http://fashion.eladies.sina.com.cn/trend/2012/1115/092835164.shtml");
 		// test.testBaiduSearch();
 		// test.baiduConfig();
-		test.testChaoxingBrowse();
+		// test.testChaoxingBrowse();
+		test.testChaoxingBookList("http://book.chaoxing.com/ebook/list_1301.html");
 		
 	}
 	
@@ -694,6 +695,144 @@ public class JsoupTest {
 		}finally {
 			
 		}
+	}
+	
+	private void testChaoxingBookList(String url) {
+		String content = getContentFromUrl(url, "utf-8");
+		org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+		 // Elements nextPgEls = doc.select("a:contains(下一页)");
+		 Elements pageContainerEls = doc.select("div.page_main.clearfix > div.container");
+		 // System.out.println(pageContainerEls.html());
+		 getContentFromBookList(url);
+		 Elements spanEls = doc.select("span:contains(...)");
+		 Elements lastPgEls = doc.select("a:contains(末页)");
+		 Elements aEls = pageContainerEls.select("a");
+		 /*for (Element aEl : aEls) {
+			 String strNextHref = aEl.attr("href").trim();
+			 if (strNextHref.length() > 0) {
+				 strNextHref = "http://book.chaoxing.com" + strNextHref;
+				 System.out.println(strNextHref);
+				 getContentFromBookList(strNextHref);
+				 // testChaoxingBookList(strNextHref);
+			 }
+			 if (aEl.nextElementSibling().equals(spanEls.first()) || 
+					 aEl.nextElementSibling().equals(lastPgEls.first()) ) {
+				 break;
+			 }
+			 
+		 }*/
+		/* if (nextPgEls.first() != null) {
+			 String strNextHref = nextPgEls.first().attr("href").trim();
+			 if (strNextHref.length() > 0) {
+				 strNextHref = "http://book.chaoxing.com" + strNextHref;
+				 System.out.println(strNextHref);
+				 testChaoxingBookList(strNextHref);
+			 }
+		 }*/
+	}
+	
+	private void getContentFromBookList(String url) {
+		String content = getContentFromUrl(url, "utf-8");
+		org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+		Elements formEls = doc.select("form#formid");
+		for (Element formEl : formEls) { // form
+			Elements resultContentEls = formEl.select("div.resultContent_box");
+			for (Element result : resultContentEls) { // book
+				Elements bookEls = result.select("dl.bookBox");
+				for (Element book : bookEls) {
+					Elements dtEls = book.select("dt");
+					
+					/*Elements ddEls = book.select("dd");
+					Elements ulEls = ddEls.select("ul");*/
+					Elements ulEls = book.select("dd>ul");
+					System.out.println(getBookName(ulEls));
+					Elements liEls = book.select("dd>ul>li");
+					// System.out.println(liEls.get(2).outerHtml());
+					System.out.println(getBookAuthor(liEls));
+					System.out.println(getBookSummary(ulEls));
+					System.out.println(getBookReadUrl(ulEls));
+					System.out.println(getImageSrc(dtEls));
+					
+				}
+			}
+			
+		}
+	}
+	
+	private String getImageSrc(Elements dtEls) {
+		for (Element dt : dtEls) {
+			Elements imgEls = dt.select("a>img");
+			for (Element img : imgEls) {
+				String imgsrc = img.attr("src");
+				if (imgsrc.length() > 0)
+					return imgsrc;
+			}
+		}
+		return "";
+	}
+	
+	private String getBookAuthor(Elements liEls) {
+		if (liEls.size() >= 2) {
+			Element authorEle = liEls.get(2);
+			// System.out.println(authorEle.outerHtml());
+			if (authorEle != null) {
+				Element aEle = authorEle.select("a").first();
+				if (aEle != null) {
+					String author = aEle.text();
+					return author;
+				}
+			}
+		}
+		return "";
+		
+	}
+	
+	private String getBookName(Elements ulEls) {
+		Element nameEle = ulEls.select("li.name").first();
+		if (nameEle != null) {
+			Element aEle = nameEle.select("a").first();
+			if (aEle != null) {
+				String bookName = aEle.text();
+				return bookName;
+			}
+		}
+		return "";
+	}
+	
+	private String getBookSummary(Elements ulEls) {
+		Element liEle = ulEls.select("li.resume").first();
+		if (liEle != null) {
+			String summary = liEle.text();
+			return summary;
+		}
+		Element msgEle = ulEls.select("li.msg.clearfix").first();
+		if (msgEle != null) {
+			String msg = msgEle.text();
+			return msg;
+		}
+		return "";
+	}
+	
+	private String getBookReadUrl(Elements ulEls) {
+		Element liEle = ulEls.select("li.read_source").first();
+		if (liEle != null) {
+			Element aEle = liEle.select("a.read").first();
+			if (aEle != null) {
+				String href = aEle.attr("href");
+				System.out.println(href);
+				if (href.length() > 0 ) {
+					String content = getContentFromUrl(href, "utf-8");
+					org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+					Element iframeEle = doc.select("iframe#ifr").first();
+					if (iframeEle != null) {
+						String urlSrc = iframeEle.attr("src");
+						return urlSrc;
+					}
+					
+				}
+			}
+		}
+		return "";
 	}
 	
 	private void testBaiduSearch() {
