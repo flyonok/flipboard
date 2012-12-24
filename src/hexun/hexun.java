@@ -175,7 +175,7 @@ public class hexun implements Job{
 		// test.processCaiJing("http://news.hexun.com/");
 		hexun test = new hexun();
 		try {
-			test.processFileXml("/sina.xml");
+			// test.processFileXml("/sina.xml");
 			test.processFileXml("/flipboard.xml");
 			// test.setConfigInit(true);
 		}catch (HostConfigException e) {
@@ -216,7 +216,7 @@ public class hexun implements Job{
 			// test end
 			// database file copy for debug
 			// mysql must commented
-			/*try {
+			try {
 				URL url = hexun.class.getResource(item.getDbFile());
 				// for pc
 				String dstFile = "E:\\php\\APMServ\\APMServ5.2.6\\www\\htdocs\\phptest\\" + item.getDbFile();
@@ -226,7 +226,7 @@ public class hexun implements Job{
 			} catch(Exception e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());
-			}*/
+			}
 			
 		}
 		logger.info("crawl end....");
@@ -498,9 +498,12 @@ public class hexun implements Job{
 		Elements newsContentEls = null;
 		for (NewsPageProcess newsPageItem : curNewsArea.getPageProcessList() ) {
 			curNewsPageItem = newsPageItem;
+			// System.out.println("NewsContentTag: " + curNewsPageItem.getNewsContentTag());
 			newsContentEls = doc.select(curNewsPageItem.getNewsContentTag());
-			if (newsContentEls.first() != null)
+			if (newsContentEls.first() != null) {
+				logger.info("Found NewsContentTag: " + curNewsPageItem.getNewsContentTag());
 				break;
+			}
 		}
 
 		if (newsContentEls.first() != null) { // 正常网页处理
@@ -858,7 +861,9 @@ public class hexun implements Job{
 		for (org.jsoup.nodes.Element image : images) {
 			String url = image.absUrl("src");
 			
-			// logger.info(url);
+			logger.info("Img url: " + url);
+			if (url.length() <= 0)
+				continue;
 			// logger.info(curArticle.getOrgUrl());
 			// testImage(url);
 			try {
@@ -1314,6 +1319,7 @@ public class hexun implements Job{
 			HttpClient client = new DefaultHttpClient();
 			client.getParams();
 			HttpGet request = new HttpGet(url);
+			request.setHeader("User-Agent", "Mozilla/5.0 (SymbianOS/9.1; U; en-us) AppleWebKit/413 (KHTML, like Gecko) Safari/413");
 			baseUrl = request.getURI().getHost();
 			// request.getParams()
 			HttpResponse response = client.execute(request);

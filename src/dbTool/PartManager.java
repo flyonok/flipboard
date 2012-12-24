@@ -45,14 +45,14 @@ public class PartManager {
 		if (isPartExist())
 			return;
 		String sql = "insert into Season(seasonTitle, novelId) values('" + title + "'," + novel_id + ")" ;
-		/*if ( !SqliteHelper.saveToDB(dbFile, sql) ) {*/
-		if ( !MysqlHelper.saveToDB(dbFile, sql) ) {
+		if ( !SqliteHelper.saveToDB(dbFile, sql) ) {
+		/*if ( !MysqlHelper.saveToDB(dbFile, sql) ) {*/
 			logger.error("save season content failed!");
 			return;
 		}
 		sql = "select max(_id) from Season";
-		/*String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);*/
-		String ret = MysqlHelper.queryToDbRetFirst(dbFile, sql);
+		String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);
+		/*String ret = MysqlHelper.queryToDbRetFirst(dbFile, sql);*/
 		if (ret != null) {
 			try {
 				_id = Integer.parseInt(ret);
@@ -70,8 +70,8 @@ public class PartManager {
 			throw new SqliteException("PartManager sqlite db file is empty! please set it first!");
 		}
 		String sql = "select _id from Season where seasonTitle = '" + title + "' and novelId = " + novel_id;
-		/*String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);*/
-		String ret = MysqlHelper.queryToDbRetFirst(dbFile, sql);
+		String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);
+		/*String ret = MysqlHelper.queryToDbRetFirst(dbFile, sql);*/
 		if (ret != null) {
 			try {
 				_id = Integer.parseInt(ret);

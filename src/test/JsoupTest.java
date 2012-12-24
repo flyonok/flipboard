@@ -43,6 +43,7 @@ public class JsoupTest {
 		// test.testSinaSports();
 		// test.testHexunNews();
 		// test.testHexunBlog();
+		test.testHexunBlogContent("http://tqtz8888.blog.hexun.com/81679920_d.html");
 		// test.testHexunGuoJi();
 		// test.testSinaYuLe();
 		// test.testSinaBlog();
@@ -57,7 +58,7 @@ public class JsoupTest {
 		// test.testBaiduSearch();
 		// test.baiduConfig();
 		// test.testChaoxingBrowse();
-		test.testChaoxingBookList("http://book.chaoxing.com/ebook/list_1301.html");
+		// test.testChaoxingBookList("http://book.chaoxing.com/ebook/list_1301.html");
 		
 	}
 	
@@ -174,6 +175,23 @@ public class JsoupTest {
 						System.out.println(linkText);
 					}
 				}
+			}
+		}finally {
+			
+		}
+	}
+	
+	private void testHexunBlogContent(String url)
+	{
+		try {
+			String content = getContentFromUrl(url, "gb2312");
+			System.out.println(content.length());
+			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
+			Elements contentEls = doc.select(/*"div#tab01_con1"*/"div#ArticeTextID");
+			System.out.println(contentEls.size());
+			for (Element conEl : contentEls) 
+			{
+				System.out.println(conEl.html());
 			}
 		}finally {
 			
@@ -707,7 +725,7 @@ public class JsoupTest {
 		 Elements spanEls = doc.select("span:contains(...)");
 		 Elements lastPgEls = doc.select("a:contains(末页)");
 		 Elements aEls = pageContainerEls.select("a");
-		 /*for (Element aEl : aEls) {
+		 for (Element aEl : aEls) {
 			 String strNextHref = aEl.attr("href").trim();
 			 if (strNextHref.length() > 0) {
 				 strNextHref = "http://book.chaoxing.com" + strNextHref;
@@ -720,7 +738,7 @@ public class JsoupTest {
 				 break;
 			 }
 			 
-		 }*/
+		 }
 		/* if (nextPgEls.first() != null) {
 			 String strNextHref = nextPgEls.first().attr("href").trim();
 			 if (strNextHref.length() > 0) {
@@ -939,9 +957,11 @@ public class JsoupTest {
 			HttpClient client = new DefaultHttpClient();
 			client.getParams();
 			HttpGet request = new HttpGet(url);
+			request.setHeader("User-Agent", "Mozilla/5.0 (SymbianOS/9.1; U; en-us) AppleWebKit/413 (KHTML, like Gecko) Safari/413");
 			// System.out.println(request.getURI().getHost());
 			// request.getParams()
 			HttpResponse response = client.execute(request);
+			System.out.println(response.getStatusLine().getStatusCode());
 			// request.getURI().getHost();
 			//GetMethod method = new GetMethod(url);
 			// System.out.println(request.getURI().getHost());

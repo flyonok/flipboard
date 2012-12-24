@@ -150,8 +150,8 @@ public class Article {
 		String fullDbFile = dburl.getFile();
 		boolean isExist = false;
 		String sql = "select _id from Article where oriUrl = '" + url + "'";
-		/*String ret = SqliteHelper.queryToDbRetFirst(fullDbFile, sql);*/
-		String ret = MysqlHelper.queryToDbRetFirst(fullDbFile, sql);
+		String ret = SqliteHelper.queryToDbRetFirst(fullDbFile, sql);
+		/*String ret = MysqlHelper.queryToDbRetFirst(fullDbFile, sql);*/
 		if (ret != null) {
 			try {
 				int id = Integer.parseInt(ret);
@@ -195,14 +195,14 @@ public class Article {
 		}
 		
 		
-		/*if ( !SqliteHelper.saveToDB(dbFile, sql) ) {*/
-		if ( !MysqlHelper.saveToDB(dbFile, sql) ) {
+		if ( !SqliteHelper.saveToDB(dbFile, sql) ) {
+		/*if ( !MysqlHelper.saveToDB(dbFile, sql) ) {*/
 			logger.error("save season content failed!");
 			return;
 		}
 		sql = "select max(_id) from Article";
-		/*String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);*/
-		String ret = MysqlHelper.queryToDbRetFirst(dbFile, sql);
+		String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);
+		/*String ret = MysqlHelper.queryToDbRetFirst(dbFile, sql);*/
 		if (ret != null) {
 			try {
 				_id = Integer.parseInt(ret);

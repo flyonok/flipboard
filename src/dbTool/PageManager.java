@@ -56,8 +56,8 @@ public class PageManager {
 			return;
 		}
 		sql = "select max(_id) from Chapter";
-		/*String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);*/
-		String ret = MysqlHelper.queryToDbRetFirst(dbFile, sql);
+		String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);
+		/*String ret = MysqlHelper.queryToDbRetFirst(dbFile, sql);*/
 		if (ret != null) {
 			try {
 				_id = Integer.parseInt(ret);

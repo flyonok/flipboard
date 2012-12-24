@@ -35,15 +35,15 @@ public class Application {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String strDate = dateFormat.format(date);
 		String sql = "insert into Novel(novelTitle, year) values('" + description + "','"+ strDate + "')";
-		/*if ( !SqliteHelper.saveToDB(dbFile, sql) ) {*/
-		if ( !MysqlHelper.saveToDB(dbFile, sql) ) {
+		if ( !SqliteHelper.saveToDB(dbFile, sql) ) {
+		/*if ( !MysqlHelper.saveToDB(dbFile, sql) ) {*/
 			logger.error("save novel content failed!");
 			return;
 		}
 		sql = "select max(_id) as max_id from Novel";
 		// sql = "select _id from Novel where novelTitle='" + description + "'";
-		/*String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);*/
-		String ret = MysqlHelper.queryToDbRetFirst(dbFile, sql);
+		String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);
+		/*String ret = MysqlHelper.queryToDbRetFirst(dbFile, sql);*/
 		if (ret != null) {
 			try {
 				_id = Integer.parseInt(ret);
@@ -64,8 +64,8 @@ public class Application {
 			throw new SqliteException("Application sqlite db file is empty!please set it first!");
 		}
 		String sql = "select _id from Novel where novelTitle='" + description + "'";
-		/*String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);*/
-		String ret = MysqlHelper.queryToDbRetFirst(dbFile, sql);
+		String ret = SqliteHelper.queryToDbRetFirst(dbFile, sql);
+		/*String ret = MysqlHelper.queryToDbRetFirst(dbFile, sql);*/
 		if (ret != null) {
 			try {
 				_id = Integer.parseInt(ret);
