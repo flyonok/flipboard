@@ -1,13 +1,12 @@
 package dbTool;
 
+import com.google.gson.Gson;
+import org.apache.log4j.Logger;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.log4j.Logger;
-
-import com.google.gson.Gson;
 
 // chapter
 public class PageManager {

@@ -1,11 +1,9 @@
 package dbTool;
 
-import java.net.URL;
-import java.sql.SQLException;
-
 import org.apache.log4j.Logger;
 
-import com.google.gson.Gson;
+import java.net.URL;
+import java.sql.SQLException;
 
 public class Resource {
 	

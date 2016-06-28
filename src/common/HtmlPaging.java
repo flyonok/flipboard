@@ -1,9 +1,9 @@
 package common;
 
-import java.util.List;
-
 import org.dom4j.Element;
 import org.jsoup.nodes.Document;
+
+import java.util.List;
 
 public interface HtmlPaging {
 	public boolean processPageNode(Element pageConfigNode) throws HostConfigException;

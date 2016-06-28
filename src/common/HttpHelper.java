@@ -1,17 +1,12 @@
 package common;
 
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Date;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 public class HttpHelper {
 	

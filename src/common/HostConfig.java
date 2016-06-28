@@ -1,20 +1,8 @@
 package common;
 
+import dbTool.Article;
+import dbTool.Resource;
 import hexun.hexun;
-
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.imageio.ImageIO;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -30,8 +18,16 @@ import org.dom4j.io.SAXReader;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 
-import dbTool.Article;
-import dbTool.Resource;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class HostConfig {
 	static Logger logger = Logger.getLogger("newedu.webcrawl.hexun"/*HostConfig.class.getName()*/);

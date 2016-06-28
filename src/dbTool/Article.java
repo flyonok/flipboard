@@ -1,21 +1,13 @@
 package dbTool;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import org.apache.commons.lang3.StringEscapeUtils;
+import com.google.gson.Gson;
+import common.ResJson;
 import org.apache.log4j.Logger;
 
-import com.google.gson.Gson;
-
-import common.ResJson;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 
 

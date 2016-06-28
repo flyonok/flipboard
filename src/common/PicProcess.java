@@ -1,12 +1,12 @@
 package common;
 
 // import org.dom4j.Document;
-import java.io.IOException;
 
+import dbTool.Article;
 import org.apache.http.client.ClientProtocolException;
 import org.dom4j.Element;
 
-import dbTool.Article;
+import java.io.IOException;
 
 public interface PicProcess {
 	public boolean processPicNode(Element picConfigNode) throws HostConfigException;

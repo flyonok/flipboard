@@ -7,42 +7,11 @@ import java.net.URL;
 import java.net.URLConnection;
 */
 
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.AbstractCollection;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.TimeZone;
-import java.util.regex.PatternSyntaxException;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.metadata.IIOMetadataNode;
-import javax.imageio.stream.ImageInputStream;
-
+import common.HostConfig;
+import common.HostConfig.*;
+import common.HostConfigException;
+import common.HttpHelper;
+import dbTool.*;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -51,41 +20,28 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.dom4j.DocumentException;
-import org.dom4j.io.SAXReader;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.jsoup.Jsoup;
-// import org.jsoup.nodes.*;
-// import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.quartz.Job;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.SimpleScheduleBuilder;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
+import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.PatternSyntaxException;
 
-
-import common.HostConfig;
-import common.HostConfig.ConfigItem;
-import common.HostConfig.ContentArea;
-import common.HostConfig.NewsArea;
-import common.HostConfig.NewsPageProcess;
-import common.HostConfig.RelatedItem;
-import common.HostConfigException;
-import common.HttpHelper;
-import dbTool.Application;
-import dbTool.Article;
-import dbTool.PartManager;
-import dbTool.Resource;
-import dbTool.SqliteException;
+// import org.jsoup.nodes.*;
+// import org.jsoup.nodes.Element;
 
 public class hexun implements Job{
 

@@ -1,9 +1,9 @@
 package dbTool;
 
+import org.apache.log4j.Logger;
+
 import java.net.URL;
 import java.sql.SQLException;
-
-import org.apache.log4j.Logger;
 
 // season--栏目
 public class PartManager {

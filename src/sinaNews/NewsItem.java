@@ -1,7 +1,5 @@
 package sinaNews;
 
-import java.util.Date;
-
 //	<summary>
 //	新闻记录实体
 //	</summary>
